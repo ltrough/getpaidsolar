@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Paid Solar | GPS</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#06152f;
+  color:white;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 8%;
+  background:#041024;
+}
+
+.gps-logo{
+  max-width:140px;
+  height:auto;
+}
+
+.phone{
+  font-size:20px;
+  font-weight:900;
+  color:#ffc400;
+}
+
+.hero{
+  padding:20px 8% 50px;
+  background:linear-gradient(120deg,#06152f 0%,#062b63 45%,#06152f 100%);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+.tagline{
+  font-size:42px;
+  font-weight:900;
+  line-height:1.05;
+  text-transform:uppercase;
+  margin-bottom:25px;
+}
+
+.yellow{ color:#ffc400; }
+.green{ color:#20b832; }
+
+.hero h1{
+  font-size:58px;
+  line-height:1.02;
+  margin:0 0 25px;
+  text-transform:uppercase;
+}
+
+.hero p{
+  font-size:22px;
+  line-height:1.5;
+  max-width:600px;
+}
+
+.bullets{
+  margin:30px 0;
+  font-size:22px;
+  line-height:1.8;
+  font-weight:bold;
+}
+
+.cta-button{
+  display:inline-block;
+  background:#ffc400;
+  color:#06152f;
+  padding:18px 32px;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:22px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.hero-image-card{
+  position:relative;
+  min-height:650px;
+  border:3px solid #ffc400;
+  border-radius:28px;
+  overflow:hidden;
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.25)),
+    url("images/solar-home.jpg");
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+.cash-overlay{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:28px;
+  background:rgba(4,16,36,.45);
+  text-align:center;
+}
+
+.cash-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.cash-icon{
+  width:125px;
+  height:auto;
+  flex-shrink:0;
+}
+
+.cash-text{
+  text-align:center;
+}
+
+.cash-text h3{
+  margin:0;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.cash{
+  font-size:88px;
+  font-weight:900;
+  color:#e00000;
+  text-shadow:3px 3px white;
+  line-height:.9;
+  margin:10px 0;
+}
+
+.cash-subtext{
+  margin-top:10px;
+  font-size:18px;
+}
+
+.gold-divider{
+  border:none;
+  border-top:2px solid #ffc400;
+  margin:25px 0;
+}
+
+.savings-section{
+  text-align:center;
+}
+
+.savings-section h2{
+  margin:0 0 15px;
+}
+
+.savings{
+  font-size:58px;
+  font-weight:900;
+  color:#ffc400;
+  line-height:1.1;
+  margin-bottom:15px;
+}
+
+.benefits{
+  max-width:1200px;
+  margin:40px auto;
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.benefit{
+  text-align:center;
+  padding:30px 20px;
+  color:#06152f;
+  border-right:1px solid #ddd;
+}
+
+.benefit:last-child{ border-right:none; }
+
+.benefit-icon{
+  width:75px;
+  height:75px;
+  object-fit:contain;
+  margin-bottom:15px;
+}
+
+.benefit h3{
+  color:#138a20;
+  font-size:24px;
+  font-weight:900;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+
+.benefit p{
+  color:#333;
+  font-size:18px;
+}
+
+.cta{
+  background:#ffc400;
+  color:#06152f;
+  padding:45px 20px;
+  text-align:center;
+}
+
+.cta h2{
+  font-size:42px;
+  margin:0 0 15px;
+  text-transform:uppercase;
+}
+
+.contact{
+  font-size:24px;
+  font-weight:bold;
+  line-height:1.8;
+}
+
+.footer{
+  background:#041024;
+  padding:18px;
+  text-align:center;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+@media(max-width:900px){
+  .header{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .hero h1{ font-size:42px; }
+  .tagline{ font-size:30px; }
+
+  .cash{
+    font-size:48px;
+  }
+
+  .savings{
+    font-size:34px;
+  }
+
+  .hero-image-card{
+    min-height:560px;
+  }
+
+  .cash-row{
+    flex-direction:column;
+  }
+
+  .cash-icon{
+    width:85px;
+  }
+
+  .benefits{
+    grid-template-columns:1fr;
+  }
+
+  .benefit{
+    border-right:none;
+    border-bottom:1px solid #ddd;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <img src="images/gps-logo-transparent.png" alt="Get Paid Solar" class="gps-logo">
+  <div class="phone">Call/Text: 760-453-0207</div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="tagline">
+      Save Money.<br>
+      <span class="yellow">Get Paid.</span><br>
+      Live Better.
+    </div>
+
+    <h1>
+      Go Solar With GPS —<br>
+      Start Saving Today<br>
+      <span class="green">& Get Paid!</span>
+    </h1>
+
+    <p>
+      Get Paid Solar helps qualifying homeowners reduce monthly electric costs,
+      avoid future APS/SRP rate hikes, and receive cash upon installation.
+    </p>
+
+    <div class="bullets">
+      ✔ $2–4K Paid Upon Installation<br>
+      ✔ 20–40% Savings Compared To APS/SRP<br>
+      ✔ No Money Down<br>
+      ✔ No Loans. No Liens.<br>
+      ✔ $1,000 Referral Bonus
+    </div>
+
+    <a href="mailto:info@GetPaidSolar.com" class="cta-button">
+      Get Qualified Now
+    </a>
+  </div>
+
+  <div class="hero-image-card">
+    <div class="cash-overlay">
+
+      <div class="cash-row">
+        <img src="images/cash-stack.png" alt="Cash incentive" class="cash-icon">
+
+        <div class="cash-text">
+          <h3>WE PAY YOU</h3>
+
+          <div class="cash">
+            $2–4K<br>CASH
+          </div>
+
+          <p class="cash-subtext">
+            Paid to you upon installation!
+          </p>
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <div class="savings-section">
+        <h2>Average Client Savings</h2>
+
+        <div class="savings">
+          $30,000 Over 25 Years*
+        </div>
+
+        <p>
+          Based on a typical 10kW system while avoiding APS/SRP rate hikes.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="benefits">
+  <div class="benefit">
+    <img src="images/shield.png" class="benefit-icon" alt="Dependable Payments">
+    <h3>Dependable Payments</h3>
+    <p>Static monthly payments.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/piggy-bank.png" class="benefit-icon" alt="Savings">
+    <h3>20–40% Savings</h3>
+    <p>Compared to APS/SRP.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/no-money-down.png" class="benefit-icon" alt="No Money Down">
+    <h3>No Money Down</h3>
+    <p>No loans. No liens.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/referral.png" class="benefit-icon" alt="Referral Bonus">
+    <h3>$1K Referral Bonus</h3>
+    <p>Earn $1,000 when you refer friends and family.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/chart.png" class="benefit-icon" alt="Avoid Rate Hikes">
+    <h3>Avoid Rate Hikes</h3>
+    <p>Avoid future utility increases.</p>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Let's Get You Started Today!</h2>
+  <div class="contact">
+    info@GetPaidSolar.com<br>
+    760-453-0207<br>
+    www.GetPaidSolar.com
+  </div>
+</section>
+
+<div class="footer">
+  SAVE MONEY. | GET PAID. | LIVE BETTER.
+</div>
+
+</body>
+</html>
