@@ -13,6 +13,73 @@ body{
   color:white;
 }
 
+.modal{
+  display:none;
+  position:fixed;
+  z-index:9999;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.75);
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-content{
+  background:white;
+  color:#06152f;
+  width:90%;
+  max-width:500px;
+  padding:30px;
+  border-radius:20px;
+  position:relative;
+  text-align:center;
+}
+
+.close{
+  position:absolute;
+  top:12px;
+  right:18px;
+  font-size:32px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.modal-content h2{
+  margin-top:0;
+  font-size:34px;
+  color:#06152f;
+}
+
+.modal-content p{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+.modal-content input{
+  width:100%;
+  padding:15px;
+  margin-bottom:14px;
+  font-size:17px;
+  border:2px solid #ddd;
+  border-radius:10px;
+  box-sizing:border-box;
+}
+
+.form-submit{
+  width:100%;
+  background:#ffc400;
+  color:#06152f;
+  border:none;
+  padding:16px;
+  font-size:22px;
+  font-weight:900;
+  border-radius:12px;
+  cursor:pointer;
+  text-transform:uppercase;
+}
+
 .header{
   display:flex;
   justify-content:center;
@@ -423,9 +490,9 @@ body{
       ✔ $1,000 Referral Bonus
     </div>
 
-    <a href="mailto:info@GetPaidSolar.com" class="cta-button">
-      Get Qualified Now
-    </a>
+<button class="cta-button" onclick="openLeadForm()">
+  Get Qualified Now
+</button>
   </div>
 
   <div class="hero-image-card">
@@ -509,6 +576,35 @@ body{
 <div class="footer">
   SAVE MONEY. | GET PAID. | LIVE BETTER.
 </div>
+<div id="leadFormModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLeadForm()">&times;</span>
 
+    <h2>Get Qualified Now</h2>
+    <p>Fill this out and we’ll contact you shortly.</p>
+
+    <form action="https://formspree.io/f/xvzyyevv" method="POST">
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="email" name="email" placeholder="Email Address" required>
+      <input type="text" name="address" placeholder="Home Address" required>
+      <input type="text" name="average_monthly_bill" placeholder="Average Monthly Electric Bill" required>
+
+      <button type="submit" class="form-submit">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openLeadForm(){
+  document.getElementById("leadFormModal").style.display = "flex";
+}
+
+function closeLeadForm(){
+  document.getElementById("leadFormModal").style.display = "none";
+}
+</script>
 </body>
 </html>
