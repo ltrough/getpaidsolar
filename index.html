@@ -612,11 +612,33 @@ body{
 }
 
 .footer{
-  background:#041024;
-  padding:18px;
-  text-align:center;
-  font-weight:bold;
-  letter-spacing:1px;
+    background:#001845;
+    color:white;
+    text-align:center;
+    padding:20px 15px;
+}
+
+.footer-tagline{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.footer-copyright{
+    font-size:14px;
+    opacity:.9;
+    margin-bottom:8px;
+}
+
+.footer-links a{
+    color:#ffc400;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:700;
+}
+
+.footer-links a:hover{
+    text-decoration:underline;
 }
 
 @media(max-width:900px){
@@ -905,9 +927,21 @@ body{
 
 
 
-<div class="footer">
-  SAVE MONEY. | GET PAID. | LIVE BETTER.
-</div>
+<footer class="footer">
+
+    <div class="footer-tagline">
+        SAVE MONEY. | GET PAID. | LIVE BETTER.
+    </div>
+
+    <div class="footer-copyright">
+        © 2026 Get Paid Solar™. All Rights Reserved.
+    </div>
+
+    <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+</footer>
 <div id="leadFormModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeLeadForm()">&times;</span>
