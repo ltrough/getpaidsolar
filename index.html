@@ -15,11 +15,37 @@ body{
   color:white;
 }
 
+.step-icon{
+    width:200px;
+    height:auto;
+}
+
 .qualify-section{
   background:white;
   color:#06152f;
   padding:60px 8%;
   text-align:center;
+}
+
+.qualify-button{
+    display:block;
+    margin:25px auto 50px auto;
+    background:#ffc400;
+    color:#06152f;
+    font-size:28px;
+    font-weight:900;
+    text-transform:uppercase;
+    padding:18px 45px;
+    border:3px solid #06152f;
+    border-radius:16px;
+    cursor:pointer;
+    box-shadow:0 4px 8px rgba(0,0,0,.25);
+    transition:.2s ease;
+}
+
+.qualify-button:hover{
+    transform:translateY(-2px);
+    background:#ffd84d;
 }
 
 .qualify-section h2{
@@ -186,6 +212,25 @@ body{
 .red{
     color:#e60000;
     font-weight:900;
+}
+
+.footer-qualify-button{
+    background:#06255a;
+    color:white;
+    font-size:24px;
+    font-weight:900;
+    text-transform:uppercase;
+    padding:18px 45px;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+    margin-top:25px;
+    margin-bottom:10px;
+    box-shadow:0 4px 8px rgba(0,0,0,.25);
+}
+
+.footer-qualify-button:hover{
+    background:#04193f;
 }
 
 @media(max-width:900px){
@@ -769,6 +814,10 @@ body{
   </div>
 
   <img src="images/AlreadyHaveSolar.png" alt="Already Have Solar" class="already-solar-img">
+  
+  <button class="qualify-button" onclick="openLeadForm()">
+    GET QUALIFIED NOW
+</button>
 
   <h3 class="section-title">How It Works</h3>
 
@@ -784,7 +833,7 @@ body{
     </div>
 
     <div class="step-card">
-        <img src="images/SolarDesign.png" alt="Custom Solar Design">
+        <img src="images/SolarDesign.png" alt="Custom Solar Design" class="step-icon">
         <h4>CUSTOM SOLAR DESIGN</h4>
         <p>
             We determine if your home
@@ -840,13 +889,21 @@ body{
 </section>
 
 <section class="cta">
-  <h2>Let's Get You Started Today!</h2>
-  <div class="contact">
-    info@GetPaidSolar.com<br>
-    (602) 688-9812<br>
-    www.GetPaidSolar.com
-  </div>
+    <h2>Let's Get You Started Today!</h2>
+
+    <div class="contact">
+        info@GetPaidSolar.com<br>
+        (602) 688-9812<br>
+        www.GetPaidSolar.com
+    </div>
+
+    <button class="footer-qualify-button" onclick="openLeadForm()">
+        GET QUALIFIED NOW
+    </button>
+
 </section>
+
+
 
 <div class="footer">
   SAVE MONEY. | GET PAID. | LIVE BETTER.
