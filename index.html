@@ -671,6 +671,15 @@ body{
     line-height:1.6;
 }
 
+.helper-text {
+  display: block;
+  font-size: 18px;
+  color: #666;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
 @media(max-width:900px){
   .header{
     flex-direction:column;
@@ -998,10 +1007,14 @@ body{
       <input type="tel" name="phone" placeholder="Phone Number" required>
       <input type="email" name="email" placeholder="Email Address" required>
       <input type="text" name="address" placeholder="Home Address" required>
-      <input type="text" name="average_monthly_bill" placeholder="Average Monthly Electric Bill" required>
+      <input type="text" name="average_monthly_bill" placeholder="Estimated Current Utility Bill" required>
 <label for="utilityBill">
-  Upload APS/SRP Bill (Optional)
+  Upload APS/SRP Bill (<strong>Recommended:</strong>)
 </label>
+
+<small class="helper-text">
+  Providing a copy of your bill helps us verify eligibility and prepare a more accurate savings estimate before we contact you.
+</small>
 
 <input
   type="file"
