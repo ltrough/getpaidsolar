@@ -989,13 +989,26 @@ body{
     <h2>Get Qualified Now</h2>
     <p>Fill this out and we’ll contact you shortly.</p>
 
-    <form action="https://formspree.io/f/xvzyyevv" method="POST">
+    <form
+  action="https://formspree.io/f/xvzyyevv"
+  method="POST"
+  enctype="multipart/form-data"
+>
       <input type="text" name="name" placeholder="Full Name" required>
       <input type="tel" name="phone" placeholder="Phone Number" required>
       <input type="email" name="email" placeholder="Email Address" required>
       <input type="text" name="address" placeholder="Home Address" required>
       <input type="text" name="average_monthly_bill" placeholder="Average Monthly Electric Bill" required>
+<label for="utilityBill">
+  Upload APS/SRP Bill (Optional)
+</label>
 
+<input
+  type="file"
+  id="utilityBill"
+  name="utilityBill"
+  accept=".pdf,.jpg,.jpeg,.png"
+/>
       <button type="submit" class="form-submit">
         Submit
       </button>
