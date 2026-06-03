@@ -1031,13 +1031,59 @@ body{
 </div>
 
 <script>
-function openLeadForm(){
+function openLeadForm() {
   document.getElementById("leadFormModal").style.display = "flex";
 }
 
-function closeLeadForm(){
+function closeLeadForm() {
   document.getElementById("leadFormModal").style.display = "none";
 }
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = this;
+  const formData = new FormData(form);
+
+  const fullName = formData.get("name")?.trim() || "";
+  const email = formData.get("email")?.trim() || "";
+  const rawPhone = formData.get("phone")?.trim() || "";
+  const digits = rawPhone.replace(/\D/g, "");
+
+  const phone = digits.length === 10
+    ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    : rawPhone;
+
+  const address = formData.get("address")?.trim() || "";
+  const utility = formData.get("utility_company")?.trim() || "";
+  const bill = formData.get("average_monthly_bill")?.trim() || "";
+
+  const nameParts = fullName.split(" ");
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const calendlyUrl =
+    "https://calendly.com/getpaidsolar-info/application" +
+    "?first_name=" + encodeURIComponent(firstName) +
+    "&last_name=" + encodeURIComponent(lastName) +
+    "&email=" + encodeURIComponent(email) +
+    "&a1=" + encodeURIComponent(address) +
+    "&a2=" + encodeURIComponent(phone) +
+    "&a3=" + encodeURIComponent(utility) +
+    "&a4=" + encodeURIComponent(bill);
+
+  const response = await fetch(form.action, {
+    method: "POST",
+    body: formData,
+    headers: { "Accept": "application/json" }
+  });
+
+  if (response.ok) {
+    window.location.href = calendlyUrl;
+  } else {
+    alert("There was a problem submitting the form. Please try again.");
+  }
+});
 </script>
 </body>
 </html>
