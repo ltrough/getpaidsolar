@@ -17,6 +17,69 @@ body{
   color:white;
 }
 
+.calculator-cta-section{
+  background:#ffffff;
+  color:#06152f;
+  padding:65px 8%;
+  text-align:center;
+}
+
+.calculator-cta-card{
+  max-width:1000px;
+  margin:0 auto;
+  background:linear-gradient(135deg,#06152f 0%,#062b63 100%);
+  color:white;
+  border:4px solid #ffc400;
+  border-radius:26px;
+  padding:45px 35px;
+  box-shadow:0 10px 28px rgba(0,0,0,.25);
+}
+
+.calculator-cta-card h2{
+  font-size:44px;
+  line-height:1.1;
+  margin:0 0 18px;
+  text-transform:uppercase;
+  font-weight:900;
+}
+
+.calculator-cta-card p{
+  max-width:850px;
+  margin:0 auto 28px;
+  font-size:23px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+.calculator-cta-button{
+  display:inline-block;
+  background:#ffc400;
+  color:#06152f;
+  padding:18px 36px;
+  border-radius:14px;
+  text-decoration:none;
+  font-size:22px;
+  font-weight:900;
+  text-transform:uppercase;
+  border:3px solid white;
+  box-shadow:0 4px 10px rgba(0,0,0,.28);
+  transition:.2s ease;
+}
+
+.calculator-cta-button:hover{
+  background:#ffd84d;
+  transform:translateY(-2px);
+}
+
+.calculator-cta-note{
+  display:block;
+  margin-top:18px;
+  font-size:16px;
+  color:#dbeafe;
+  font-weight:700;
+}
+
+
 .news-articles{
   background:#06152f;
   padding:55px 8%;
@@ -358,6 +421,27 @@ body{
 }
 
 @media(max-width:900px){
+
+  .calculator-cta-section{
+    padding:45px 5%;
+  }
+
+  .calculator-cta-card{
+    padding:34px 22px;
+  }
+
+  .calculator-cta-card h2{
+    font-size:30px;
+  }
+
+  .calculator-cta-card p{
+    font-size:18px;
+  }
+
+  .calculator-cta-button{
+    font-size:18px;
+    padding:16px 24px;
+  }
 
     .steps-grid{
         grid-template-columns:1fr;
@@ -1071,6 +1155,25 @@ body{
   </div>
 </section>
 
+<section class="calculator-cta-section">
+  <div class="calculator-cta-card">
+    <h2>See How Much APS Could Cost You Over 25 Years</h2>
+
+    <p>
+      Compare your current utility bill against a solar + battery option and see your potential
+      long-term savings before your free Energy Savings Review.
+    </p>
+
+    <a href="gpscalculator.html" class="calculator-cta-button">
+      See My 25-Year Savings
+    </a>
+
+    <span class="calculator-cta-note">
+      Free calculator • No obligation • Built for Arizona homeowners
+    </span>
+  </div>
+</section>
+
 <section class="news-articles">
 <h2 class="section-heading">Arizona Energy & Utility News</h2>
 
@@ -1078,7 +1181,7 @@ body{
     Stay informed about utility rates, battery incentives, grid programs, and energy updates that may impact Arizona homeowners.
 </p>
 <div class="news-card">
-    <h3>⚡ APS Proposes %14 Rate Increase</h3>
+    <h3>⚡ APS Proposes 14% Rate Increase</h3>
 
     <p>
         APS has requested a rate increase that could raise residential electric bills if
@@ -1113,10 +1216,10 @@ body{
     <h3>🔋 Tesla Offers Up To <span style="color:red;">$1,000</span> Back On Powerwall Batteries</h3>
 
     <p>
-        Tesla's Next Million Powerwall Rebate currently offers homeowners up to Tesla's Next Million Powerwall Rebate currently offers homeowners up to <span style="color:red; font-weight:bold;">$1,000</span> back
-on qualifying Powerwall 3 battery installations. back
-        on qualifying Powerwall 3 battery installations. Registration is currently scheduled
-        to remain open through June 30, 2026.
+        Tesla's Next Million Powerwall Rebate currently offers homeowners up to
+        <span style="color:red; font-weight:bold;">$1,000</span> back on qualifying
+        Powerwall 3 battery installations. Registration is currently scheduled to
+        remain open through June 30, 2026.
     </p>
 
     <a href="https://www.tesla.com/support/energy/powerwall/order/rebate"
@@ -1167,8 +1270,6 @@ on qualifying Powerwall 3 battery installations. back
 
 </section>
 
-
-<section class="cta">
 
 <section class="cta">
     <h2>Let's Get You Started Today!</h2>
