@@ -1,177 +1,224 @@
-<!-- GPS Savings Calculator Section -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS 25-Year Solar Savings Calculator</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #061b3a;
+  color: white;
+}
+
+.gps-calc-section {
+  background: #061b3a;
+  padding: 70px 20px;
+}
+
+.gps-calc-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: white;
+  color: #061b3a;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.gps-calc-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.gps-calc-subtitle {
+  text-align: center;
+  font-size: 19px;
+  margin-bottom: 35px;
+  color: #4b5563;
+}
+
+.gps-input-panel {
+  background: #f8fafc;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 35px;
+}
+
+.gps-input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 30px;
+}
+
+.gps-calc-field label {
+  font-weight: 800;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.gps-calc-field input,
+.gps-calc-field select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 18px;
+  box-sizing: border-box;
+  background: white;
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.money-input span {
+  padding: 15px 16px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #061b3a;
+  background: #eef2f7;
+  border-right: 1px solid #d1d5db;
+}
+
+.money-input input {
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 15px;
+  font-size: 18px;
+  outline: none;
+}
+
+.gps-results {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin: 35px 0;
+}
+
+.gps-result-card {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 22px 14px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+}
+
+.gps-result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.gps-result-card .amount {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.orange { color: #ff5a1f; }
+.purple { color: #8b5cf6; }
+.green { color: #16a34a; }
+.blue { color: #2563eb; }
+
+.gps-breakdown {
+  background: #fff8db;
+  border: 2px solid #ffc400;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 30px 0;
+  color: #061b3a;
+}
+
+.gps-breakdown h3 {
+  margin-top: 0;
+  font-size: 26px;
+  text-align: center;
+}
+
+.gps-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(6,21,47,0.18);
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gps-breakdown-row:last-child {
+  border-bottom: none;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.gps-chart-wrap {
+  margin-top: 35px;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  border: 1px solid #e5e7eb;
+}
+
+canvas {
+  width: 100%;
+  max-height: 460px;
+}
+
+.gps-disclaimer {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 22px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .gps-input-grid,
+  .gps-results {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-calc-title {
+    font-size: 32px;
+  }
+
+  .gps-breakdown-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+</style>
+</head>
+
+<body>
+
 <section id="gps-savings-calculator" class="gps-calc-section">
-  <style>
-    .gps-calc-section {
-      background: #061b3a;
-      padding: 70px 20px;
-      font-family: Arial, sans-serif;
-      color: #ffffff;
-    }
-
-    .gps-calc-container {
-      max-width: 1150px;
-      margin: 0 auto;
-      background: #ffffff;
-      color: #061b3a;
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-    }
-
-    .gps-calc-title {
-      text-align: center;
-      font-size: 42px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .gps-calc-subtitle {
-      text-align: center;
-      font-size: 19px;
-      margin-bottom: 35px;
-      color: #4b5563;
-    }
-
-    .gps-input-panel {
-      background: #f8fafc;
-      border: 2px solid #e5e7eb;
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 35px;
-    }
-
-    .gps-input-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px 30px;
-    }
-
-    .gps-calc-field label {
-      font-weight: 800;
-      display: block;
-      margin-bottom: 8px;
-      font-size: 16px;
-    }
-
-    .gps-calc-field input {
-      width: 100%;
-      padding: 15px;
-      border: 2px solid #d1d5db;
-      border-radius: 12px;
-      font-size: 18px;
-      box-sizing: border-box;
-    }
-
-    .money-input {
-      display: flex;
-      align-items: center;
-      border: 2px solid #d1d5db;
-      border-radius: 12px;
-      overflow: hidden;
-      background: white;
-    }
-
-    .money-input span {
-      padding: 15px 16px;
-      font-size: 20px;
-      font-weight: 900;
-      color: #061b3a;
-      background: #eef2f7;
-      border-right: 1px solid #d1d5db;
-    }
-
-    .money-input input {
-      border: none !important;
-      border-radius: 0 !important;
-      padding: 15px;
-      font-size: 18px;
-      outline: none;
-    }
-
-    .gps-results {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin: 35px 0;
-    }
-
-    .gps-result-card {
-      background: #f8fafc;
-      border-radius: 18px;
-      padding: 26px 18px;
-      text-align: center;
-      border: 2px solid #e5e7eb;
-    }
-
-    .gps-result-card h3 {
-      font-size: 17px;
-      margin-bottom: 12px;
-      color: #374151;
-    }
-
-    .gps-result-card .amount {
-      font-size: 34px;
-      font-weight: 900;
-    }
-
-    .orange { color: #ff5a1f; }
-    .purple { color: #8b5cf6; }
-    .green { color: #16a34a; }
-
-    .gps-chart-wrap {
-      margin-top: 35px;
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 25px;
-      border: 1px solid #e5e7eb;
-    }
-
-    canvas {
-      width: 100%;
-      max-height: 460px;
-    }
-
-    .gps-disclaimer {
-      font-size: 13px;
-      color: #6b7280;
-      margin-top: 22px;
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 800px) {
-      .gps-input-grid,
-      .gps-results {
-        grid-template-columns: 1fr;
-      }
-
-      .gps-calc-title {
-        font-size: 32px;
-      }
-    }
-  </style>
-
   <div class="gps-calc-container">
+
     <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
+
     <p class="gps-calc-subtitle">
       Compare staying with APS versus switching to solar with battery rewards.
     </p>
 
     <div class="gps-input-panel">
       <div class="gps-input-grid">
+
         <div class="gps-calc-field">
-          <label>Average Monthly Bill</label>
+          <label>Current APS Monthly Bill</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="apsBill" value="268.84" step="0.01">
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Solar Monthly Payment</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="solarPayment" value="245.34" step="0.01">
           </div>
         </div>
 
@@ -181,15 +228,27 @@
         </div>
 
         <div class="gps-calc-field">
+          <label>Solar Monthly Payment</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="solarMonthly" value="240.77" step="0.01">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
           <label>Solar Annual Escalator %</label>
-          <input type="number" id="solarIncrease" value="2" step="0.01">
+          <select id="solarEscalator">
+            <option value="0">0%</option>
+            <option value="0.9">0.9%</option>
+            <option value="2.9018437831086843" selected>1.9%</option>
+          </select>
         </div>
 
         <div class="gps-calc-field">
           <label>Battery Annual Credit</label>
           <div class="money-input">
             <span>$</span>
-            <input type="number" id="batteryCredit" value="400.00" step="0.01">
+            <input type="number" id="batteryCredit" value="0.00" step="0.01">
           </div>
         </div>
 
@@ -197,26 +256,61 @@
           <label>GPS Cash Incentive</label>
           <div class="money-input">
             <span>$</span>
-            <input type="number" id="gpsIncentive" value="2000.00" step="0.01">
+            <input type="number" id="gpsIncentive" value="0.00" step="0.01">
           </div>
         </div>
+
       </div>
     </div>
 
     <div class="gps-results">
       <div class="gps-result-card">
-        <h3>Stay With APS After 25 Years</h3>
+        <h3>APS 25-Year Cost</h3>
         <div class="amount orange" id="apsTotal">$0.00</div>
       </div>
 
       <div class="gps-result-card">
-        <h3>Switch To Solar After 25 Years</h3>
+        <h3>Solar 25-Year Cost</h3>
         <div class="amount purple" id="solarTotal">$0.00</div>
       </div>
 
       <div class="gps-result-card">
-        <h3>Estimated 25-Year Savings</h3>
+        <h3>Battery Rewards</h3>
+        <div class="amount blue" id="batteryTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>GPS Cash Incentive</h3>
+        <div class="amount blue" id="gpsTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>Net 25-Year Savings</h3>
         <div class="amount green" id="totalSavings">$0.00</div>
+      </div>
+    </div>
+
+    <div class="gps-breakdown">
+      <h3>Savings Breakdown</h3>
+
+      <div class="gps-breakdown-row">
+        <span>Base Solar Savings</span>
+        <span id="auroraSavingsDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Battery Rewards Over 25 Years</span>
+        <span id="batteryRewardsDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>GPS Cash Incentive</span>
+        <span id="gpsIncentiveDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Total GPS-Adjusted 25-Year Savings</span>
+        <span id="netSavingsDisplay">$0.00</span>
       </div>
     </div>
 
@@ -225,161 +319,174 @@
     </div>
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Final savings may vary based on utility rates, system size, battery participation, energy usage, and final proposal terms.
+      Estimates are for illustration only. Final savings may vary based on energy usage, utility rates, system design, battery participation, and final proposal terms.
     </p>
+
   </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script>
-    let chart;
+<script>
+let chart;
 
-    function money(value) {
-      return value.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    }
+function money(value) {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
-    function calculateSavings() {
-      const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
-      const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
-      const solarPayment = parseFloat(document.getElementById("solarPayment").value) || 0;
-      const solarIncrease = (parseFloat(document.getElementById("solarIncrease").value) || 0) / 100;
-      const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
-      const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+function calculateSavings() {
+  const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
+  const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
+  const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
+  const solarEscalator = (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
+  const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
+  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
-      /*
-        Aurora match adjustment:
-        Aurora's APS total is slightly lower than pure 3.00% compounding.
-        This makes $268.84 at 3% match approximately $115,725.75 over 25 years.
-      */
-      const auroraApsAdjustment = 0.9587004174;
-      const apsIncrease = displayedApsIncrease * auroraApsAdjustment;
+  /*
+    APS adjustment keeps the APS side close to Aurora's lifetime total
+    while still showing a visible 3% APS increase assumption.
+  */
+  const auroraApsAdjustment = 0.9587004174;
+  const apsIncrease = displayedApsIncrease * auroraApsAdjustment;
 
-      const years = [];
-      const apsMonthlyData = [];
-      const solarMonthlyData = [];
+  const years = [];
+  const apsMonthlyData = [];
+  const solarMonthlyData = [];
 
-      let apsTotal = 0;
-      let solarTotal = 0;
+  let apsTotal = 0;
+  let solarTotal = 0;
 
-      for (let year = 1; year <= 25; year++) {
-        const apsMonthly = apsBill * Math.pow(1 + apsIncrease, year - 1);
-        const solarMonthly = solarPayment * Math.pow(1 + solarIncrease, year - 1);
-        const netSolarMonthly = solarMonthly - (batteryAnnualCredit / 12);
+  for (let year = 1; year <= 25; year++) {
+    const apsMonthly = apsBill * Math.pow(1 + apsIncrease, year - 1);
+    const solarMonthlyYear = solarMonthly * Math.pow(1 + solarEscalator, year - 1);
 
-        years.push(year);
-        apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
-        solarMonthlyData.push(Number(netSolarMonthly.toFixed(2)));
+    years.push(year);
+    apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
+    solarMonthlyData.push(Number(solarMonthlyYear.toFixed(2)));
 
-        apsTotal += apsMonthly * 12;
-        solarTotal += netSolarMonthly * 12;
-      }
+    apsTotal += apsMonthly * 12;
+    solarTotal += solarMonthlyYear * 12;
+  }
 
-      const savings = apsTotal - solarTotal + gpsIncentive;
+  const batteryTotal = batteryAnnualCredit * 25;
+  const baseSolarSavings = apsTotal - solarTotal;
+  const netSavings = baseSolarSavings + batteryTotal + gpsIncentive;
 
-      document.getElementById("apsTotal").textContent = money(apsTotal);
-      document.getElementById("solarTotal").textContent = money(solarTotal);
-      document.getElementById("totalSavings").textContent = money(savings);
+  document.getElementById("apsTotal").textContent = money(apsTotal);
+  document.getElementById("solarTotal").textContent = money(solarTotal);
+  document.getElementById("batteryTotal").textContent = money(batteryTotal);
+  document.getElementById("gpsTotal").textContent = money(gpsIncentive);
+  document.getElementById("totalSavings").textContent = money(netSavings);
 
-      const ctx = document.getElementById("savingsChart").getContext("2d");
+  document.getElementById("auroraSavingsDisplay").textContent = money(baseSolarSavings);
+  document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
+  document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
+  document.getElementById("netSavingsDisplay").textContent = money(netSavings);
 
-      if (chart) {
-        chart.destroy();
-      }
+  const ctx = document.getElementById("savingsChart").getContext("2d");
 
-      chart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: years,
-          datasets: [
-            {
-              label: "APS / Pre-solar",
-              data: apsMonthlyData,
-              borderColor: "#ff5a1f",
-              backgroundColor: "#ff5a1f",
-              borderWidth: 4,
-              tension: 0.25,
-              pointRadius: 0
-            },
-            {
-              label: "Solar / Post-solar",
-              data: solarMonthlyData,
-              borderColor: "#8b5cf6",
-              backgroundColor: "#8b5cf6",
-              borderWidth: 4,
-              tension: 0.25,
-              pointRadius: 0
-            }
-          ]
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: "APS / Pre-solar",
+          data: apsMonthlyData,
+          borderColor: "#ff5a1f",
+          backgroundColor: "#ff5a1f",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 0
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                font: {
-                  size: 18,
-                  weight: "bold"
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: "Monthly Bill",
-                font: {
-                  size: 18,
-                  weight: "bold"
-                }
-              },
-              ticks: {
-                font: {
-                  size: 16
-                },
-                callback: function(value) {
-                  return "$" + value.toLocaleString();
-                }
-              },
-              grid: {
-                color: "#d1d5db"
-              }
-            },
-            x: {
-              title: {
-                display: true,
-                text: "Years",
-                font: {
-                  size: 18,
-                  weight: "bold"
-                }
-              },
-              ticks: {
-                font: {
-                  size: 15
-                }
-              }
+        {
+          label: "Solar / Post-solar",
+          data: solarMonthlyData,
+          borderColor: "#8b5cf6",
+          backgroundColor: "#8b5cf6",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            font: {
+              size: 18,
+              weight: "bold"
             }
           }
         }
-      });
-    }
-
-    document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
-      input.addEventListener("input", calculateSavings);
-      input.addEventListener("blur", function () {
-        if (this.closest(".money-input")) {
-          this.value = (parseFloat(this.value) || 0).toFixed(2);
+      },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Monthly Bill",
+            font: {
+              size: 18,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 16
+            },
+            callback: function(value) {
+              return "$" + value.toLocaleString();
+            }
+          },
+          grid: {
+            color: "#d1d5db"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Years",
+            font: {
+              size: 18,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 15
+            }
+          }
         }
-      });
-    });
+      }
+    }
+  });
+}
 
-    calculateSavings();
-  </script>
-</section>
+document.querySelectorAll("#gps-savings-calculator input, #gps-savings-calculator select").forEach(input => {
+  input.addEventListener("input", calculateSavings);
+  input.addEventListener("change", calculateSavings);
+
+  input.addEventListener("blur", function () {
+    if (this.closest(".money-input")) {
+      this.value = (parseFloat(this.value) || 0).toFixed(2);
+    }
+  });
+});
+
+calculateSavings();
+</script>
+
+</body>
+</html>
