@@ -407,7 +407,7 @@ function calculateSavings() {
   const netSavings = baseSolarSavings + batteryTotal + gpsIncentive;
 
   const firstYearMonthlyBatteryCredit = batteryAnnualCredit / 12;
-  const firstYearMonthlyGpsIncentive = gpsIncentive / 12;
+  const firstYearMonthlyGpsIncentive = gpsIncentive / 300;
 
   const newAvgMonthlyBill =
     solarMonthly -
