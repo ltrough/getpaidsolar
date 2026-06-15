@@ -25,7 +25,6 @@ body {
   color: #061b3a;
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
 }
 
 .gps-calc-title {
@@ -95,8 +94,6 @@ body {
 .money-input input {
   border: none !important;
   border-radius: 0 !important;
-  padding: 15px;
-  font-size: 18px;
   outline: none;
 }
 
@@ -121,7 +118,7 @@ body {
   color: #374151;
 }
 
-.gps-result-card .amount {
+.amount {
   font-size: 26px;
   font-weight: 900;
 }
@@ -130,6 +127,13 @@ body {
 .purple { color: #8b5cf6; }
 .green { color: #16a34a; }
 .blue { color: #2563eb; }
+
+.lower-text {
+  font-size: 14px;
+  font-weight: 900;
+  color: #16a34a;
+  margin-top: 8px;
+}
 
 .gps-breakdown {
   background: #fff8db;
@@ -167,11 +171,12 @@ body {
   border-radius: 18px;
   padding: 25px;
   border: 1px solid #e5e7eb;
+  height: 460px;
 }
 
-canvas {
-  width: 100%;
-  max-height: 460px;
+.gps-chart-wrap canvas {
+  width: 100% !important;
+  height: 420px !important;
 }
 
 .gps-disclaimer {
@@ -240,7 +245,7 @@ canvas {
           <select id="solarEscalator">
             <option value="0">0%</option>
             <option value="0.9">0.9%</option>
-            <option value="2.9018437831086843" selected>1.9%</option>
+            <option value="2.9251490406770044" selected>1.9%</option>
           </select>
         </div>
 
@@ -264,14 +269,18 @@ canvas {
     </div>
 
     <div class="gps-results">
+
       <div class="gps-result-card">
         <h3>APS 25-Year Cost</h3>
         <div class="amount orange" id="apsTotal">$0.00</div>
       </div>
 
       <div class="gps-result-card">
-        <h3>Solar 25-Year Cost</h3>
-        <div class="amount purple" id="solarTotal">$0.00</div>
+        <h3>New Avg Monthly Bill</h3>
+        <div class="amount purple" id="newAvgMonthly">$0.00</div>
+        <div class="lower-text">
+          <span id="percentLower">0%</span> lower than APS
+        </div>
       </div>
 
       <div class="gps-result-card">
@@ -288,6 +297,7 @@ canvas {
         <h3>Net 25-Year Savings</h3>
         <div class="amount green" id="totalSavings">$0.00</div>
       </div>
+
     </div>
 
     <div class="gps-breakdown">
@@ -339,6 +349,29 @@ function money(value) {
   });
 }
 
+const verticalHoverLine = {
+  id: "verticalHoverLine",
+  afterDraw(chart) {
+    if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
+      const ctx = chart.ctx;
+      const x = chart.tooltip._active[0].element.x;
+      const topY = chart.chartArea.top;
+      const bottomY = chart.chartArea.bottom;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, topY);
+      ctx.lineTo(x, bottomY);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#9ca3af";
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+};
+
+Chart.register(verticalHoverLine);
+
 function calculateSavings() {
   const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
@@ -347,10 +380,6 @@ function calculateSavings() {
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
-  /*
-    APS adjustment keeps the APS side close to Aurora's lifetime total
-    while still showing a visible 3% APS increase assumption.
-  */
   const auroraApsAdjustment = 0.9587004174;
   const apsIncrease = displayedApsIncrease * auroraApsAdjustment;
 
@@ -377,8 +406,23 @@ function calculateSavings() {
   const baseSolarSavings = apsTotal - solarTotal;
   const netSavings = baseSolarSavings + batteryTotal + gpsIncentive;
 
+  const firstYearMonthlyBatteryCredit = batteryAnnualCredit / 12;
+  const firstYearMonthlyGpsIncentive = gpsIncentive / 12;
+
+  const newAvgMonthlyBill =
+    solarMonthly -
+    firstYearMonthlyBatteryCredit -
+    firstYearMonthlyGpsIncentive;
+
+  const currentAvgMonthlyAps = apsBill;
+
+  const percentLower = currentAvgMonthlyAps > 0
+    ? ((currentAvgMonthlyAps - newAvgMonthlyBill) / currentAvgMonthlyAps) * 100
+    : 0;
+
   document.getElementById("apsTotal").textContent = money(apsTotal);
-  document.getElementById("solarTotal").textContent = money(solarTotal);
+  document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
+  document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
   document.getElementById("batteryTotal").textContent = money(batteryTotal);
   document.getElementById("gpsTotal").textContent = money(gpsIncentive);
   document.getElementById("totalSavings").textContent = money(netSavings);
@@ -400,28 +444,75 @@ function calculateSavings() {
       labels: years,
       datasets: [
         {
-          label: "APS / Pre-solar",
+          label: "Pre-solar",
           data: apsMonthlyData,
           borderColor: "#ff5a1f",
           backgroundColor: "#ff5a1f",
           borderWidth: 4,
           tension: 0.25,
-          pointRadius: 0
+          pointRadius: 3,
+          pointHoverRadius: 7
         },
         {
-          label: "Solar / Post-solar",
+          label: "Post-solar",
           data: solarMonthlyData,
           borderColor: "#8b5cf6",
           backgroundColor: "#8b5cf6",
           borderWidth: 4,
           tension: 0.25,
-          pointRadius: 0
+          pointRadius: 3,
+          pointHoverRadius: 7
         }
       ]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+
       plugins: {
+        tooltip: {
+          enabled: true,
+          mode: "index",
+          intersect: false,
+          backgroundColor: "#ffffff",
+          titleColor: "#061b3a",
+          bodyColor: "#374151",
+          borderColor: "#d1d5db",
+          borderWidth: 1,
+          padding: 14,
+          displayColors: true,
+          boxWidth: 10,
+          boxHeight: 10,
+          titleFont: {
+            size: 13,
+            weight: "bold"
+          },
+          bodyFont: {
+            size: 13,
+            weight: "normal"
+          },
+          callbacks: {
+            title: function(context) {
+              return "Year " + context[0].label;
+            },
+            label: function(context) {
+              return context.dataset.label + "     " + money(context.parsed.y);
+            },
+            afterBody: function(context) {
+              const aps = context[0].parsed.y;
+              const solar = context[1].parsed.y;
+              const savings = aps - solar;
+
+              return "\nSavings     ↓ " + money(savings);
+            }
+          }
+        },
+
         legend: {
           position: "bottom",
           labels: {
@@ -432,19 +523,20 @@ function calculateSavings() {
           }
         }
       },
+
       scales: {
         y: {
           title: {
             display: true,
-            text: "Monthly Bill",
+            text: "Monthly bills",
             font: {
-              size: 18,
+              size: 16,
               weight: "bold"
             }
           },
           ticks: {
             font: {
-              size: 16
+              size: 14
             },
             callback: function(value) {
               return "$" + value.toLocaleString();
@@ -454,18 +546,19 @@ function calculateSavings() {
             color: "#d1d5db"
           }
         },
+
         x: {
           title: {
             display: true,
             text: "Years",
             font: {
-              size: 18,
+              size: 14,
               weight: "bold"
             }
           },
           ticks: {
             font: {
-              size: 15
+              size: 14
             }
           }
         }
