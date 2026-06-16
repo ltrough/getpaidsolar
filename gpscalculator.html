@@ -268,15 +268,16 @@ body {
         </div>
 
         <div class="gps-calc-field">
-          <label>Battery Annual Credit</label>
+          <label>APS VPP Annual Reward</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="batteryCredit" value="0.00" step="0.01">
           </div>
+          <div class="gps-help-text">Estimated annual APS Storage Rewards / VPP payment. Calculator counts this for 5 years only.</div>
         </div>
 
         <div class="gps-calc-field">
-          <label>GPS Cash Incentive</label>
+          <label>GPS Cash + Battery Incentive</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="gpsIncentive" value="0.00" step="0.01">
@@ -297,12 +298,12 @@ body {
         <h3>Monthly Cost After Rewards</h3>
         <div class="amount purple" id="newAvgMonthly">$0.00</div>
         <div class="lower-text">
-          <span id="percentLower">0%</span> lower than APS
+          <span id="percentLower">0%</span> lower than current APS bill
         </div>
       </div>
 
       <div class="gps-result-card">
-        <h3>Battery Rewards</h3>
+        <h3>5-Year Battery Rewards</h3>
         <div class="amount blue" id="batteryTotal">$0.00</div>
       </div>
 
@@ -327,7 +328,7 @@ body {
       </div>
 
       <div class="gps-breakdown-row">
-        <span>Battery Rewards Over 25 Years</span>
+        <span>Battery Rewards Over 5 Years</span>
         <span id="batteryRewardsDisplay">$0.00</span>
       </div>
 
@@ -347,7 +348,7 @@ body {
     </div>
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Aurora Base 25-Year Savings should be copied directly from the Aurora proposal. Battery rewards, GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+      Estimates are for illustration only. Aurora Base 25-Year Savings should be copied directly from the Aurora proposal. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
 
   </div>
@@ -420,7 +421,8 @@ function calculateSavings() {
     apsTotal += apsMonthly * 12;
   }
 
-  const batteryTotal = batteryAnnualCredit * 25;
+  const batteryRewardYears = 5;
+  const batteryTotal = batteryAnnualCredit * batteryRewardYears;
 
 // Aurora baseline APS cost (the value when APS Increase = 3%)
 const auroraBaselineApsCost = 115725.75;
@@ -434,12 +436,13 @@ const netSavings =
   batteryTotal +
   gpsIncentive;
 
-  const firstYearMonthlyBatteryCredit = batteryAnnualCredit / 12;
-  const firstYearMonthlyGpsIncentive = gpsIncentive / 300;
+  const monthlyBatteryCredit = batteryAnnualCredit / 12;
 
-  const newAvgMonthlyBill = solarMonthly - firstYearMonthlyBatteryCredit - firstYearMonthlyGpsIncentive;
+const newAvgMonthlyBill =
+  solarMonthly -
+  monthlyBatteryCredit;
 
-  const percentLower = apsBill > 0
+const percentLower = apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
