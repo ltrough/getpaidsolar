@@ -62,6 +62,13 @@ body {
   font-size: 16px;
 }
 
+.gps-help-text {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.35;
+}
+
 .gps-calc-field input,
 .gps-calc-field select {
   width: 100%;
@@ -213,7 +220,7 @@ body {
     <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
 
     <p class="gps-calc-subtitle">
-      Compare staying with APS versus switching to solar with battery rewards.
+      Match the Aurora proposal first, then add battery rewards and GPS cash incentives.
     </p>
 
     <div class="gps-input-panel">
@@ -233,11 +240,12 @@ body {
         </div>
 
         <div class="gps-calc-field">
-          <label>Solar Monthly Payment</label>
+          <label>Aurora Post-Solar Avg Monthly Payment</label>
           <div class="money-input">
             <span>$</span>
-            <input type="number" id="solarMonthly" value="240.77" step="0.01">
+            <input type="number" id="solarMonthly" value="237.28" step="0.01">
           </div>
+          <div class="gps-help-text">Use the average monthly payment from the Aurora post-solar box.</div>
         </div>
 
         <div class="gps-calc-field">
@@ -245,8 +253,18 @@ body {
           <select id="solarEscalator">
             <option value="0">0%</option>
             <option value="0.9">0.9%</option>
-            <option value="2.9251490406770044" selected>1.9%</option>
+            <option value="1.9" selected>1.9%</option>
           </select>
+          <div class="gps-help-text">Used for the chart only. The savings total is controlled by Aurora's 25-year savings field.</div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Aurora 25-Year Savings</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="auroraSavings" value="14022.02" step="0.01">
+          </div>
+          <div class="gps-help-text">Copy this directly from Aurora. This keeps the website calculator matching the proposal even when PPW changes.</div>
         </div>
 
         <div class="gps-calc-field">
@@ -276,7 +294,7 @@ body {
       </div>
 
       <div class="gps-result-card">
-        <h3>New Avg Monthly Bill</h3>
+        <h3>Monthly Cost After Rewards</h3>
         <div class="amount purple" id="newAvgMonthly">$0.00</div>
         <div class="lower-text">
           <span id="percentLower">0%</span> lower than APS
@@ -304,7 +322,7 @@ body {
       <h3>Savings Breakdown</h3>
 
       <div class="gps-breakdown-row">
-        <span>Base Solar Savings</span>
+        <span>Aurora Base 25-Year Savings</span>
         <span id="auroraSavingsDisplay">$0.00</span>
       </div>
 
@@ -329,7 +347,7 @@ body {
     </div>
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Final savings may vary based on energy usage, utility rates, system design, battery participation, and final proposal terms.
+      Estimates are for illustration only. Aurora Base 25-Year Savings should be copied directly from the Aurora proposal. Battery rewards, GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
 
   </div>
@@ -377,9 +395,11 @@ function calculateSavings() {
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
   const solarEscalator = (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
+  const auroraSavings = parseFloat(document.getElementById("auroraSavings").value) || 0;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
+  // This adjustment keeps the APS 25-year total aligned with Aurora-style lifetime total estimates.
   const auroraApsAdjustment = 0.9587004174;
   const apsIncrease = displayedApsIncrease * auroraApsAdjustment;
 
@@ -388,7 +408,6 @@ function calculateSavings() {
   const solarMonthlyData = [];
 
   let apsTotal = 0;
-  let solarTotal = 0;
 
   for (let year = 1; year <= 25; year++) {
     const apsMonthly = apsBill * Math.pow(1 + apsIncrease, year - 1);
@@ -399,25 +418,29 @@ function calculateSavings() {
     solarMonthlyData.push(Number(solarMonthlyYear.toFixed(2)));
 
     apsTotal += apsMonthly * 12;
-    solarTotal += solarMonthlyYear * 12;
   }
 
   const batteryTotal = batteryAnnualCredit * 25;
-  const baseSolarSavings = apsTotal - solarTotal;
-  const netSavings = baseSolarSavings + batteryTotal + gpsIncentive;
+
+// Aurora baseline APS cost (the value when APS Increase = 3%)
+const auroraBaselineApsCost = 115725.75;
+
+// Additional savings created by changing APS escalation
+const extraApsSavings = apsTotal - auroraBaselineApsCost;
+
+const netSavings =
+  auroraSavings +
+  extraApsSavings +
+  batteryTotal +
+  gpsIncentive;
 
   const firstYearMonthlyBatteryCredit = batteryAnnualCredit / 12;
   const firstYearMonthlyGpsIncentive = gpsIncentive / 300;
 
-  const newAvgMonthlyBill =
-    solarMonthly -
-    firstYearMonthlyBatteryCredit -
-    firstYearMonthlyGpsIncentive;
+  const newAvgMonthlyBill = solarMonthly - firstYearMonthlyBatteryCredit - firstYearMonthlyGpsIncentive;
 
-  const currentAvgMonthlyAps = apsBill;
-
-  const percentLower = currentAvgMonthlyAps > 0
-    ? ((currentAvgMonthlyAps - newAvgMonthlyBill) / currentAvgMonthlyAps) * 100
+  const percentLower = apsBill > 0
+    ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
   document.getElementById("apsTotal").textContent = money(apsTotal);
@@ -427,7 +450,7 @@ function calculateSavings() {
   document.getElementById("gpsTotal").textContent = money(gpsIncentive);
   document.getElementById("totalSavings").textContent = money(netSavings);
 
-  document.getElementById("auroraSavingsDisplay").textContent = money(baseSolarSavings);
+  document.getElementById("auroraSavingsDisplay").textContent = money(auroraSavings);
   document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
   document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
   document.getElementById("netSavingsDisplay").textContent = money(netSavings);
@@ -508,7 +531,7 @@ function calculateSavings() {
               const solar = context[1].parsed.y;
               const savings = aps - solar;
 
-              return "\nSavings     ↓ " + money(savings);
+              return "\nMonthly difference     ↓ " + money(savings);
             }
           }
         },
