@@ -111,22 +111,26 @@
     placeholder="Estimated Current Utility Bill (Optional)"
 >
 
-      <label for="utilityBill">
-        Upload APS/SRP Bill
-      </label>
+     <small class="helper-text">
+  Uploading your bill allows us to review your account in advance and provide a faster, more accurate savings estimate.
+</small>
 
-      <small class="helper-text">
-        <Uploading your bill allows us to review your account in advance and provide a faster, more accurate savings estimate.
-      </small>
+<input
+  type="file"
+  id="utilityBill"
+  name="utilityBill"
+  accept=".pdf,.jpg,.jpeg,.png"
+  multiple
+  required
+>
 
-      <input
-        type="file"
-        id="utilityBill"
-        name="utilityBill"
-        accept=".pdf,.jpg,.jpeg,.png"
-		multiple
-		required
-      >
+<small class="helper-text">
+   <strong>Items to upload:</strong><br>
+  ✓ Picture of monthly kWh usage<br>
+  ✓ Picture of daily energy usage<br>
+  ✓ Picture of current monthly bill amount<br>
+  ✓ Most recent APS or SRP bill preferred
+</small>
 
       <textarea
         name="notes"
