@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schedule With Lester | Get Paid Solar</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #061426, #0b2a4a);
+      color: #061426;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+    }
+
+    h1 { text-align: center; margin-bottom: 10px; }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 18px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .address-wrapper {
+      position: relative;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 52px;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      z-index: 9999;
+      display: none;
+      max-height: 220px;
+      overflow-y: auto;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .suggestion-item {
+      padding: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .suggestion-item:hover {
+      background: #f4f4f4;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .helper-text {
+      display: block;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .upload-checklist {
+      margin-top: 10px;
+      margin-bottom: 15px;
+      text-align: left;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .upload-checklist strong {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .check-item {
+      display: flex !important;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0;
+      font-size: 14px;
+      font-weight: normal !important;
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: #ffc400;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #061426;
+    }
+
+    button:hover { background: #ffcf33; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Get Paid Solar</h1>
+    <p class="subtitle">Complete this form, then schedule your appointment with Lester.</p>
+
+    <form action="https://formspree.io/f/mrevwjak" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="rep" value="Lester">
+      <input type="hidden" name="_redirect" value="https://calendly.com/getpaidsolar-info/lester">
+
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="email" name="email" placeholder="Email Address" required>
+
+      <div class="address-wrapper">
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="Start typing property address"
+          autocomplete="off"
+          required
+        >
+        <div id="addressSuggestions" class="suggestions"></div>
+      </div>
+
+      <select name="utility_company" required>
+        <option value="">Select Utility Company</option>
+        <option value="APS">APS</option>
+        <option value="SRP">SRP</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <input type="text" name="average_monthly_bill" placeholder="Estimated Current Utility Bill (Optional)">
+
+      <label for="utilityBill">Upload APS/SRP Bill</label>
+      <small class="helper-text">
+        Uploading your bill allows us to review your account in advance and provide a faster, more accurate savings estimate.
+      </small>
+
+      <input type="file" id="utilityBill" name="utilityBill" accept=".pdf,.jpg,.jpeg,.png" multiple required>
+
+      <div class="upload-checklist">
+        <strong>Items to upload:</strong>
+
+        <label class="check-item"><input type="checkbox"> Picture of monthly kWh usage</label>
+        <label class="check-item"><input type="checkbox"> Picture of daily energy usage</label>
+        <label class="check-item"><input type="checkbox"> Picture of current monthly bill amount</label>
+        <label class="check-item"><input type="checkbox"> Most recent APS or SRP bill preferred</label>
+        <label class="check-item"><input type="checkbox"> Picture of electrical panel (breaker box) with door open</label>
+      </div>
+
+      <textarea name="notes" placeholder="Notes or anything we should know before the appointment" rows="4"></textarea>
+
+      <button type="submit">Continue to Schedule Appointment</button>
+    </form>
+  </div>
+
+<script>
+const GEOAPIFY_KEY = "eee263acca5749e480b88a534798d08e";
+const addressInput = document.getElementById("address");
+const suggestionsBox = document.getElementById("addressSuggestions");
+let debounceTimer;
+
+addressInput.addEventListener("input", function () {
+  clearTimeout(debounceTimer);
+
+  const query = addressInput.value.trim();
+
+  if (query.length < 3) {
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = "";
+    return;
+  }
+
+  debounceTimer = setTimeout(() => {
+    fetchAddressSuggestions(query);
+  }, 300);
+});
+
+async function fetchAddressSuggestions(query) {
+  const url =
+    "https://api.geoapify.com/v1/geocode/autocomplete" +
+    "?text=" + encodeURIComponent(query) +
+    "&filter=countrycode:us" +
+    "&limit=5" +
+    "&apiKey=" + GEOAPIFY_KEY;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    suggestionsBox.innerHTML = "";
+
+    if (!data.features || data.features.length === 0) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+
+    data.features.forEach((feature) => {
+      const address = feature.properties.formatted;
+
+      const item = document.createElement("div");
+      item.className = "suggestion-item";
+      item.textContent = address;
+
+      item.addEventListener("mousedown", function () {
+        addressInput.value = address;
+        suggestionsBox.style.display = "none";
+      });
+
+      suggestionsBox.appendChild(item);
+    });
+
+    suggestionsBox.style.display = "block";
+
+  } catch (error) {
+    console.error("Address lookup failed:", error);
+    suggestionsBox.style.display = "none";
+  }
+}
+
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".address-wrapper")) {
+    suggestionsBox.style.display = "none";
+  }
+});
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = this;
+  const formData = new FormData(form);
+
+  const fullName = formData.get("name")?.trim() || "";
+  const email = formData.get("email")?.trim() || "";
+  const rawPhone = formData.get("phone")?.trim() || "";
+  const digits = rawPhone.replace(/\D/g, "");
+
+  const phone = digits.length === 10
+    ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    : rawPhone;
+
+  const address = formData.get("address")?.trim() || "";
+  const utility = formData.get("utility_company") || "";
+  const bill = formData.get("average_monthly_bill")?.trim() || "";
+
+  const nameParts = fullName.split(" ");
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const calendlyUrl =
+    "https://calendly.com/getpaidsolar-info/Lester" +
+    "?first_name=" + encodeURIComponent(firstName) +
+    "&last_name=" + encodeURIComponent(lastName) +
+    "&email=" + encodeURIComponent(email) +
+    "&a1=" + encodeURIComponent(address) +
+    "&a2=" + encodeURIComponent(phone) +
+    "&a3=" + encodeURIComponent(utility) +
+    "&a4=" + encodeURIComponent(bill);
+
+  const response = await fetch(form.action, {
+    method: "POST",
+    body: formData,
+    headers: { "Accept": "application/json" }
+  });
+
+  if (response.ok) {
+    window.location.href = calendlyUrl;
+  } else {
+    alert("There was a problem submitting the form. Please try again.");
+  }
+});
+</script>
+
+</body>
+</html>
