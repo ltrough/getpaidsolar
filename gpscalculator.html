@@ -51,7 +51,7 @@ body {
 
 .gps-input-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 24px 30px;
 }
 
@@ -69,8 +69,7 @@ body {
   line-height: 1.35;
 }
 
-.gps-calc-field input,
-.gps-calc-field select {
+.gps-calc-field input {
   width: 100%;
   padding: 15px;
   border: 2px solid #d1d5db;
@@ -78,6 +77,13 @@ body {
   font-size: 18px;
   box-sizing: border-box;
   background: white;
+}
+
+.readonly-field {
+  background: #ffffff !important;
+  color: #061b3a;
+  font-weight: 700;
+  cursor: default;
 }
 
 .money-input {
@@ -140,6 +146,33 @@ body {
   font-weight: 900;
   color: #16a34a;
   margin-top: 8px;
+}
+
+.estimate-notice {
+  background: #fff5f5;
+  border: 3px solid #dc2626;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 25px 0;
+  color: #991b1b;
+  line-height: 1.8;
+}
+
+.estimate-notice-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.estimate-notice-main {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.estimate-notice-sub {
+  margin-top: 10px;
+  font-size: 15px;
 }
 
 .gps-breakdown {
@@ -249,11 +282,7 @@ body {
 
         <div class="gps-calc-field">
           <label>Solar Annual Rate Lock %</label>
-          <select id="solarEscalator">
-            <option value="0">0%</option>
-            <option value="0.9">0.9%</option>
-            <option value="1.9" selected>1.9%</option>
-          </select>
+          <input type="text" id="solarEscalatorDisplay" value="1.9%" readonly class="readonly-field">
         </div>
 
         <div class="gps-calc-field">
@@ -262,7 +291,9 @@ body {
             <span>$</span>
             <input type="number" id="batteryCredit" value="0.00" step="0.01">
           </div>
-          <div class="gps-help-text">Estimated annual APS Storage Rewards / VPP payment. Calculator counts this for 5 years only.</div>
+          <div class="gps-help-text">
+            Estimated annual APS Storage Rewards / VPP payment. Calculator counts this for 5 years only.
+          </div>
         </div>
 
         <div class="gps-calc-field">
@@ -306,44 +337,21 @@ body {
         <div class="amount green" id="totalSavings">$0.00</div>
       </div>
 
- </div>
+    </div>
 
-<div style="
-  background:#fff5f5;
-  border:3px solid #dc2626;
-  border-radius:14px;
-  padding:20px;
-  margin:25px 0;
-  color:#991b1b;
-  line-height:1.8;
-">
+    <div class="estimate-notice">
+      <div class="estimate-notice-title">IMPORTANT ESTIMATE NOTICE</div>
 
-  <div style="
-    font-size:22px;
-    font-weight:900;
-    color:#dc2626;
-    margin-bottom:10px;
-  ">
-    IMPORTANT ESTIMATE NOTICE
-  </div>
+      <div class="estimate-notice-main">
+        The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
+      </div>
 
-  <div style="
-    font-size:16px;
-    font-weight:700;
-  ">
-    The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
-  </div>
+      <div class="estimate-notice-sub">
+        Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
+      </div>
+    </div>
 
-  <div style="
-    margin-top:10px;
-    font-size:15px;
-  ">
-    Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
-  </div>
-
-</div>
-
-<div class="gps-breakdown">
+    <div class="gps-breakdown">
       <h3>Savings Breakdown</h3>
 
       <div class="gps-breakdown-row">
@@ -424,7 +432,7 @@ function calculateSavings() {
   const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
-  const solarEscalator = (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
+  const solarEscalator = 0.019;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
@@ -614,7 +622,7 @@ function calculateSavings() {
   });
 }
 
-document.querySelectorAll("#gps-savings-calculator input, #gps-savings-calculator select").forEach(input => {
+document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
   input.addEventListener("input", calculateSavings);
   input.addEventListener("change", calculateSavings);
 
