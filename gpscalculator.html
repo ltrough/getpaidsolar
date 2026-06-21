@@ -220,7 +220,7 @@ body {
     <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
 
     <p class="gps-calc-subtitle">
-      Match the Aurora proposal first, then add battery rewards and GPS cash incentives.
+      Estimate your solar savings using your current APS bill, solar payment, battery rewards, and GPS incentives.
     </p>
 
     <div class="gps-input-panel">
@@ -240,31 +240,20 @@ body {
         </div>
 
         <div class="gps-calc-field">
-          <label>Aurora Post-Solar Avg Monthly Payment</label>
+          <label>Solar Avg Monthly Payment</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="solarMonthly" value="237.28" step="0.01">
           </div>
-          <div class="gps-help-text">Use the average monthly payment from the Aurora post-solar box.</div>
         </div>
 
         <div class="gps-calc-field">
-          <label>Solar Annual Escalator %</label>
+          <label>Solar Annual Rate Lock %</label>
           <select id="solarEscalator">
             <option value="0">0%</option>
             <option value="0.9">0.9%</option>
             <option value="1.9" selected>1.9%</option>
           </select>
-          <div class="gps-help-text">Used for the chart only. The savings total is controlled by Aurora's 25-year savings field.</div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Aurora 25-Year Savings</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="auroraSavings" value="14022.02" step="0.01">
-          </div>
-          <div class="gps-help-text">Copy this directly from Aurora. This keeps the website calculator matching the proposal even when PPW changes.</div>
         </div>
 
         <div class="gps-calc-field">
@@ -317,14 +306,54 @@ body {
         <div class="amount green" id="totalSavings">$0.00</div>
       </div>
 
-    </div>
+ </div>
 
-    <div class="gps-breakdown">
+<div style="
+  background:#fff5f5;
+  border:3px solid #dc2626;
+  border-radius:14px;
+  padding:20px;
+  margin:25px 0;
+  color:#991b1b;
+  line-height:1.8;
+">
+
+  <div style="
+    font-size:22px;
+    font-weight:900;
+    color:#dc2626;
+    margin-bottom:10px;
+  ">
+    IMPORTANT ESTIMATE NOTICE
+  </div>
+
+  <div style="
+    font-size:16px;
+    font-weight:700;
+  ">
+    The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
+  </div>
+
+  <div style="
+    margin-top:10px;
+    font-size:15px;
+  ">
+    Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
+  </div>
+
+</div>
+
+<div class="gps-breakdown">
       <h3>Savings Breakdown</h3>
 
       <div class="gps-breakdown-row">
-        <span>Aurora Base 25-Year Savings</span>
-        <span id="auroraSavingsDisplay">$0.00</span>
+        <span>APS 25-Year Cost</span>
+        <span id="apsCostDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Solar 25-Year Cost</span>
+        <span id="solarCostDisplay">$0.00</span>
       </div>
 
       <div class="gps-breakdown-row">
@@ -338,7 +367,7 @@ body {
       </div>
 
       <div class="gps-breakdown-row">
-        <span>Total GPS-Adjusted 25-Year Savings</span>
+        <span>Total Estimated 25-Year Savings</span>
         <span id="netSavingsDisplay">$0.00</span>
       </div>
     </div>
@@ -348,7 +377,7 @@ body {
     </div>
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Aurora Base 25-Year Savings should be copied directly from the Aurora proposal. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
 
   </div>
@@ -396,53 +425,44 @@ function calculateSavings() {
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
   const solarEscalator = (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
-  const auroraSavings = parseFloat(document.getElementById("auroraSavings").value) || 0;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
-  // This adjustment keeps the APS 25-year total aligned with Aurora-style lifetime total estimates.
-  const auroraApsAdjustment = 0.9587004174;
-  const apsIncrease = displayedApsIncrease * auroraApsAdjustment;
+  const fixedCharge = 13.785;
+  const energyPortion = Math.max(apsBill - fixedCharge, 0);
 
   const years = [];
   const apsMonthlyData = [];
   const solarMonthlyData = [];
 
   let apsTotal = 0;
+  let solarTotal = 0;
 
   for (let year = 1; year <= 25; year++) {
-    const apsMonthly = apsBill * Math.pow(1 + apsIncrease, year - 1);
-    const solarMonthlyYear = solarMonthly * Math.pow(1 + solarEscalator, year - 1);
+    const apsMonthly =
+      fixedCharge +
+      (energyPortion * Math.pow(1 + displayedApsIncrease, year - 1));
+
+    const solarMonthlyYear =
+      solarMonthly * Math.pow(1 + solarEscalator, year - 1);
 
     years.push(year);
     apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
     solarMonthlyData.push(Number(solarMonthlyYear.toFixed(2)));
 
     apsTotal += apsMonthly * 12;
+    solarTotal += solarMonthlyYear * 12;
   }
 
   const batteryRewardYears = 5;
   const batteryTotal = batteryAnnualCredit * batteryRewardYears;
 
-// Aurora baseline APS cost (the value when APS Increase = 3%)
-const auroraBaselineApsCost = 115725.75;
-
-// Additional savings created by changing APS escalation
-const extraApsSavings = apsTotal - auroraBaselineApsCost;
-
-const netSavings =
-  auroraSavings +
-  extraApsSavings +
-  batteryTotal +
-  gpsIncentive;
+  const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
 
   const monthlyBatteryCredit = batteryAnnualCredit / 12;
+  const newAvgMonthlyBill = solarMonthly - monthlyBatteryCredit;
 
-const newAvgMonthlyBill =
-  solarMonthly -
-  monthlyBatteryCredit;
-
-const percentLower = apsBill > 0
+  const percentLower = apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
@@ -453,7 +473,8 @@ const percentLower = apsBill > 0
   document.getElementById("gpsTotal").textContent = money(gpsIncentive);
   document.getElementById("totalSavings").textContent = money(netSavings);
 
-  document.getElementById("auroraSavingsDisplay").textContent = money(auroraSavings);
+  document.getElementById("apsCostDisplay").textContent = money(apsTotal);
+  document.getElementById("solarCostDisplay").textContent = money(solarTotal);
   document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
   document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
   document.getElementById("netSavingsDisplay").textContent = money(netSavings);
