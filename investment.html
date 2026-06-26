@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Solar for Arizona Rental Property Owners | Get Paid Solar</title>
+<meta name="description" content="Get Paid Solar helps Arizona rental and investment property owners reduce utility costs, improve cash flow, and receive a cash incentive on qualifying solar projects.">
+
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#06152f;
+  color:white;
+}
+
+.header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:50px;
+  padding:20px 5%;
+  background:#041024;
+}
+
+.gps-logo{
+  max-width:420px;
+  height:auto;
+}
+
+.banner-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.pay-banner-text{
+  font-size:clamp(55px,7vw,150px);
+  font-weight:900;
+  color:#ffc400;
+  text-transform:uppercase;
+  line-height:.9;
+  white-space:nowrap;
+  text-align:center;
+}
+
+.phone{
+  margin-top:15px;
+  font-size:34px;
+  font-weight:900;
+  color:#ffc400;
+  text-align:center;
+}
+
+.hero{
+  padding:35px 8% 60px;
+  background:linear-gradient(120deg,#06152f 0%,#062b63 45%,#06152f 100%);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+.tagline{
+  font-size:42px;
+  font-weight:900;
+  line-height:1.05;
+  text-transform:uppercase;
+  margin-bottom:25px;
+}
+
+.yellow{ color:#ffc400; }
+.green{ color:#20b832; }
+.red{ color:#e60000; font-weight:900; }
+
+.hero h1{
+  font-size:56px;
+  line-height:1.02;
+  margin:0 0 25px;
+  text-transform:uppercase;
+}
+
+.hero p{
+  font-size:22px;
+  line-height:1.5;
+  max-width:650px;
+}
+
+.bullets{
+  margin:30px 0;
+  font-size:22px;
+  line-height:1.8;
+  font-weight:bold;
+}
+
+.cta-button{
+  display:inline-block;
+  background:#ffc400;
+  color:#06152f;
+  padding:18px 32px;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:22px;
+  font-weight:900;
+  text-transform:uppercase;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 4px 8px rgba(0,0,0,.25);
+}
+
+.cta-button:hover{
+  background:#ffd84d;
+  transform:translateY(-2px);
+}
+
+.hero-image-card{
+  position:relative;
+  min-height:650px;
+  border:3px solid #ffc400;
+  border-radius:28px;
+  overflow:hidden;
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.35)),
+    url("images/solar-home.jpg");
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+.cash-overlay{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(4,16,36,.48);
+  padding:30px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+
+.cash-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.cash-icon{
+  width:120px;
+  height:auto;
+  flex-shrink:0;
+}
+
+.cash-text h3{
+  margin:0;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.cash{
+  font-family:'Anton', sans-serif;
+  font-size:88px;
+  font-weight:400;
+  color:#e00000;
+  line-height:1.0;
+  margin:10px 0;
+  letter-spacing:2px;
+  -webkit-text-stroke:2px white;
+  text-shadow:0 2px 4px rgba(0,0,0,.25);
+}
+
+.cash-subtext{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.gold-divider{
+  border:none;
+  border-top:2px solid #ffc400;
+  margin:25px 0;
+}
+
+.savings-section{
+  text-align:center;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.savings-section h2{
+  margin:0 0 15px;
+  font-size:30px;
+  text-transform:uppercase;
+}
+
+.savings{
+  font-size:50px;
+  font-weight:900;
+  color:#ffc400;
+  line-height:1.1;
+  margin-bottom:15px;
+}
+
+.savings-note{
+  max-width:700px;
+  margin:0 auto;
+  text-align:center;
+  font-size:20px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+.investor-section{
+  background:white;
+  color:#06152f;
+  padding:60px 8%;
+  text-align:center;
+}
+
+.investor-section h2{
+  font-size:48px;
+  text-transform:uppercase;
+  margin:0 0 15px;
+  font-weight:900;
+}
+
+.investor-section p{
+  max-width:950px;
+  margin:0 auto 30px;
+  font-size:22px;
+  line-height:1.55;
+}
+
+.investor-highlight{
+  max-width:1000px;
+  margin:25px auto 10px;
+  background:#f4fff4;
+  border:4px solid #138a20;
+  border-radius:18px;
+  padding:28px;
+  color:#06152f;
+  font-size:26px;
+  font-weight:900;
+  line-height:1.35;
+}
+
+.investor-grid{
+  background:#f8f9fc;
+  color:#06152f;
+  padding:60px 8%;
+}
+
+.section-heading{
+  text-align:center;
+  color:#06152f;
+  font-size:42px;
+  font-weight:900;
+  margin:0 0 10px;
+  text-transform:uppercase;
+}
+
+.section-subheading{
+  text-align:center;
+  color:#06152f;
+  font-size:21px;
+  max-width:900px;
+  margin:0 auto 40px auto;
+  line-height:1.5;
+}
+
+.benefits{
+  max-width:1200px;
+  margin:0 auto;
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  box-shadow:0 6px 20px rgba(0,0,0,.12);
+}
+
+.benefit{
+  text-align:center;
+  padding:30px 20px;
+  color:#06152f;
+  border-right:1px solid #ddd;
+}
+
+.benefit:last-child{ border-right:none; }
+
+.benefit-icon{
+  width:75px;
+  height:75px;
+  object-fit:contain;
+  margin-bottom:15px;
+}
+
+.benefit h3{
+  color:#138a20;
+  font-size:23px;
+  font-weight:900;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+
+.benefit p{
+  color:#333;
+  font-size:18px;
+  line-height:1.45;
+}
+
+.qualify-section{
+  background:white;
+  color:#06152f;
+  padding:60px 8%;
+  text-align:center;
+}
+
+.qualify-section h2{
+  font-size:52px;
+  text-transform:uppercase;
+  margin:0;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.qualify-img{
+  max-width:430px;
+  width:90%;
+  margin:10px auto 25px;
+  display:block;
+}
+
+.qualify-subtitle{
+  color:#138a20;
+  font-size:26px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin:20px 0;
+}
+
+.qualify-list{
+  max-width:850px;
+  margin:0 auto 35px;
+  text-align:left;
+  font-size:24px;
+  line-height:1.8;
+  font-weight:900;
+}
+
+.qualify-list strong{
+  color:#138a20;
+}
+
+.section-title{
+  font-size:38px;
+  margin:0 0 25px;
+  text-transform:uppercase;
+  color:#06152f;
+  font-weight:900;
+}
+
+.steps-grid{
+  max-width:1100px;
+  margin:40px auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
+
+.step-card{
+  text-align:center;
+  padding:0 30px;
+}
+
+.step-card:not(:last-child){
+  border-right:2px solid #d9d9d9;
+}
+
+.step-card img{
+  width:170px;
+  height:auto;
+  margin-bottom:15px;
+}
+
+.step-card h4{
+  color:#118d1b;
+  font-size:28px;
+  font-weight:900;
+  margin-bottom:15px;
+  line-height:1.1;
+  text-transform:uppercase;
+}
+
+.step-card p{
+  color:#06152f;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.45;
+}
+
+.calculator-cta-section{
+  background:#ffffff;
+  color:#06152f;
+  padding:65px 8%;
+  text-align:center;
+}
+
+.calculator-cta-card{
+  max-width:1000px;
+  margin:0 auto;
+  background:linear-gradient(135deg,#06152f 0%,#062b63 100%);
+  color:white;
+  border:4px solid #ffc400;
+  border-radius:26px;
+  padding:45px 35px;
+  box-shadow:0 10px 28px rgba(0,0,0,.25);
+}
+
+.calculator-cta-card h2{
+  font-size:42px;
+  line-height:1.1;
+  margin:0 0 18px;
+  text-transform:uppercase;
+  font-weight:900;
+}
+
+.calculator-cta-card p{
+  max-width:850px;
+  margin:0 auto 28px;
+  font-size:23px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+.investor-proof{
+  background:#06152f;
+  padding:55px 8%;
+}
+
+.proof-card{
+  max-width:900px;
+  margin:0 auto 35px;
+  background:white;
+  color:#06152f;
+  border-left:8px solid #ffc400;
+  border-radius:18px;
+  padding:30px 35px;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);
+  text-align:left;
+}
+
+.proof-card h3{
+  margin:0 0 16px;
+  color:#06152f;
+  font-size:30px;
+  font-weight:900;
+  line-height:1.15;
+}
+
+.proof-card p{
+  margin:0;
+  color:#06152f;
+  font-size:21px;
+  line-height:1.45;
+}
+
+.cta{
+  background:#ffc400;
+  color:#06152f;
+  padding:45px 20px;
+  text-align:center;
+}
+
+.cta h2{
+  font-size:42px;
+  margin:0 0 15px;
+  text-transform:uppercase;
+}
+
+.contact{
+  font-size:24px;
+  font-weight:bold;
+  line-height:1.8;
+}
+
+.footer-qualify-button{
+  background:#06255a;
+  color:white;
+  font-size:24px;
+  font-weight:900;
+  text-transform:uppercase;
+  padding:18px 45px;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+  margin-top:25px;
+  margin-bottom:10px;
+  box-shadow:0 4px 8px rgba(0,0,0,.25);
+}
+
+.footer-qualify-button:hover{
+  background:#04193f;
+}
+
+.partner-section{
+  background:#ffffff;
+  color:#06152f;
+  text-align:center;
+  padding:40px 20px;
+}
+
+.partner-section h3{
+  color:#138a20;
+  font-size:32px;
+  text-transform:uppercase;
+  margin-bottom:15px;
+}
+
+.partner-section p{
+  max-width:800px;
+  margin:0 auto;
+  font-size:20px;
+  line-height:1.6;
+}
+
+.disclaimer-section{
+  background:#f8f9fc;
+  color:#06152f;
+  padding:35px 8%;
+  text-align:center;
+}
+
+.disclaimer-section p{
+  max-width:1000px;
+  margin:0 auto;
+  font-size:15px;
+  line-height:1.6;
+  color:#333;
+}
+
+.footer{
+  background:#001845;
+  color:white;
+  text-align:center;
+  padding:20px 15px;
+}
+
+.footer-tagline{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.footer-copyright{
+  font-size:14px;
+  opacity:.9;
+  margin-bottom:8px;
+}
+
+.footer-links a{
+  color:#ffc400;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+}
+
+.footer-links a:hover{
+  text-decoration:underline;
+}
+
+.helper-text {
+  display: block;
+  font-size: 18px;
+  color: #666;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  z-index:9999;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.75);
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-content{
+  background:white;
+  color:#06152f;
+  width:90%;
+  max-width:520px;
+  padding:30px;
+  border-radius:20px;
+  position:relative;
+  text-align:center;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.close{
+  position:absolute;
+  top:12px;
+  right:18px;
+  font-size:32px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.modal-content h2{
+  margin-top:0;
+  font-size:34px;
+  color:#06152f;
+}
+
+.modal-content p{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+.modal-content input,
+.modal-content select{
+  width:100%;
+  padding:15px;
+  margin-bottom:14px;
+  font-size:17px;
+  border:2px solid #ddd;
+  border-radius:10px;
+  box-sizing:border-box;
+}
+
+.form-submit{
+  width:100%;
+  background:#ffc400;
+  color:#06152f;
+  border:none;
+  padding:16px;
+  font-size:22px;
+  font-weight:900;
+  border-radius:12px;
+  cursor:pointer;
+  text-transform:uppercase;
+}
+
+@media(max-width:900px){
+  .header{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .pay-banner-text{
+    font-size:clamp(45px,12vw,90px);
+  }
+
+  .phone{
+    font-size:28px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    text-align:center;
+    padding:35px 5% 50px;
+  }
+
+  .hero h1{
+    font-size:40px;
+  }
+
+  .tagline{
+    font-size:30px;
+  }
+
+  .hero-image-card{
+    min-height:620px;
+  }
+
+  .cash-overlay{
+    padding:35px 22px;
+  }
+
+  .cash-row{
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+    margin-bottom:20px;
+  }
+
+  .cash-icon{
+    width:90px;
+  }
+
+  .cash{
+    font-size:54px;
+    line-height:.9;
+  }
+
+  .cash-text h3{
+    margin-top:0;
+    font-size:22px;
+  }
+
+  .savings{
+    font-size:34px;
+  }
+
+  .savings-note{
+    max-width:90%;
+    font-size:18px;
+  }
+
+  .investor-section h2,
+  .qualify-section h2{
+    font-size:34px;
+  }
+
+  .investor-section p,
+  .qualify-list{
+    font-size:18px;
+  }
+
+  .investor-highlight{
+    font-size:20px;
+    padding:22px;
+  }
+
+  .benefits{
+    grid-template-columns:1fr;
+  }
+
+  .benefit{
+    border-right:none;
+    border-bottom:1px solid #ddd;
+  }
+
+  .steps-grid{
+    grid-template-columns:1fr;
+  }
+
+  .step-card{
+    border-right:none !important;
+    border-bottom:1px solid #ddd;
+    padding:30px 0;
+  }
+
+  .step-card img{
+    width:140px;
+  }
+
+  .step-card h4{
+    font-size:24px;
+  }
+
+  .step-card p{
+    font-size:18px;
+  }
+
+  .calculator-cta-card h2{
+    font-size:30px;
+  }
+
+  .calculator-cta-card p{
+    font-size:18px;
+  }
+}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1RQMD8FRYL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1RQMD8FRYL');
+</script>
+
+</head>
+
+<body>
+
+<header class="header">
+  <img src="images/gps-logo-transparent.png"
+       alt="Get Paid Solar"
+       class="gps-logo">
+
+  <div class="banner-content">
+    <div class="pay-banner-text">
+      INVESTOR SOLAR
+    </div>
+
+    <div class="phone">
+      Call/Text: (602) 688-9812
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="tagline">
+      Lower Costs.<br>
+      <span class="yellow">Improve Cash Flow.</span><br>
+      Get Paid.
+    </div>
+
+    <h1>
+      Solar For Arizona<br>
+      Rental Property Owners<br>
+      <span class="green">& Investors</span>
+    </h1>
+
+    <p>
+      Get Paid Solar helps qualifying rental and investment property owners reduce electric costs,
+      improve property economics, and receive a cash incentive on completed solar projects.
+    </p>
+
+    <div class="bullets">
+      ✔ Built For Rental & Investment Properties<br>
+      ✔ $2–4K Cash Incentive On Qualifying Projects<br>
+      ✔ 20–40% Savings Compared To APS/SRP<br>
+      ✔ No Money Down Options<br>
+      ✔ Help Make Your Property More Attractive To Tenants
+    </div>
+
+    <button class="cta-button" onclick="openLeadForm()">
+      Request Property Review
+    </button>
+  </div>
+
+  <div class="hero-image-card">
+    <div class="cash-overlay">
+      <div class="cash-row">
+        <img src="images/cash-stack.png" alt="Cash incentive" class="cash-icon">
+
+        <div class="cash-text">
+          <h3>QUALIFYING INVESTORS</h3>
+
+          <div class="cash">
+            $2–4K<br>CASH
+          </div>
+
+          <p class="cash-subtext">
+            Paid after qualifying project completion.
+          </p>
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <div class="savings-section">
+        <h2>Turn Solar Into A Property Strategy</h2>
+
+        <div class="savings">
+          Reduce Costs. Add Value.
+        </div>
+
+        <p class="savings-note">
+          We help you review whether solar can improve the long-term economics
+          of your Arizona rental property.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="investor-section">
+  <h2>A Smarter Solar Strategy For Property Owners</h2>
+
+  <p>
+    Most solar companies focus only on homeowners who live in the home.
+    GPS created this investor page for landlords, rental property owners,
+    and real estate investors who want to evaluate solar like a business decision.
+  </p>
+
+  <div class="investor-highlight">
+    If the numbers make sense, your property may qualify for solar with no upfront investment,
+    reduced monthly utility costs, and a GPS cash incentive after completion.
+  </div>
+</section>
+
+<section class="investor-grid">
+  <h2 class="section-heading">Why Investors Look At Solar</h2>
+
+  <p class="section-subheading">
+    For a rental owner, solar is not just about energy. It can be about cash flow,
+    tenant appeal, future utility increases, and long-term property value.
+  </p>
+
+  <section class="benefits">
+    <div class="benefit">
+      <img src="images/piggy-bank.png" class="benefit-icon" alt="Lower Costs">
+      <h3>Lower Utility Costs</h3>
+      <p>Reduce monthly electric costs for the property.</p>
+    </div>
+
+    <div class="benefit">
+      <img src="images/chart.png" class="benefit-icon" alt="Property Economics">
+      <h3>Better Property Math</h3>
+      <p>Review solar as part of the property's long-term investment strategy.</p>
+    </div>
+
+    <div class="benefit">
+      <img src="images/no-money-down.png" class="benefit-icon" alt="No Money Down">
+      <h3>No Money Down</h3>
+      <p>Many qualifying projects can be structured with no upfront cost.</p>
+    </div>
+
+    <div class="benefit">
+      <img src="images/shield.png" class="benefit-icon" alt="Rate Protection">
+      <h3>Rate Protection</h3>
+      <p>Help reduce exposure to future APS/SRP electric rate increases.</p>
+    </div>
+
+    <div class="benefit">
+      <img src="images/referral.png" class="benefit-icon" alt="Cash Incentive">
+      <h3>Cash Incentive</h3>
+      <p>GPS pays qualifying property owners after completed projects.</p>
+    </div>
+  </section>
+</section>
+
+<section class="qualify-section">
+  <h2>Could Your Rental Property</h2>
+  <img src="images/Qualify.png" alt="Qualify?" class="qualify-img">
+
+  <p class="qualify-subtitle">This May Be A Fit If:</p>
+
+  <div class="qualify-list">
+    <div>✓ You own a rental or investment property in Arizona</div>
+    <div>✓ The property is served by <strong>APS/SRP</strong> or another qualifying utility</div>
+    <div>✓ The electric bill averages <strong>$100+ per month</strong></div>
+    <div>✓ You want to improve property cash flow without paying upfront</div>
+  </div>
+
+  <button class="cta-button" onclick="openLeadForm()">
+    REQUEST PROPERTY REVIEW
+  </button>
+
+  <h3 class="section-title" style="margin-top:55px;">How It Works</h3>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <img src="images/CheckList.png" alt="Property Review">
+      <h4>FREE PROPERTY REVIEW</h4>
+      <p>
+        We review the rental address, utility provider, estimated usage,
+        roof condition, and basic qualification details.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <img src="images/SolarDesign.png" alt="Solar Design">
+      <h4>INVESTOR SOLAR DESIGN</h4>
+      <p>
+        We estimate potential savings and show how the project could impact
+        the property's monthly economics.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <img src="images/get-paid.png" alt="Get Paid">
+      <h4>GET PAID & IMPROVE CASH FLOW</h4>
+      <p>
+        Receive <span class="red">$2,000–$4,000</span> after qualifying completion
+        and start reducing electric costs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="calculator-cta-section">
+  <div class="calculator-cta-card">
+    <h2>Want To See If The Numbers Make Sense?</h2>
+
+    <p>
+      Send us the rental property address and estimated electric bill.
+      We will review the property and let you know whether solar may be worth considering.
+    </p>
+
+    <button class="cta-button" onclick="openLeadForm()">
+      Start Free Review
+    </button>
+  </div>
+</section>
+
+<section class="investor-proof">
+  <h2 class="section-heading" style="color:white;">Built For Investor Conversations</h2>
+
+  <p class="section-subheading" style="color:white;">
+    This page is designed for landlords, rental owners, and real estate investors
+    who care about property performance more than a typical homeowner sales pitch.
+  </p>
+
+  <div class="proof-card">
+    <h3>🏠 Owner-Occupied Or Rental — The Numbers Still Matter</h3>
+    <p>
+      Whether your tenant pays the bill or you do, lower utility costs can create a stronger
+      rental offering and a more attractive long-term asset.
+    </p>
+  </div>
+
+  <div class="proof-card">
+    <h3>💰 GPS Adds A Cash Incentive</h3>
+    <p>
+      On qualifying completed projects, GPS currently offers a cash incentive to the property owner.
+      This is separate from any utility, battery, or manufacturer incentives that may apply.
+    </p>
+  </div>
+
+  <div class="proof-card">
+    <h3>⚡ Designed Around Arizona Utility Costs</h3>
+    <p>
+      Arizona electric costs, peak rates, usage patterns, and future rate increases can all impact
+      the long-term economics of owning rental property.
+    </p>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Review Your Rental Property Today</h2>
+
+  <div class="contact">
+    info@GetPaidSolar.com<br>
+    (602) 688-9812<br>
+    www.GetPaidSolar.com/investors
+  </div>
+
+  <button class="footer-qualify-button" onclick="openLeadForm()">
+    REQUEST PROPERTY REVIEW
+  </button>
+</section>
+
+<section class="partner-section">
+  <h3>Trusted Installation Partner</h3>
+
+  <p>
+    Get Paid Solar is proud to be an Authorized Dealer Partner of
+    Our World Energy, helping Arizona homeowners and property owners save money,
+    avoid future utility rate increases, and get paid for going solar.
+  </p>
+</section>
+
+<section class="disclaimer-section">
+  <p>
+    *Savings, incentives, and eligibility are not guaranteed. Actual results depend on utility usage,
+    utility provider, property condition, roof suitability, credit approval, program availability,
+    signed agreement terms, installation, PTO, and final project completion. Cash incentives are paid
+    only on qualifying completed projects according to Get Paid Solar’s incentive terms.
+  </p>
+</section>
+
+<footer class="footer">
+  <div class="footer-tagline">
+    SAVE MONEY. | GET PAID. | LIVE BETTER.
+  </div>
+
+  <div class="footer-copyright">
+    © 2026 Get Paid Solar™. All Rights Reserved.
+  </div>
+
+  <div class="footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+<div id="leadFormModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLeadForm()">&times;</span>
+
+    <h2>Free Property Review</h2>
+    <p>
+      Fill out the form below. After submitting, you'll be able to choose a convenient
+      time for your free investor solar review.
+    </p>
+
+    <form
+      action="https://formspree.io/f/xvzyyevv"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="source" value="Investor / Rental Property Lead">
+      <input type="hidden" name="lead_type" value="Rental Property Owner">
+
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="email" name="email" placeholder="Email Address" required>
+      <input type="text" name="address" placeholder="Rental Property Address" required>
+      <input type="text" name="average_monthly_bill" placeholder="Estimated Monthly Electric Bill" required>
+
+      <select name="utility_company" required>
+        <option value="">Utility Company</option>
+        <option value="APS">APS</option>
+        <option value="SRP">SRP</option>
+        <option value="Other / Not Sure">Other / Not Sure</option>
+      </select>
+
+      <input type="text" name="owner_occupied" placeholder="Is this property rented, vacant, or owner-occupied?">
+
+      <label for="utilityBill">
+        Upload APS/SRP Bill (<strong>Recommended:</strong>)
+      </label>
+
+      <small class="helper-text">
+        Providing a copy of the bill helps us verify eligibility and prepare a more accurate savings estimate.
+      </small>
+
+      <input
+        type="file"
+        id="utilityBill"
+        name="utilityBill"
+        accept=".pdf,.jpg,.jpeg,.png"
+      />
+
+      <button type="submit" class="form-submit">
+        CONTINUE TO SCHEDULING
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openLeadForm() {
+  document.getElementById("leadFormModal").style.display = "flex";
+}
+
+function closeLeadForm() {
+  document.getElementById("leadFormModal").style.display = "none";
+}
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = this;
+  const formData = new FormData(form);
+
+  const fullName = formData.get("name")?.trim() || "";
+  const email = formData.get("email")?.trim() || "";
+  const rawPhone = formData.get("phone")?.trim() || "";
+  const digits = rawPhone.replace(/\D/g, "");
+
+  const phone = digits.length === 10
+    ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    : rawPhone;
+
+  const address = formData.get("address")?.trim() || "";
+  const utility = formData.get("utility_company")?.trim() || "";
+  const bill = formData.get("average_monthly_bill")?.trim() || "";
+  const propertyStatus = formData.get("owner_occupied")?.trim() || "";
+
+  const nameParts = fullName.split(" ");
+  const firstName = nameParts[0] || "";
+  const lastName = nameParts.slice(1).join(" ") || "";
+
+  const calendlyUrl =
+    "https://calendly.com/getpaidsolar-info/application" +
+    "?first_name=" + encodeURIComponent(firstName) +
+    "&last_name=" + encodeURIComponent(lastName) +
+    "&email=" + encodeURIComponent(email) +
+    "&a1=" + encodeURIComponent(address) +
+    "&a2=" + encodeURIComponent(phone) +
+    "&a3=" + encodeURIComponent(utility) +
+    "&a4=" + encodeURIComponent(bill) +
+    "&a5=" + encodeURIComponent("Investor / Rental Property Lead") +
+    "&a6=" + encodeURIComponent(propertyStatus);
+
+  const response = await fetch(form.action, {
+    method: "POST",
+    body: formData,
+    headers: { "Accept": "application/json" }
+  });
+
+  if (response.ok) {
+    window.location.href = calendlyUrl;
+  } else {
+    alert("There was a problem submitting the form. Please try again.");
+  }
+});
+</script>
+
+</body>
+</html>
