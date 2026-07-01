@@ -439,6 +439,10 @@ function calculateSavings() {
   const fixedCharge = 13.785;
   const energyPortion = Math.max(apsBill - fixedCharge, 0);
 
+  const batteryRewardYears = 5;
+  const monthlyBatteryCredit = batteryAnnualCredit / 12;
+  const batteryTotal = batteryAnnualCredit * batteryRewardYears;
+
   const years = [];
   const apsMonthlyData = [];
   const solarMonthlyData = [];
@@ -454,21 +458,23 @@ function calculateSavings() {
     const solarMonthlyYear =
       solarMonthly * Math.pow(1 + solarEscalator, year - 1);
 
+    const batteryCreditThisYear =
+      year <= batteryRewardYears ? monthlyBatteryCredit : 0;
+
+    const solarMonthlyAfterRewards =
+      Math.max(solarMonthlyYear - batteryCreditThisYear, 0);
+
     years.push(year);
     apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
-    solarMonthlyData.push(Number(solarMonthlyYear.toFixed(2)));
+    solarMonthlyData.push(Number(solarMonthlyAfterRewards.toFixed(2)));
 
     apsTotal += apsMonthly * 12;
     solarTotal += solarMonthlyYear * 12;
   }
 
-  const batteryRewardYears = 5;
-  const batteryTotal = batteryAnnualCredit * batteryRewardYears;
-
   const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
 
-  const monthlyBatteryCredit = batteryAnnualCredit / 12;
-  const newAvgMonthlyBill = solarMonthly - monthlyBatteryCredit;
+  const newAvgMonthlyBill = Math.max(solarMonthly - monthlyBatteryCredit, 0);
 
   const percentLower = apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
