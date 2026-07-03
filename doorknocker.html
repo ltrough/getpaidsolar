@@ -912,20 +912,37 @@ function updateMap(lat, lng) {
   }
 }
 
+function clearPanelMarkers() {
+  panelMarkers.forEach(marker => marker.setMap(null));
+  panelMarkers = [];
+}
+
+function drawSolarPanels(panels) {
+  if (!googleRoofMap || !panels || !panels.length) return;
+
+  clearPanelMarkers();
+
+  panels.forEach(panel => {
+    const marker = new google.maps.Marker({
+      position: { lat: panel.lat, lng: panel.lng },
+      map: googleRoofMap,
+      icon: {
+        path: google.maps.SymbolPath.RECTANGLE,
+        scale: 7,
+        fillColor: "#16a34a",
+        fillOpacity: 0.95,
+        strokeColor: "#ffffff",
+        strokeWeight: 2,
+        rotation: panel.orientation === "LANDSCAPE" ? 90 : 0
+      }
+    });
+
+    panelMarkers.push(marker);
+  });
+}
+
 function drawDemoPanels(panelCount) {
-  /*
-    Removed the fake panel overlay.
-
-    Why:
-    The old version used fixed screen positions over a Google Maps iframe.
-    That makes panels appear on the wrong roof because the iframe does not expose
-    roof geometry or map coordinates to this page.
-
-    Next step:
-    When the Google Solar API backend is connected, use real solar panel center
-    coordinates from the API and draw them with Google Maps JavaScript API instead
-    of placing generic panels over an iframe.
-  */
+  // Removed fake demo panels.
 }
 
 function updateSolarPreviewFromApi(data, lat, lng) {
@@ -979,7 +996,7 @@ function updateSolarPreviewFromApi(data, lat, lng) {
   document.getElementById("annualProductionDisplay").textContent = annualProduction ? formatNumber(Math.round(annualProduction)) : "—";
   document.getElementById("solarPotentialDisplay").textContent = potentialLabel;
 
-  drawDemoPanels(panelsCount || 20);
+  drawSolarPanels(data.panels);
 }
 
 function updateSolarPreviewFallback(lat, lng, addressLabel) {
@@ -1103,7 +1120,7 @@ function searchManualAddress() {
     It still opens a satellite map, but accurate Solar API data needs lat/lng.
   */
   showRoofResults();
-  document.getElementById("roofMapFrame").src = "https://www.google.com/maps?q=" + encodeURIComponent(address) + "&z=20&t=k&output=embed";
+  setSolarStatus("Please select one of the recommended addresses from the dropdown so we can place the panels accurately.");
   document.getElementById("locationDisplay").textContent = address;
   document.getElementById("panelCountDisplay").textContent = "Requires Solar API";
   document.getElementById("systemSizeDisplay").textContent = "—";
