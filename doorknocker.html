@@ -570,7 +570,7 @@ body {
       <div class="gps-roof-results" id="roofResults">
         <div class="gps-map-card">
           <div class="gps-roof-map" id="roofMap">
-            <iframe id="roofMapFrame" loading="lazy" allowfullscreen></iframe>
+            <div id="googleRoofMap" style="width:100%; height:100%;"></div>
           </div>
           <div class="gps-map-note">
             Satellite roof preview only. Accurate solar panel placement requires the Google Solar API connection so panels are placed from real rooftop data instead of a generic overlay.
@@ -887,9 +887,29 @@ function showRoofResults() {
   document.getElementById("roofResults").classList.add("gps-show");
 }
 
+let googleRoofMap;
+let panelMarkers = [];
+
 function updateMap(lat, lng) {
-  const frame = document.getElementById("roofMapFrame");
-  frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(lat + "," + lng) + "&z=20&t=k&output=embed";
+  const center = {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng)
+};
+
+  if (!googleRoofMap) {
+    googleRoofMap = new google.maps.Map(document.getElementById("googleRoofMap"), {
+      center,
+      zoom: 20,
+      mapTypeId: "satellite",
+      tilt: 0,
+      streetViewControl: false,
+      mapTypeControl: false,
+      fullscreenControl: true
+    });
+  } else {
+    googleRoofMap.setCenter(center);
+    googleRoofMap.setZoom(20);
+  }
 }
 
 function drawDemoPanels(panelCount) {
@@ -1343,6 +1363,10 @@ document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
 
 setupGeoapifyAutocomplete();
 calculateSavings();
+</script>
+
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB08Feth79-2v_eUwUIBwja7e0P0nTtH_M&libraries=geometry">
 </script>
 
 </body>
