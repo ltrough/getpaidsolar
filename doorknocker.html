@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS 25-Year Solar Savings Calculator</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #061b3a;
+  color: white;
+}
+
+.gps-calc-section {
+  background: #061b3a;
+  padding: 70px 20px;
+}
+
+.gps-calc-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: white;
+  color: #061b3a;
+  border-radius: 24px;
+  padding: 40px;
+}
+
+.gps-calc-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.gps-calc-subtitle {
+  text-align: center;
+  font-size: 19px;
+  margin-bottom: 35px;
+  color: #4b5563;
+}
+
+.gps-input-panel {
+  background: #f8fafc;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 35px;
+}
+
+.gps-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 30px;
+}
+
+.gps-calc-field label {
+  font-weight: 800;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.gps-help-text {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.35;
+}
+
+.gps-calc-field input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 18px;
+  box-sizing: border-box;
+  background: white;
+}
+
+.readonly-field {
+  background: #ffffff !important;
+  color: #061b3a;
+  font-weight: 700;
+  cursor: default;
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.money-input span {
+  padding: 15px 16px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #061b3a;
+  background: #eef2f7;
+  border-right: 1px solid #d1d5db;
+}
+
+.money-input input {
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none;
+}
+
+.gps-roof-panel {
+  background: #eef6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 35px;
+}
+
+.gps-roof-title {
+  font-size: 30px;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.gps-roof-subtitle {
+  text-align: center;
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 22px 0;
+}
+
+.gps-location-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.gps-location-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 15px 22px;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  background: #16a34a;
+  color: white;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.25);
+}
+
+.gps-location-btn:hover {
+  background: #15803d;
+}
+
+.gps-secondary-btn {
+  border: 2px solid #2563eb;
+  border-radius: 14px;
+  padding: 13px 20px;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  background: white;
+  color: #2563eb;
+}
+
+.gps-secondary-btn:hover {
+  background: #eff6ff;
+}
+
+.gps-manual-address {
+  display: none;
+  max-width: 720px;
+  margin: 15px auto 0 auto;
+}
+
+.gps-manual-address.gps-show {
+  display: block;
+}
+
+.gps-address-row {
+  display: flex;
+  gap: 10px;
+}
+
+.gps-address-row input {
+  flex: 1;
+  padding: 14px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.gps-status {
+  margin: 18px auto 0 auto;
+  max-width: 760px;
+  text-align: center;
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 24px;
+}
+
+.gps-status strong {
+  color: #061b3a;
+}
+
+.gps-roof-results {
+  display: none;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 22px;
+  margin-top: 24px;
+  align-items: stretch;
+}
+
+.gps-roof-results.gps-show {
+  display: grid;
+}
+
+.gps-map-card,
+.gps-solar-summary-card {
+  background: white;
+  border: 2px solid #dbeafe;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.gps-roof-map {
+  position: relative;
+  overflow: hidden;
+  height: 360px;
+  border-radius: 14px;
+  background: #cbd5e1;
+  border: 1px solid #cbd5e1;
+}
+
+.gps-roof-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Panel overlay removed until live Solar API panel coordinates are connected. */
+
+.gps-results {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin: 35px 0;
+}
+
+.gps-result-card {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 22px 14px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+}
+
+.gps-result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.amount {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.orange { color: #ff5a1f; }
+.purple { color: #8b5cf6; }
+.green { color: #16a34a; }
+.blue { color: #2563eb; }
+
+.lower-text {
+  font-size: 14px;
+  font-weight: 900;
+  color: #16a34a;
+  margin-top: 8px;
+}
+
+.estimate-notice {
+  background: #fff5f5;
+  border: 3px solid #dc2626;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 25px 0;
+  color: #991b1b;
+  line-height: 1.8;
+}
+
+.estimate-notice-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.estimate-notice-main {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.estimate-notice-sub {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.gps-breakdown {
+  background: #fff8db;
+  border: 2px solid #ffc400;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 30px 0;
+  color: #061b3a;
+}
+
+.gps-breakdown h3 {
+  margin-top: 0;
+  font-size: 26px;
+  text-align: center;
+}
+
+.gps-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(6,21,47,0.18);
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gps-breakdown-row:last-child {
+  border-bottom: none;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.gps-chart-wrap {
+  margin-top: 35px;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  border: 1px solid #e5e7eb;
+  height: 460px;
+}
+
+.gps-chart-wrap canvas {
+  width: 100% !important;
+  height: 420px !important;
+}
+
+.gps-disclaimer {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 22px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+
+.gps-address-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.gps-address-suggestions {
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  z-index: 999999;
+  display: none;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  text-align: left;
+}
+
+.gps-address-suggestion-item {
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #061b3a;
+  border-bottom: 1px solid #e5e7eb;
+  line-height: 1.35;
+}
+
+.gps-address-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.gps-address-suggestion-item:hover {
+  background: #f8fafc;
+}
+
+
+.gps-solar-summary-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 2px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.08);
+}
+
+.gps-solar-summary-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 28px;
+  text-align: center;
+  color: #061b3a;
+}
+
+.gps-address-pill {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  color: #1e3a8a;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 800;
+  text-align: center;
+}
+
+.gps-solar-metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gps-solar-big-metric {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.gps-solar-big-metric .metric-label {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.gps-solar-big-metric .metric-value {
+  color: #061b3a;
+  font-size: 25px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.gps-solar-big-metric .metric-sub {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.gps-solar-highlight {
+  background: #ecfdf5;
+  border: 2px solid #86efac;
+  color: #14532d;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+
+.gps-solar-note-box {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .gps-solar-metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .gps-input-grid,
+  .gps-results,
+  .gps-roof-results {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-calc-title {
+    font-size: 32px;
+  }
+
+  .gps-roof-title {
+    font-size: 26px;
+  }
+
+  .gps-breakdown-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .gps-address-row {
+    flex-direction: column;
+  }
+
+  .gps-roof-map {
+    height: 320px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<section id="gps-savings-calculator" class="gps-calc-section">
+  <div class="gps-calc-container">
+
+    <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
+
+    <p class="gps-calc-subtitle">
+      Estimate your solar savings using your current APS bill, solar payment, battery rewards, and GPS incentives.
+    </p>
+
+    <div class="gps-roof-panel">
+      <h3 class="gps-roof-title">See Solar Panels on This Roof</h3>
+      <p class="gps-roof-subtitle">
+        Tap Use My Location while standing at the home. The page will detect your location, show the rooftop, and estimate solar potential.
+      </p>
+
+      <div class="gps-location-actions">
+        <button type="button" class="gps-location-btn" id="useLocationBtn">📍 Use My Location</button>
+        <button type="button" class="gps-secondary-btn" id="showAddressBtn">Enter Address Instead</button>
+      </div>
+
+      <div class="gps-manual-address" id="manualAddressBox">
+        <div class="gps-address-row">
+          <div class="gps-address-wrapper">
+            <input type="text" id="manualAddress" placeholder="Enter customer address" autocomplete="off">
+            <div id="addressSuggestions" class="gps-address-suggestions"></div>
+          </div>
+          <button type="button" class="gps-secondary-btn" id="searchAddressBtn">Search</button>
+        </div>
+        <div class="gps-help-text">
+          Start typing and select the correct recommended address. This uses the same Geoapify autocomplete setup as your Austin page.
+        </div>
+      </div>
+
+      <div class="gps-status" id="solarStatus">
+        Ready when you are. Tap <strong>Use My Location</strong> to preview the roof.
+      </div>
+
+      <div class="gps-roof-results" id="roofResults">
+        <div class="gps-map-card">
+          <div class="gps-roof-map" id="roofMap">
+            <iframe id="roofMapFrame" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="gps-map-note">
+            Satellite roof preview only. Accurate solar panel placement requires the Google Solar API connection so panels are placed from real rooftop data instead of a generic overlay.
+          </div>
+        </div>
+
+        <div class="gps-solar-summary-card">
+          <h3>Roof Solar Preview</h3>
+
+          <div class="gps-address-pill">
+            📍 <span id="locationDisplay">Select an address or use your location</span>
+          </div>
+
+          <div class="gps-solar-metric-grid">
+            <div class="gps-solar-big-metric">
+              <div class="metric-label">Recommended Panels</div>
+              <div class="metric-value" id="panelCountDisplay">—</div>
+              <div class="metric-sub">estimated layout</div>
+            </div>
+
+            <div class="gps-solar-big-metric">
+              <div class="metric-label">System Size</div>
+              <div class="metric-value" id="systemSizeDisplay">—</div>
+              <div class="metric-sub">approx. DC size</div>
+            </div>
+
+            <div class="gps-solar-big-metric">
+              <div class="metric-label">Annual Production</div>
+              <div class="metric-value" id="annualProductionDisplay">—</div>
+              <div class="metric-sub">estimated kWh / year</div>
+            </div>
+
+            <div class="gps-solar-big-metric">
+              <div class="metric-label">Solar Potential</div>
+              <div class="metric-value" id="solarPotentialDisplay">—</div>
+              <div class="metric-sub">roof qualification</div>
+            </div>
+          </div>
+
+          <div class="gps-solar-highlight">
+            Next: connect Google Solar API for real rooftop panel placement.
+          </div>
+
+          <div class="gps-solar-note-box">
+            This preview is designed for a quick homeowner conversation. Final panel count, production, shade, setbacks, and roof layout must be confirmed by the final installer design.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gps-input-panel">
+      <div class="gps-input-grid">
+
+        <div class="gps-calc-field">
+          <label>Current APS Monthly Bill</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="apsBill" value="268.84" step="0.01">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>APS Annual Increase %</label>
+          <input type="number" id="apsIncrease" value="3" step="0.01">
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Solar Avg Monthly Payment</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="solarMonthly" value="237.28" step="0.01">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Solar Annual Rate Lock %</label>
+          <input type="text" id="solarEscalatorDisplay" value="1.9%" readonly class="readonly-field">
+        </div>
+
+        <div class="gps-calc-field">
+          <label>APS VPP Annual Reward</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="batteryCredit" value="0.00" step="0.01">
+          </div>
+          <div class="gps-help-text">
+            Estimated annual APS Storage Rewards / VPP payment. Calculator counts this for 5 years only.
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>GPS Cash + Battery Incentive</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="gpsIncentive" value="0.00" step="0.01">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="gps-results">
+
+      <div class="gps-result-card">
+        <h3>APS 25-Year Cost</h3>
+        <div class="amount orange" id="apsTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>Monthly Cost After Rewards</h3>
+        <div class="amount purple" id="newAvgMonthly">$0.00</div>
+        <div class="lower-text">
+          <span id="percentLower">0%</span> lower than current APS bill
+        </div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>5-Year Battery Rewards</h3>
+        <div class="amount blue" id="batteryTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>GPS Cash Incentive</h3>
+        <div class="amount blue" id="gpsTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>Net 25-Year Savings</h3>
+        <div class="amount green" id="totalSavings">$0.00</div>
+      </div>
+
+    </div>
+
+    <div class="estimate-notice">
+      <div class="estimate-notice-title">IMPORTANT ESTIMATE NOTICE</div>
+
+      <div class="estimate-notice-main">
+        The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
+      </div>
+
+      <div class="estimate-notice-sub">
+        Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
+      </div>
+    </div>
+
+    <div class="gps-breakdown">
+      <h3>Savings Breakdown</h3>
+
+      <div class="gps-breakdown-row">
+        <span>APS 25-Year Cost</span>
+        <span id="apsCostDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Solar 25-Year Cost</span>
+        <span id="solarCostDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Battery Rewards Over 5 Years</span>
+        <span id="batteryRewardsDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>GPS Cash Incentive</span>
+        <span id="gpsIncentiveDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span>Total Estimated 25-Year Savings</span>
+        <span id="netSavingsDisplay">$0.00</span>
+      </div>
+    </div>
+
+    <div class="gps-chart-wrap">
+      <canvas id="savingsChart"></canvas>
+    </div>
+
+    <p class="gps-disclaimer">
+      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+    </p>
+
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/*
+  GOOGLE SOLAR API SETUP NOTE
+
+  Keep this as "/api/solar" if you create a backend endpoint at:
+  https://yourdomain.com/api/solar
+
+  Your webpage sends:
+  /api/solar?lat=33.123&lng=-112.123
+
+  Your backend privately calls Google Solar API with your secret API key.
+  Do NOT put your Google Solar API key directly in this HTML page.
+*/
+const SOLAR_API_ENDPOINT = "https://gps-solar-api.getpaidsolar.workers.dev";
+
+let chart;
+let selectedPlaceLat = null;
+let selectedPlaceLng = null;
+let selectedPlaceAddress = "";
+
+const GEOAPIFY_KEY = "eee263acca5749e480b88a534798d08e";
+
+const addressInput = document.getElementById("manualAddress");
+const suggestionsBox = document.getElementById("addressSuggestions");
+let debounceTimer;
+
+function setupGeoapifyAutocomplete() {
+  if (!addressInput || !suggestionsBox) return;
+
+  addressInput.addEventListener("input", function () {
+    clearTimeout(debounceTimer);
+
+    selectedPlaceLat = null;
+    selectedPlaceLng = null;
+    selectedPlaceAddress = "";
+
+    const query = addressInput.value.trim();
+
+    if (query.length < 3) {
+      suggestionsBox.style.display = "none";
+      suggestionsBox.innerHTML = "";
+      return;
+    }
+
+    debounceTimer = setTimeout(function () {
+      fetchAddressSuggestions(query);
+    }, 300);
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".gps-address-wrapper")) {
+      suggestionsBox.style.display = "none";
+    }
+  });
+}
+
+async function fetchAddressSuggestions(query) {
+  const url =
+    "https://api.geoapify.com/v1/geocode/autocomplete" +
+    "?text=" + encodeURIComponent(query) +
+    "&filter=countrycode:us" +
+    "&limit=5" +
+    "&apiKey=" + GEOAPIFY_KEY;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    suggestionsBox.innerHTML = "";
+
+    if (!data.features || data.features.length === 0) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+
+    data.features.forEach(function (feature) {
+      const props = feature.properties || {};
+      const address = props.formatted || "";
+      const lat = props.lat;
+      const lng = props.lon;
+
+      if (!address || lat === undefined || lng === undefined) return;
+
+      const item = document.createElement("div");
+      item.className = "gps-address-suggestion-item";
+      item.textContent = address;
+
+      item.addEventListener("mousedown", function () {
+        selectedPlaceLat = lat;
+        selectedPlaceLng = lng;
+        selectedPlaceAddress = address;
+        addressInput.value = address;
+        suggestionsBox.style.display = "none";
+        fetchSolarData(selectedPlaceLat, selectedPlaceLng, selectedPlaceAddress);
+      });
+
+      suggestionsBox.appendChild(item);
+    });
+
+    suggestionsBox.style.display = suggestionsBox.children.length ? "block" : "none";
+
+  } catch (error) {
+    console.error("Address lookup failed:", error);
+    suggestionsBox.style.display = "none";
+  }
+}
+
+function money(value) {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function formatNumber(value) {
+  if (value === null || value === undefined || isNaN(value)) return "—";
+  return Number(value).toLocaleString("en-US");
+}
+
+function setSolarStatus(message) {
+  document.getElementById("solarStatus").innerHTML = message;
+}
+
+function showRoofResults() {
+  document.getElementById("roofResults").classList.add("gps-show");
+}
+
+function updateMap(lat, lng) {
+  const frame = document.getElementById("roofMapFrame");
+  frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(lat + "," + lng) + "&z=20&t=k&output=embed";
+}
+
+function drawDemoPanels(panelCount) {
+  /*
+    Removed the fake panel overlay.
+
+    Why:
+    The old version used fixed screen positions over a Google Maps iframe.
+    That makes panels appear on the wrong roof because the iframe does not expose
+    roof geometry or map coordinates to this page.
+
+    Next step:
+    When the Google Solar API backend is connected, use real solar panel center
+    coordinates from the API and draw them with Google Maps JavaScript API instead
+    of placing generic panels over an iframe.
+  */
+}
+
+function updateSolarPreviewFromApi(data, lat, lng) {
+  /*
+    This function accepts either real Google Solar API-shaped data
+    or a simplified response from your own backend.
+
+    Your backend can return something like:
+    {
+      "address": "123 Main St, Goodyear, AZ",
+      "panelsCount": 31,
+      "systemSizeKw": 12.4,
+      "annualProductionKwh": 20481,
+      "solarPotential": "Excellent"
+    }
+  */
+
+  const solarPotential = data && data.solarPotential ? data.solarPotential : {};
+  const maxConfig = solarPotential.solarPanelConfigs && solarPotential.solarPanelConfigs.length
+    ? solarPotential.solarPanelConfigs[solarPotential.solarPanelConfigs.length - 1]
+    : null;
+
+  const panelsCount =
+    data.panelsCount ||
+    (maxConfig ? maxConfig.panelsCount : null) ||
+    (solarPotential.maxArrayPanelsCount || null);
+
+  const annualProduction =
+    data.annualProductionKwh ||
+    (maxConfig ? maxConfig.yearlyEnergyDcKwh : null) ||
+    null;
+
+  const systemSizeKw =
+    data.systemSizeKw ||
+    (panelsCount ? (panelsCount * 0.4) : null);
+
+  const address =
+    data.address ||
+    data.formattedAddress ||
+    (lat.toFixed(5) + ", " + lng.toFixed(5));
+
+  const potentialLabel =
+    data.solarPotentialLabel ||
+    data.solarPotentialScore ||
+    data.solarPotential ||
+    (annualProduction ? "Available" : "Preview only");
+
+  document.getElementById("locationDisplay").textContent = address;
+  document.getElementById("panelCountDisplay").textContent = panelsCount ? formatNumber(Math.round(panelsCount)) : "—";
+  document.getElementById("systemSizeDisplay").textContent = systemSizeKw ? Number(systemSizeKw).toFixed(1) + " kW" : "—";
+  document.getElementById("annualProductionDisplay").textContent = annualProduction ? formatNumber(Math.round(annualProduction)) : "—";
+  document.getElementById("solarPotentialDisplay").textContent = potentialLabel;
+
+  drawDemoPanels(panelsCount || 20);
+}
+
+function updateSolarPreviewFallback(lat, lng, addressLabel) {
+  /*
+    This fallback lets the page still look good before your backend is connected.
+    Once /api/solar exists, real values will replace these preview values.
+  */
+  const demoPanels = 28;
+  const demoSystemKw = demoPanels * 0.4;
+  const demoAnnualProduction = Math.round(demoSystemKw * 1650);
+
+  document.getElementById("locationDisplay").textContent = addressLabel || (lat.toFixed(5) + ", " + lng.toFixed(5));
+  document.getElementById("panelCountDisplay").textContent = demoPanels;
+  document.getElementById("systemSizeDisplay").textContent = demoSystemKw.toFixed(1) + " kW";
+  document.getElementById("annualProductionDisplay").textContent = formatNumber(demoAnnualProduction);
+  document.getElementById("solarPotentialDisplay").textContent = "Preview mode";
+
+  drawDemoPanels(demoPanels);
+}
+
+async function fetchSolarData(lat, lng, addressLabel) {
+  updateMap(lat, lng);
+  showRoofResults();
+
+  setSolarStatus("⏳ <strong>Analyzing your roof...</strong> Checking location and solar potential.");
+
+  try {
+    const response = await fetch(SOLAR_API_ENDPOINT + "?lat=" + encodeURIComponent(lat) + "&lng=" + encodeURIComponent(lng));
+
+    if (!response.ok) {
+      throw new Error("Solar endpoint not connected yet.");
+    }
+
+    const data = await response.json();
+
+    updateSolarPreviewFromApi(data, lat, lng);
+    setSolarStatus("✅ <strong>Roof preview loaded.</strong> Confirm the map is showing the correct home.");
+
+  } catch (error) {
+    updateSolarPreviewFallback(lat, lng, addressLabel);
+    setSolarStatus("✅ <strong>Location found.</strong> Showing satellite roof preview until your Google Solar API backend is connected.");
+  }
+}
+
+function useCurrentLocation() {
+  if (!navigator.geolocation) {
+    setSolarStatus("❌ Your browser does not support location services. Try entering the address instead.");
+    return;
+  }
+
+  setSolarStatus("📍 <strong>Getting your location...</strong> Please allow location access when your phone asks.");
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      fetchSolarData(lat, lng);
+    },
+    function(error) {
+      let message = "Unable to get your location.";
+
+      if (error.code === 1) {
+        message = "Location permission was denied. Allow location access or enter the address instead.";
+      } else if (error.code === 2) {
+        message = "Your phone could not determine the location. Move outside or enter the address instead.";
+      } else if (error.code === 3) {
+        message = "Location timed out. Try again or enter the address instead.";
+      }
+
+      setSolarStatus("❌ " + message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 12000,
+      maximumAge: 0
+    }
+  );
+}
+
+function searchManualAddress() {
+  const address = document.getElementById("manualAddress").value.trim();
+
+  if (!address) {
+    setSolarStatus("Please enter an address first.");
+    return;
+  }
+
+  if (selectedPlaceLat && selectedPlaceLng) {
+    fetchSolarData(selectedPlaceLat, selectedPlaceLng, selectedPlaceAddress);
+    return;
+  }
+
+  /*
+    Fallback if the user types an address but does not select a Google suggestion.
+    It still opens a satellite map, but accurate Solar API data needs lat/lng.
+  */
+  showRoofResults();
+  document.getElementById("roofMapFrame").src = "https://www.google.com/maps?q=" + encodeURIComponent(address) + "&z=20&t=k&output=embed";
+  document.getElementById("locationDisplay").textContent = address;
+  document.getElementById("panelCountDisplay").textContent = "Requires Solar API";
+  document.getElementById("systemSizeDisplay").textContent = "—";
+  document.getElementById("annualProductionDisplay").textContent = "—";
+  document.getElementById("solarPotentialDisplay").textContent = "Satellite preview";
+
+  setSolarStatus("✅ <strong>Address preview loaded.</strong> For best results, select one of the recommended addresses from the dropdown.");
+}
+
+const verticalHoverLine = {
+  id: "verticalHoverLine",
+  afterDraw(chart) {
+    if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
+      const ctx = chart.ctx;
+      const x = chart.tooltip._active[0].element.x;
+      const topY = chart.chartArea.top;
+      const bottomY = chart.chartArea.bottom;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, topY);
+      ctx.lineTo(x, bottomY);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#9ca3af";
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+};
+
+Chart.register(verticalHoverLine);
+
+function calculateSavings() {
+  const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
+  const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
+  const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
+  const solarEscalator = 0.019;
+  const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
+  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+
+  const fixedCharge = 13.785;
+  const energyPortion = Math.max(apsBill - fixedCharge, 0);
+
+  const batteryRewardYears = 5;
+  const monthlyBatteryCredit = batteryAnnualCredit / 12;
+  const batteryTotal = batteryAnnualCredit * batteryRewardYears;
+
+  const years = [];
+  const apsMonthlyData = [];
+  const solarMonthlyData = [];
+
+  let apsTotal = 0;
+  let solarTotal = 0;
+
+  for (let year = 1; year <= 25; year++) {
+    const apsMonthly =
+      fixedCharge +
+      (energyPortion * Math.pow(1 + displayedApsIncrease, year - 1));
+
+    const solarMonthlyYear =
+      solarMonthly * Math.pow(1 + solarEscalator, year - 1);
+
+    const batteryCreditThisYear =
+      year <= batteryRewardYears ? monthlyBatteryCredit : 0;
+
+    const solarMonthlyAfterRewards =
+      Math.max(solarMonthlyYear - batteryCreditThisYear, 0);
+
+    years.push(year);
+    apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
+    solarMonthlyData.push(Number(solarMonthlyAfterRewards.toFixed(2)));
+
+    apsTotal += apsMonthly * 12;
+    solarTotal += solarMonthlyYear * 12;
+  }
+
+  const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
+
+  const newAvgMonthlyBill = Math.max(solarMonthly - monthlyBatteryCredit, 0);
+
+  const percentLower = apsBill > 0
+    ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
+    : 0;
+
+  document.getElementById("apsTotal").textContent = money(apsTotal);
+  document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
+  document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
+  document.getElementById("batteryTotal").textContent = money(batteryTotal);
+  document.getElementById("gpsTotal").textContent = money(gpsIncentive);
+  document.getElementById("totalSavings").textContent = money(netSavings);
+
+  document.getElementById("apsCostDisplay").textContent = money(apsTotal);
+  document.getElementById("solarCostDisplay").textContent = money(solarTotal);
+  document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
+  document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
+  document.getElementById("netSavingsDisplay").textContent = money(netSavings);
+
+  const ctx = document.getElementById("savingsChart").getContext("2d");
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: "Pre-solar",
+          data: apsMonthlyData,
+          borderColor: "#ff5a1f",
+          backgroundColor: "#ff5a1f",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 3,
+          pointHoverRadius: 7
+        },
+        {
+          label: "Post-solar",
+          data: solarMonthlyData,
+          borderColor: "#8b5cf6",
+          backgroundColor: "#8b5cf6",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 3,
+          pointHoverRadius: 7
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+
+      plugins: {
+        tooltip: {
+          enabled: true,
+          mode: "index",
+          intersect: false,
+          backgroundColor: "#ffffff",
+          titleColor: "#061b3a",
+          bodyColor: "#374151",
+          borderColor: "#d1d5db",
+          borderWidth: 1,
+          padding: 14,
+          displayColors: true,
+          boxWidth: 10,
+          boxHeight: 10,
+          titleFont: {
+            size: 13,
+            weight: "bold"
+          },
+          bodyFont: {
+            size: 13,
+            weight: "normal"
+          },
+          callbacks: {
+            title: function(context) {
+              return "Year " + context[0].label;
+            },
+            label: function(context) {
+              return context.dataset.label + "     " + money(context.parsed.y);
+            },
+            afterBody: function(context) {
+              const aps = context[0].parsed.y;
+              const solar = context[1].parsed.y;
+              const savings = aps - solar;
+
+              return "\nMonthly difference     ↓ " + money(savings);
+            }
+          }
+        },
+
+        legend: {
+          position: "bottom",
+          labels: {
+            font: {
+              size: 18,
+              weight: "bold"
+            }
+          }
+        }
+      },
+
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Monthly bills",
+            font: {
+              size: 16,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 14
+            },
+            callback: function(value) {
+              return "$" + value.toLocaleString();
+            }
+          },
+          grid: {
+            color: "#d1d5db"
+          }
+        },
+
+        x: {
+          title: {
+            display: true,
+            text: "Years",
+            font: {
+              size: 14,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+document.getElementById("useLocationBtn").addEventListener("click", useCurrentLocation);
+
+document.getElementById("showAddressBtn").addEventListener("click", function () {
+  document.getElementById("manualAddressBox").classList.toggle("gps-show");
+});
+
+document.getElementById("searchAddressBtn").addEventListener("click", searchManualAddress);
+
+document.getElementById("manualAddress").addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    searchManualAddress();
+  }
+});
+
+document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
+  input.addEventListener("input", calculateSavings);
+  input.addEventListener("change", calculateSavings);
+
+  input.addEventListener("blur", function () {
+    if (this.closest(".money-input")) {
+      this.value = (parseFloat(this.value) || 0).toFixed(2);
+    }
+  });
+});
+
+setupGeoapifyAutocomplete();
+calculateSavings();
+</script>
+
+</body>
+</html>
