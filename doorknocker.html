@@ -1004,6 +1004,32 @@ async function fetchSolarData(lat, lng, addressLabel) {
   }
 }
 
+async function reverseGeocodeLocation(lat, lng) {
+  try {
+    const url =
+      "https://api.geoapify.com/v1/geocode/reverse" +
+      "?lat=" + encodeURIComponent(lat) +
+      "&lon=" + encodeURIComponent(lng) +
+      "&apiKey=" + GEOAPIFY_KEY;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const address =
+      data.features &&
+      data.features[0] &&
+      data.features[0].properties &&
+      data.features[0].properties.formatted
+        ? data.features[0].properties.formatted
+        : lat.toFixed(5) + ", " + lng.toFixed(5);
+
+    fetchSolarData(lat, lng, address);
+
+  } catch (error) {
+    fetchSolarData(lat, lng, lat.toFixed(5) + ", " + lng.toFixed(5));
+  }
+}
+
 function useCurrentLocation() {
   if (!navigator.geolocation) {
     setSolarStatus("❌ Your browser does not support location services. Try entering the address instead.");
@@ -1016,7 +1042,7 @@ function useCurrentLocation() {
     function(position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      fetchSolarData(lat, lng);
+      reverseGeocodeLocation(lat, lng);
     },
     function(error) {
       let message = "Unable to get your location.";
