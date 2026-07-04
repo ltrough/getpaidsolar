@@ -357,6 +357,7 @@ body {
   font-weight:800;
 }
 
+.gps-breakdown-row.aps-row,
 .gps-breakdown-row.savings-row{
   font-size:1.15em;
 }
@@ -1128,9 +1129,43 @@ function useCurrentLocation() {
 
   navigator.geolocation.getCurrentPosition(
     function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      reverseGeocodeLocation(lat, lng);
+
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        console.log("GPS accuracy:", position.coords.accuracy, "meters");
+
+        // If GPS isn't accurate enough, try again before searching.
+        if (position.coords.accuracy > 12) {
+
+            setSolarStatus(
+                "📍 Improving GPS accuracy (" +
+                Math.round(position.coords.accuracy) +
+                "m)... Hold still for a moment."
+            );
+
+            navigator.geolocation.getCurrentPosition(
+                function(betterPosition) {
+                    reverseGeocodeLocation(
+                        betterPosition.coords.latitude,
+                        betterPosition.coords.longitude
+                    );
+                },
+                function() {
+                    reverseGeocodeLocation(lat, lng);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+
+            return;
+        }
+
+        reverseGeocodeLocation(lat, lng);
+
     },
     function(error) {
       let message = "Unable to get your location.";
@@ -1146,10 +1181,10 @@ function useCurrentLocation() {
       setSolarStatus("❌ " + message);
     },
     {
-      enableHighAccuracy: true,
-      timeout: 12000,
-      maximumAge: 0
-    }
+  enableHighAccuracy: true,
+  timeout: 25000,
+  maximumAge: 0
+}
   );
 }
 
