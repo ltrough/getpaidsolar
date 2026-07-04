@@ -45,8 +45,8 @@ body {
   background: #f8fafc;
   border: 2px solid #e5e7eb;
   border-radius: 20px;
-  padding: 28px;
-  margin-bottom: 35px;
+  padding: 24px;
+  margin-bottom: 28px;
 }
 
 .gps-input-grid {
@@ -248,9 +248,9 @@ body {
 
 .gps-results {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
-  margin: 35px 0;
+  margin: 28px 0;
 }
 
 .gps-result-card {
@@ -266,6 +266,24 @@ body {
   margin-bottom: 12px;
   color: #374151;
 }
+
+.gps-result-card.feature-card {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  box-shadow: 0 12px 24px rgba(22, 163, 74, 0.12);
+}
+
+.gps-result-card.payment-card {
+  border-color: #ddd6fe;
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+  box-shadow: 0 12px 24px rgba(139, 92, 246, 0.10);
+}
+
+.gps-result-card.payment-card .amount,
+.gps-result-card.feature-card .amount {
+  font-size: 31px;
+}
+
 
 .amount {
   font-size: 26px;
@@ -324,6 +342,23 @@ body {
   margin-top: 0;
   font-size: 26px;
   text-align: center;
+}
+
+
+.gps-breakdown-row.aps-row span:first-child,
+.gps-breakdown-row.aps-row span:last-child{
+  color:#c62828;
+  font-weight:800;
+}
+
+.gps-breakdown-row.savings-row span:first-child,
+.gps-breakdown-row.savings-row span:last-child{
+  color:#2e7d32;
+  font-weight:800;
+}
+
+.gps-breakdown-row.savings-row{
+  font-size:1.15em;
 }
 
 .gps-breakdown-row {
@@ -526,7 +561,7 @@ body {
     <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
 
     <p class="gps-calc-subtitle">
-      Estimate your solar savings using your current APS bill, solar payment, battery rewards, and GPS incentives.
+      Estimate your long-term savings by comparing your current APS bill with a customized solar payment over 25 years.
     </p>
 
     <div class="gps-roof-panel">
@@ -633,25 +668,6 @@ body {
           <input type="text" id="solarEscalatorDisplay" value="1.9%" readonly class="readonly-field">
         </div>
 
-        <div class="gps-calc-field">
-          <label>APS VPP Annual Reward</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="batteryCredit" value="0.00" step="0.01">
-          </div>
-          <div class="gps-help-text">
-            Estimated annual APS Storage Rewards / VPP payment. Calculator counts this for 5 years only.
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>GPS Cash + Battery Incentive</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="gpsIncentive" value="0.00" step="0.01">
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -662,25 +678,15 @@ body {
         <div class="amount orange" id="apsTotal">$0.00</div>
       </div>
 
-      <div class="gps-result-card">
-        <h3>Monthly Cost After Rewards</h3>
+      <div class="gps-result-card payment-card">
+        <h3>New Solar Payment</h3>
         <div class="amount purple" id="newAvgMonthly">$0.00</div>
         <div class="lower-text">
           <span id="percentLower">0%</span> lower than current APS bill
         </div>
       </div>
 
-      <div class="gps-result-card">
-        <h3>5-Year Battery Rewards</h3>
-        <div class="amount blue" id="batteryTotal">$0.00</div>
-      </div>
-
-      <div class="gps-result-card">
-        <h3>GPS Cash Incentive</h3>
-        <div class="amount blue" id="gpsTotal">$0.00</div>
-      </div>
-
-      <div class="gps-result-card">
+      <div class="gps-result-card feature-card">
         <h3>Net 25-Year Savings</h3>
         <div class="amount green" id="totalSavings">$0.00</div>
       </div>
@@ -691,28 +697,13 @@ body {
     <div class="gps-breakdown">
       <h3>Savings Breakdown</h3>
 
-      <div class="gps-breakdown-row">
-        <span>APS 25-Year Cost</span>
+      <div class="gps-breakdown-row aps-row">
+<span>APS 25-Year Cost</span>
         <span id="apsCostDisplay">$0.00</span>
       </div>
 
-      <div class="gps-breakdown-row">
-        <span>Solar 25-Year Cost</span>
-        <span id="solarCostDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row">
-        <span>Battery Rewards Over 5 Years</span>
-        <span id="batteryRewardsDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row">
-        <span>GPS Cash Incentive</span>
-        <span id="gpsIncentiveDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row">
-        <span>Total Estimated 25-Year Savings</span>
+      <div class="gps-breakdown-row savings-row">
+<span>Total Estimated 25-Year Savings</span>
         <span id="netSavingsDisplay">$0.00</span>
       </div>
     </div>
@@ -722,7 +713,7 @@ body {
     </div>
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+      Estimates are for illustration only. Utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
 
   </div>
@@ -1218,8 +1209,8 @@ function calculateSavings() {
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
   const solarEscalator = 0.019;
-  const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
-  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+  const batteryAnnualCredit = 0;
+  const gpsIncentive = 0;
 
   const fixedCharge = 13.785;
   const energyPortion = Math.max(apsBill - fixedCharge, 0);
@@ -1259,7 +1250,7 @@ function calculateSavings() {
 
   const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
 
-  const newAvgMonthlyBill = Math.max(solarMonthly - monthlyBatteryCredit, 0);
+  const newAvgMonthlyBill = solarMonthly;
 
   const percentLower = apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
@@ -1268,14 +1259,9 @@ function calculateSavings() {
   document.getElementById("apsTotal").textContent = money(apsTotal);
   document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
-  document.getElementById("batteryTotal").textContent = money(batteryTotal);
-  document.getElementById("gpsTotal").textContent = money(gpsIncentive);
   document.getElementById("totalSavings").textContent = money(netSavings);
 
   document.getElementById("apsCostDisplay").textContent = money(apsTotal);
-  document.getElementById("solarCostDisplay").textContent = money(solarTotal);
-  document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
-  document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
   document.getElementById("netSavingsDisplay").textContent = money(netSavings);
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
@@ -1290,7 +1276,7 @@ function calculateSavings() {
       labels: years,
       datasets: [
         {
-          label: "Pre-solar",
+          label: "APS Without Solar",
           data: apsMonthlyData,
           borderColor: "#ff5a1f",
           backgroundColor: "#ff5a1f",
@@ -1300,7 +1286,7 @@ function calculateSavings() {
           pointHoverRadius: 7
         },
         {
-          label: "Post-solar",
+          label: "New Solar Payment",
           data: solarMonthlyData,
           borderColor: "#8b5cf6",
           backgroundColor: "#8b5cf6",
@@ -1354,7 +1340,7 @@ function calculateSavings() {
               const solar = context[1].parsed.y;
               const savings = aps - solar;
 
-              return "\nMonthly difference     ↓ " + money(savings);
+              return "\nEstimated monthly savings     " + money(savings);
             }
           }
         },
