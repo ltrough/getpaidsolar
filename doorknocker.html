@@ -704,17 +704,6 @@ body {
 
     </div>
 
-    <div class="estimate-notice">
-      <div class="estimate-notice-title">IMPORTANT ESTIMATE NOTICE</div>
-
-      <div class="estimate-notice-main">
-        The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
-      </div>
-
-      <div class="estimate-notice-sub">
-        Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
-      </div>
-    </div>
 
     <div class="gps-breakdown">
       <h3>Savings Breakdown</h3>
@@ -917,27 +906,112 @@ function clearPanelMarkers() {
   panelMarkers = [];
 }
 
+function metersToLatLngOffset(lat, eastMeters, northMeters) {
+  const metersPerDegreeLat = 111320;
+  const metersPerDegreeLng = 111320 * Math.cos(lat * Math.PI / 180);
+
+  return {
+    lat: northMeters / metersPerDegreeLat,
+    lng: eastMeters / metersPerDegreeLng
+  };
+}
+
+function createPanelPolygon(panel) {
+  const width = panel.widthMeters || 1.05;
+  const height = panel.heightMeters || 1.75;
+  const azimuth = (panel.azimuthDegrees || 180) * Math.PI / 180;
+
+  const halfW = width / 2;
+  const halfH = height / 2;
+
+  const corners = [
+    [-halfW, -halfH],
+    [ halfW, -halfH],
+    [ halfW,  halfH],
+    [-halfW,  halfH]
+  ];
+
+  const path = corners.map(([x, y]) => {
+    const east = x * Math.cos(azimuth) - y * Math.sin(azimuth);
+    const north = x * Math.sin(azimuth) + y * Math.cos(azimuth);
+    const offset = metersToLatLngOffset(panel.lat, east, north);
+
+    return {
+      lat: panel.lat + offset.lat,
+      lng: panel.lng + offset.lng
+    };
+  });
+
+  return new google.maps.Polygon({
+    paths: path,
+    map: googleRoofMap,
+    fillColor: "#111827",
+    fillOpacity: 0.92,
+    strokeColor: "#ffffff",
+    strokeOpacity: 0.95,
+    strokeWeight: 1
+  });
+}
+
+let solarFluxOverlay = null;
+
+function clearSolarFluxOverlay() {
+  if (solarFluxOverlay) {
+    solarFluxOverlay.setMap(null);
+    solarFluxOverlay = null;
+  }
+}
+
+function showSolarFluxLayer(data) {
+  const fluxUrl = data?.dataLayers?.roofFluxProxyUrl;
+
+  if (!googleRoofMap || !fluxUrl || !data.center) {
+    console.warn("No roof flux layer returned", data);
+    return;
+  }
+
+  clearSolarFluxOverlay();
+
+  const bounds = data.dataLayers.roofFluxBounds;
+
+if (!bounds) {
+  console.warn("No roof flux bounds returned", data);
+  return;
+}
+
+  const overlayBounds = new google.maps.LatLngBounds(
+    {
+        lat: bounds.south,
+        lng: bounds.west
+    },
+    {
+        lat: bounds.north,
+        lng: bounds.east
+    }
+);
+
+console.log("Overlay bounds:", overlayBounds);
+
+solarFluxOverlay = new google.maps.GroundOverlay(
+    fluxUrl,
+    overlayBounds,
+    {
+        opacity: 1.0
+    }
+);
+
+solarFluxOverlay.setMap(googleRoofMap);
+}
+
 function drawSolarPanels(panels) {
+console.log("Panels received:", panels);
   if (!googleRoofMap || !panels || !panels.length) return;
 
   clearPanelMarkers();
 
   panels.forEach(panel => {
-    const marker = new google.maps.Marker({
-      position: { lat: panel.lat, lng: panel.lng },
-      map: googleRoofMap,
-      icon: {
-        path: google.maps.SymbolPath.RECTANGLE,
-        scale: 7,
-        fillColor: "#16a34a",
-        fillOpacity: 0.95,
-        strokeColor: "#ffffff",
-        strokeWeight: 2,
-        rotation: panel.orientation === "LANDSCAPE" ? 90 : 0
-      }
-    });
-
-    panelMarkers.push(marker);
+    const panelPoly = createPanelPolygon(panel);
+panelMarkers.push(panelPoly);
   });
 }
 
@@ -996,7 +1070,8 @@ function updateSolarPreviewFromApi(data, lat, lng) {
   document.getElementById("annualProductionDisplay").textContent = annualProduction ? formatNumber(Math.round(annualProduction)) : "—";
   document.getElementById("solarPotentialDisplay").textContent = potentialLabel;
 
-  drawSolarPanels(data.panels);
+  showSolarFluxLayer(data);
+  
 }
 
 function updateSolarPreviewFallback(lat, lng, addressLabel) {
