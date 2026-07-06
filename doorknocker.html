@@ -852,6 +852,7 @@ function showRoofResults() {
 }
 
 let googleRoofMap;
+let roofClickListenerAdded = false;
 let panelMarkers = [];
 
 function updateMap(lat, lng) {
@@ -870,6 +871,18 @@ function updateMap(lat, lng) {
       mapTypeControl: false,
       fullscreenControl: true
     });
+
+    if (!roofClickListenerAdded) {
+      googleRoofMap.addListener("click", function(event) {
+        const clickedLat = event.latLng.lat();
+        const clickedLng = event.latLng.lng();
+
+        setSolarStatus("⏳ <strong>Checking selected roof...</strong> Loading sunlight for the roof you tapped.");
+        reverseGeocodeLocation(clickedLat, clickedLng);
+      });
+
+      roofClickListenerAdded = true;
+    }
   } else {
     googleRoofMap.setCenter(center);
     googleRoofMap.setZoom(20);
@@ -1085,7 +1098,7 @@ async function fetchSolarData(lat, lng, addressLabel) {
     const data = await response.json();
 
     updateSolarPreviewFromApi(data, lat, lng, addressLabel);
-    setSolarStatus("✅ <strong>Roof preview loaded.</strong> Confirm the map is showing the correct home.");
+    setSolarStatus("✅ <strong>Roof preview loaded.</strong> If this is not the correct home, tap the correct roof on the map.");
 
   } catch (error) {
     updateSolarPreviewFallback(lat, lng, addressLabel);
@@ -1129,43 +1142,40 @@ function useCurrentLocation() {
 
   navigator.geolocation.getCurrentPosition(
     function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
 
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+      console.log("GPS accuracy:", position.coords.accuracy, "meters");
 
-        console.log("GPS accuracy:", position.coords.accuracy, "meters");
+      if (position.coords.accuracy > 12) {
+        setSolarStatus(
+          "📍 <strong>Improving GPS accuracy...</strong> Hold still for a moment. Current accuracy: " +
+          Math.round(position.coords.accuracy) +
+          " meters."
+        );
 
-        // If GPS isn't accurate enough, try again before searching.
-        if (position.coords.accuracy > 12) {
-
-            setSolarStatus(
-                "📍 Improving GPS accuracy (" +
-                Math.round(position.coords.accuracy) +
-                "m)... Hold still for a moment."
+        navigator.geolocation.getCurrentPosition(
+          function(betterPosition) {
+            console.log("Improved GPS accuracy:", betterPosition.coords.accuracy, "meters");
+            reverseGeocodeLocation(
+              betterPosition.coords.latitude,
+              betterPosition.coords.longitude
             );
+          },
+          function() {
+            reverseGeocodeLocation(lat, lng);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
 
-            navigator.geolocation.getCurrentPosition(
-                function(betterPosition) {
-                    reverseGeocodeLocation(
-                        betterPosition.coords.latitude,
-                        betterPosition.coords.longitude
-                    );
-                },
-                function() {
-                    reverseGeocodeLocation(lat, lng);
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
-            );
+        return;
+      }
 
-            return;
-        }
-
-        reverseGeocodeLocation(lat, lng);
-
+      reverseGeocodeLocation(lat, lng);
     },
     function(error) {
       let message = "Unable to get your location.";
