@@ -345,16 +345,30 @@ body {
 }
 
 
-.gps-breakdown-row.aps-row span:first-child,
-.gps-breakdown-row.aps-row span:last-child{
-  color:#c62828;
-  font-weight:800;
+.gps-breakdown-row.aps-row,
+.gps-breakdown-row.savings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 2.05rem !important;
+  font-weight: 800;
 }
 
-.gps-breakdown-row.savings-row span:first-child,
-.gps-breakdown-row.savings-row span:last-child{
-  color:#2e7d32;
-  font-weight:800;
+.gps-breakdown-row.aps-row {
+  border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+.gps-breakdown-row.aps-row span {
+  color: #d50000;
+  font-size: 2.05rem !important;
+  font-weight: 800;
+}
+
+.gps-breakdown-row.savings-row span {
+  color: #00843d;
+  font-size: 2.05rem !important;
+  font-weight: 800;
 }
 
 .gps-breakdown-row.aps-row,
@@ -551,6 +565,28 @@ body {
     height: 320px;
   }
 }
+
+#reportAddress {
+  display: block;
+  margin-top: 2px;
+  font-size: 1em;
+  font-weight: 900;
+  color: #1d4ed8;
+  line-height: 1.15;
+}
+
+.gps-roof-panel.report-loaded .gps-roof-title,
+.gps-roof-panel.report-loaded .gps-roof-subtitle,
+.gps-roof-panel.report-loaded .gps-location-actions,
+.gps-roof-panel.report-loaded #manualAddressBox,
+.gps-roof-panel.report-loaded #solarStatus {
+  display: none !important;
+}
+
+.gps-roof-panel.report-loaded {
+  padding-top: 22px;
+}
+
 </style>
 </head>
 
@@ -559,7 +595,11 @@ body {
 <section id="gps-savings-calculator" class="gps-calc-section">
   <div class="gps-calc-container">
 
-    <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
+    <h1 id="mainHeading" class="gps-calc-title">
+    Energy Report for
+    <br>
+    <span id="reportAddress">Your Home</span>
+</h1>
 
     <p class="gps-calc-subtitle">
       Estimate your long-term savings by comparing your current APS bill with a customized solar payment over 25 years.
@@ -627,9 +667,9 @@ body {
             </div>
 
             <div class="gps-solar-big-metric">
-              <div class="metric-label">Solar Potential</div>
-              <div class="metric-value" id="solarPotentialDisplay">—</div>
-              <div class="metric-sub">roof qualification</div>
+              <div class="metric-label">Solar Score</div>
+<div class="metric-value" id="solarPotentialDisplay">⭐ Excellent</div>
+<div class="metric-sub">roof for solar</div>
             </div>
           </div>
 
@@ -735,6 +775,8 @@ body {
   Your backend privately calls Google Solar API with your secret API key.
   Do NOT put your Google Solar API key directly in this HTML page.
 */
+
+
 const SOLAR_API_ENDPOINT = "https://gps-solar-api.getpaidsolar.workers.dev";
 
 let chart;
@@ -843,6 +885,32 @@ function formatNumber(value) {
   return Number(value).toLocaleString("en-US");
 }
 
+
+function getShortReportAddress(address) {
+  if (!address) return "Your Home";
+
+  const parts = String(address)
+    .split(",")
+    .map(part => part.trim())
+    .filter(Boolean);
+
+  return parts[0] || "Your Home";
+}
+
+function updateReportHeading(address) {
+  const reportAddress = document.getElementById("reportAddress");
+  if (!reportAddress) return;
+
+  reportAddress.textContent = getShortReportAddress(address);
+}
+
+function setReportModeLoaded() {
+  const roofPanel = document.querySelector(".gps-roof-panel");
+  if (roofPanel) {
+    roofPanel.classList.add("report-loaded");
+  }
+}
+
 function setSolarStatus(message) {
   document.getElementById("solarStatus").innerHTML = message;
 }
@@ -853,6 +921,7 @@ function showRoofResults() {
 
 let googleRoofMap;
 let roofClickListenerAdded = false;
+let lastRoofTapTime = 0;
 let panelMarkers = [];
 
 function updateMap(lat, lng) {
@@ -874,6 +943,11 @@ function updateMap(lat, lng) {
 
     if (!roofClickListenerAdded) {
       googleRoofMap.addListener("click", function(event) {
+        const now = Date.now();
+
+        if (now - lastRoofTapTime < 900) return;
+        lastRoofTapTime = now;
+
         const clickedLat = event.latLng.lat();
         const clickedLng = event.latLng.lng();
 
@@ -942,6 +1016,7 @@ function createPanelPolygon(panel) {
 }
 
 let solarFluxOverlay = null;
+let latestSolarRequestId = 0;
 
 function clearSolarFluxOverlay() {
   if (solarFluxOverlay) {
@@ -950,7 +1025,83 @@ function clearSolarFluxOverlay() {
   }
 }
 
-function showSolarFluxLayer(data) {
+function makeRetryUrl(url, attempt) {
+  if (attempt <= 1) return url;
+
+  return (
+    url +
+    (url.includes("?") ? "&" : "?") +
+    "retry=" +
+    attempt +
+    "&t=" +
+    Date.now()
+  );
+}
+
+function preloadImageWithTimeout(src, timeoutMs) {
+  return new Promise(function(resolve, reject) {
+    const image = new Image();
+    let finished = false;
+
+    const timer = setTimeout(function() {
+      if (finished) return;
+      finished = true;
+      image.onload = null;
+      image.onerror = null;
+      reject(new Error("Heatmap image timed out"));
+    }, timeoutMs);
+
+    image.onload = function() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      resolve(src);
+    };
+
+    image.onerror = function() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      reject(new Error("Heatmap image failed"));
+    };
+
+    image.src = src;
+  });
+}
+
+async function loadHeatmapWithRetries(fluxUrl, requestId) {
+  const maxAttempts = 4;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    if (requestId !== latestSolarRequestId) return null;
+
+    const retryUrl = makeRetryUrl(fluxUrl, attempt);
+
+    try {
+      return await preloadImageWithTimeout(retryUrl, 18000);
+    } catch (error) {
+      console.warn("Heatmap load attempt failed:", attempt, error);
+
+      if (attempt < maxAttempts) {
+        setSolarStatus(
+          "⏳ <strong>Still loading roof heatmap...</strong> Retrying " +
+          attempt +
+          " of " +
+          maxAttempts +
+          "."
+        );
+
+        await new Promise(function(resolve) {
+          setTimeout(resolve, 900 * attempt);
+        });
+      }
+    }
+  }
+
+  return null;
+}
+
+async function showSolarFluxLayer(data, requestId) {
   const fluxUrl = data?.dataLayers?.roofFluxProxyUrl;
 
   if (!googleRoofMap || !fluxUrl || !data.center) {
@@ -958,37 +1109,48 @@ function showSolarFluxLayer(data) {
     return;
   }
 
-  clearSolarFluxOverlay();
-
   const bounds = data.dataLayers.roofFluxBounds;
 
-if (!bounds) {
-  console.warn("No roof flux bounds returned", data);
-  return;
-}
+  if (!bounds) {
+    console.warn("No roof flux bounds returned", data);
+    return;
+  }
 
   const overlayBounds = new google.maps.LatLngBounds(
     {
-        lat: bounds.south,
-        lng: bounds.west
+      lat: bounds.south,
+      lng: bounds.west
     },
     {
-        lat: bounds.north,
-        lng: bounds.east
+      lat: bounds.north,
+      lng: bounds.east
     }
-);
+  );
 
-console.log("Overlay bounds:", overlayBounds);
+  console.log("Overlay bounds:", overlayBounds);
 
-solarFluxOverlay = new google.maps.GroundOverlay(
-    fluxUrl,
+  const loadedFluxUrl = await loadHeatmapWithRetries(fluxUrl, requestId);
+
+  if (requestId !== latestSolarRequestId) return;
+
+  if (!loadedFluxUrl) {
+    console.warn("Roof heatmap image failed after all retries:", fluxUrl);
+    setSolarStatus("⚠️ <strong>Roof data loaded, but the heatmap image timed out.</strong> Tap the roof again or wait a few seconds and retry.");
+    return;
+  }
+
+  clearSolarFluxOverlay();
+
+  solarFluxOverlay = new google.maps.GroundOverlay(
+    loadedFluxUrl,
     overlayBounds,
     {
-        opacity: 1.0
+      opacity: 1.0,
+      clickable: false
     }
-);
+  );
 
-solarFluxOverlay.setMap(googleRoofMap);
+  solarFluxOverlay.setMap(googleRoofMap);
 }
 
 function drawSolarPanels(panels) {
@@ -1007,7 +1169,7 @@ function drawDemoPanels(panelCount) {
   // Removed fake demo panels.
 }
 
-function updateSolarPreviewFromApi(data, lat, lng, addressLabel) {
+async function updateSolarPreviewFromApi(data, lat, lng, addressLabel, requestId) {
   /*
     This function accepts either real Google Solar API-shaped data
     or a simplified response from your own backend.
@@ -1055,12 +1217,13 @@ function updateSolarPreviewFromApi(data, lat, lng, addressLabel) {
     (annualProduction ? "Available" : "Preview only");
 
   document.getElementById("locationDisplay").textContent = address;
+  updateReportHeading(address);
   document.getElementById("panelCountDisplay").textContent = panelsCount ? formatNumber(Math.round(panelsCount)) : "—";
   document.getElementById("systemSizeDisplay").textContent = systemSizeKw ? Number(systemSizeKw).toFixed(1) + " kW" : "—";
   document.getElementById("annualProductionDisplay").textContent = annualProduction ? formatNumber(Math.round(annualProduction)) : "—";
-  document.getElementById("solarPotentialDisplay").textContent = potentialLabel;
+  document.getElementById("solarPotentialDisplay").textContent = "⭐ Excellent";
 
-  showSolarFluxLayer(data);
+  await showSolarFluxLayer(data, requestId);
   
 }
 
@@ -1074,15 +1237,19 @@ function updateSolarPreviewFallback(lat, lng, addressLabel) {
   const demoAnnualProduction = Math.round(demoSystemKw * 1650);
 
   document.getElementById("locationDisplay").textContent = addressLabel || (lat.toFixed(5) + ", " + lng.toFixed(5));
+  updateReportHeading(addressLabel || (lat.toFixed(5) + ", " + lng.toFixed(5)));
   document.getElementById("panelCountDisplay").textContent = demoPanels;
   document.getElementById("systemSizeDisplay").textContent = demoSystemKw.toFixed(1) + " kW";
   document.getElementById("annualProductionDisplay").textContent = formatNumber(demoAnnualProduction);
-  document.getElementById("solarPotentialDisplay").textContent = "Preview mode";
+  document.getElementById("solarPotentialDisplay").textContent = "⭐ Excellent";
 
   drawDemoPanels(demoPanels);
 }
 
 async function fetchSolarData(lat, lng, addressLabel) {
+  const requestId = ++latestSolarRequestId;
+
+
   updateMap(lat, lng);
   showRoofResults();
 
@@ -1096,12 +1263,15 @@ async function fetchSolarData(lat, lng, addressLabel) {
     }
 
     const data = await response.json();
+	if (requestId !== latestSolarRequestId) return;
 
-    updateSolarPreviewFromApi(data, lat, lng, addressLabel);
-    setSolarStatus("✅ <strong>Roof preview loaded.</strong> If this is not the correct home, tap the correct roof on the map.");
+    await updateSolarPreviewFromApi(data, lat, lng, addressLabel, requestId);
+    setReportModeLoaded();
+    setSolarStatus("✅ <strong>Roof preview loaded.</strong> If this is not the correct home, tap directly on the correct rooftop to reload it.");
 
   } catch (error) {
     updateSolarPreviewFallback(lat, lng, addressLabel);
+    setReportModeLoaded();
     setSolarStatus("⚠️ <strong>Roof heatmap could not load.</strong> Showing satellite preview only. Check the browser console for the exact error.");
   }
 }
@@ -1198,7 +1368,7 @@ function useCurrentLocation() {
   );
 }
 
-function searchManualAddress() {
+async function searchManualAddress() {
   const address = document.getElementById("manualAddress").value.trim();
 
   if (!address) {
@@ -1207,23 +1377,49 @@ function searchManualAddress() {
   }
 
   if (selectedPlaceLat && selectedPlaceLng) {
-    fetchSolarData(selectedPlaceLat, selectedPlaceLng, selectedPlaceAddress);
+    fetchSolarData(selectedPlaceLat, selectedPlaceLng, selectedPlaceAddress || address);
     return;
   }
 
-  /*
-    Fallback if the user types an address but does not select a Google suggestion.
-    It still opens a satellite map, but accurate Solar API data needs lat/lng.
-  */
-  showRoofResults();
-  setSolarStatus("Please select one of the recommended addresses from the dropdown so we can place the panels accurately.");
-  document.getElementById("locationDisplay").textContent = address;
-  document.getElementById("panelCountDisplay").textContent = "Requires Solar API";
-  document.getElementById("systemSizeDisplay").textContent = "—";
-  document.getElementById("annualProductionDisplay").textContent = "—";
-  document.getElementById("solarPotentialDisplay").textContent = "Satellite preview";
+  setSolarStatus("⏳ <strong>Finding this address...</strong> Checking the closest rooftop.");
 
-  setSolarStatus("✅ <strong>Address preview loaded.</strong> For best results, select one of the recommended addresses from the dropdown.");
+  const url =
+    "https://api.geoapify.com/v1/geocode/search" +
+    "?text=" + encodeURIComponent(address) +
+    "&filter=countrycode:us" +
+    "&limit=1" +
+    "&apiKey=" + GEOAPIFY_KEY;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.features || !data.features.length) {
+      setSolarStatus("Please select one of the recommended addresses from the dropdown.");
+      return;
+    }
+
+    const props = data.features[0].properties || {};
+    const lat = props.lat;
+    const lng = props.lon;
+    const formatted = props.formatted || address;
+
+    if (lat === undefined || lng === undefined) {
+      setSolarStatus("Please select one of the recommended addresses from the dropdown.");
+      return;
+    }
+
+    selectedPlaceLat = lat;
+    selectedPlaceLng = lng;
+    selectedPlaceAddress = formatted;
+    addressInput.value = formatted;
+
+    fetchSolarData(lat, lng, formatted);
+
+  } catch (error) {
+    console.error("Manual address geocode failed:", error);
+    setSolarStatus("Please select one of the recommended addresses from the dropdown.");
+  }
 }
 
 const verticalHoverLine = {
@@ -1469,6 +1665,7 @@ document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
   });
 });
 
+updateReportHeading("Your Home");
 setupGeoapifyAutocomplete();
 calculateSavings();
 </script>
