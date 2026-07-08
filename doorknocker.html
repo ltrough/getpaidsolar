@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>GPS 25-Year Solar Savings Calculator</title>
-
 <style>
 body {
   margin: 0;
@@ -211,7 +211,7 @@ body {
 
 .gps-roof-results {
   display: none;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
   gap: 22px;
   margin-top: 24px;
   align-items: stretch;
@@ -531,6 +531,16 @@ body {
   font-weight: 700;
 }
 
+
+.gps-solar-summary-card.gps-under-chart {
+  display: none;
+  margin-top: 22px;
+}
+
+.gps-solar-summary-card.gps-under-chart.gps-show {
+  display: block;
+}
+
 @media (max-width: 900px) {
   .gps-solar-metric-grid {
     grid-template-columns: 1fr;
@@ -587,181 +597,145 @@ body {
   padding-top: 22px;
 }
 
+
+
+/* Clean layout after removing redundant calculation sections */
+.gps-input-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .gps-input-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Two-card summary layout above chart */
+.gps-results.gps-two-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 28px 0 18px 0;
+}
+
+@media (max-width: 900px) {
+  .gps-results.gps-two-summary {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
-
 <body>
-
-<section id="gps-savings-calculator" class="gps-calc-section">
-  <div class="gps-calc-container">
-
-    <h1 id="mainHeading" class="gps-calc-title">
+<section class="gps-calc-section" id="gps-savings-calculator">
+<div class="gps-calc-container">
+<h1 class="gps-calc-title" id="mainHeading">
     Energy Report for
-    <br>
-    <span id="reportAddress">Your Home</span>
+    <br/>
+<span id="reportAddress">Your Home</span>
 </h1>
-
-    <p class="gps-calc-subtitle">
+<p class="gps-calc-subtitle">
       Estimate your long-term savings by comparing your current APS bill with a customized solar payment over 25 years.
     </p>
-
-    <div class="gps-roof-panel">
-      <h3 class="gps-roof-title">See Sunlight on This Roof</h3>
-      <p class="gps-roof-subtitle">
+<div class="gps-roof-panel">
+<h3 class="gps-roof-title">See Sunlight on This Roof</h3>
+<p class="gps-roof-subtitle">
         Tap Use My Location while standing at the home. The page will detect your location, show the rooftop, and estimate solar potential.
       </p>
-
-      <div class="gps-location-actions">
-        <button type="button" class="gps-location-btn" id="useLocationBtn">📍 Use My Location</button>
-        <button type="button" class="gps-secondary-btn" id="showAddressBtn">Enter Address Instead</button>
-      </div>
-
-      <div class="gps-manual-address" id="manualAddressBox">
-        <div class="gps-address-row">
-          <div class="gps-address-wrapper">
-            <input type="text" id="manualAddress" placeholder="Enter customer address" autocomplete="off">
-            <div id="addressSuggestions" class="gps-address-suggestions"></div>
-          </div>
-          <button type="button" class="gps-secondary-btn" id="searchAddressBtn">Search</button>
-        </div>
-        <div class="gps-help-text">
+<div class="gps-location-actions">
+<button class="gps-location-btn" id="useLocationBtn" type="button">📍 Use My Location</button>
+<button class="gps-secondary-btn" id="showAddressBtn" type="button">Enter Address Instead</button>
+</div>
+<div class="gps-manual-address" id="manualAddressBox">
+<div class="gps-address-row">
+<div class="gps-address-wrapper">
+<input autocomplete="off" id="manualAddress" placeholder="Enter customer address" type="text"/>
+<div class="gps-address-suggestions" id="addressSuggestions"></div>
+</div>
+<button class="gps-secondary-btn" id="searchAddressBtn" type="button">Search</button>
+</div>
+<div class="gps-help-text">
           Start typing and select the correct recommended address. This uses the same Geoapify autocomplete setup as your Austin page.
         </div>
-      </div>
-
-      <div class="gps-status" id="solarStatus">
+</div>
+<div class="gps-status" id="solarStatus">
         Ready when you are. Tap <strong>Use My Location</strong> to preview the roof.
       </div>
-
-      <div class="gps-roof-results" id="roofResults">
-        <div class="gps-map-card">
-          <div class="gps-roof-map" id="roofMap">
-            <div id="googleRoofMap" style="width:100%; height:100%;"></div>
-          </div>
-        </div>
-
-        <div class="gps-solar-summary-card">
-          <h3>Roof Solar Preview</h3>
-
-          <div class="gps-address-pill">
+<div class="gps-roof-results" id="roofResults">
+<div class="gps-map-card">
+<div class="gps-roof-map" id="roofMap">
+<div id="googleRoofMap" style="width:100%; height:100%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="gps-input-panel">
+<div class="gps-input-grid">
+<div class="gps-calc-field">
+<label>Current Average APS Monthly Bill</label>
+<div class="money-input">
+<span>$</span>
+<input id="apsBill" step="0.01" type="number" value="250.00"/>
+</div>
+</div>
+<div class="gps-calc-field">
+<label>New Solar Monthly Payment</label>
+<div class="money-input">
+<span>$</span>
+<input id="solarMonthly" step="0.01" type="number" value="200.00"/>
+</div>
+</div>
+</div>
+</div>
+<div class="gps-results gps-two-summary">
+<div class="gps-result-card">
+<h3>APS 25-Year Cost</h3>
+<div class="amount orange" id="apsTotal">$0.00</div>
+</div>
+<div class="gps-result-card feature-card">
+<h3>Net 25-Year Savings</h3>
+<div class="amount green" id="totalSavings">$0.00</div>
+</div>
+</div>
+<div class="gps-chart-wrap">
+<canvas id="savingsChart"></canvas>
+</div><div class="gps-solar-summary-card gps-under-chart" id="solarSummaryCard">
+<h3>Roof Solar Preview</h3>
+<div class="gps-address-pill">
             📍 <span id="locationDisplay">Select an address or use your location</span>
-          </div>
-
-          <div class="gps-solar-metric-grid">
-            <div class="gps-solar-big-metric">
-              <div class="metric-label">Recommended Panels</div>
-              <div class="metric-value" id="panelCountDisplay">—</div>
-              <div class="metric-sub">estimated layout</div>
-            </div>
-
-            <div class="gps-solar-big-metric">
-              <div class="metric-label">System Size</div>
-              <div class="metric-value" id="systemSizeDisplay">—</div>
-              <div class="metric-sub">approx. DC size</div>
-            </div>
-
-            <div class="gps-solar-big-metric">
-              <div class="metric-label">Annual Production</div>
-              <div class="metric-value" id="annualProductionDisplay">—</div>
-              <div class="metric-sub">estimated kWh / year</div>
-            </div>
-
-            <div class="gps-solar-big-metric">
-              <div class="metric-label">Solar Score</div>
+</div>
+<div class="gps-solar-metric-grid">
+<div class="gps-solar-big-metric">
+<div class="metric-label">Recommended Panels</div>
+<div class="metric-value" id="panelCountDisplay">—</div>
+<div class="metric-sub">estimated layout</div>
+</div>
+<div class="gps-solar-big-metric">
+<div class="metric-label">System Size</div>
+<div class="metric-value" id="systemSizeDisplay">—</div>
+<div class="metric-sub">approx. DC size</div>
+</div>
+<div class="gps-solar-big-metric">
+<div class="metric-label">Annual Production</div>
+<div class="metric-value" id="annualProductionDisplay">—</div>
+<div class="metric-sub">estimated kWh / year</div>
+</div>
+<div class="gps-solar-big-metric">
+<div class="metric-label">Solar Score</div>
 <div class="metric-value" id="solarPotentialDisplay">⭐ Excellent</div>
 <div class="metric-sub">roof for solar</div>
-            </div>
-          </div>
-
-          <div class="gps-solar-note-box">
+</div>
+</div>
+<div class="gps-solar-note-box">
             This preview is designed for a quick homeowner conversation. Final panel count, production, shade, setbacks, and roof layout must be confirmed by the final installer design.
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="gps-input-panel">
-      <div class="gps-input-grid">
-
-        <div class="gps-calc-field">
-          <label>Current APS Monthly Bill</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="apsBill" value="250.00" step="0.01">
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>APS Annual Increase %</label>
-          <input type="number" id="apsIncrease" value="5" step="0.01">
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Solar Avg Monthly Payment</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="solarMonthly" value="200.00" step="0.01">
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Solar Annual Rate Lock %</label>
-          <input type="text" id="solarEscalatorDisplay" value="1.9%" readonly class="readonly-field">
-        </div>
-
-      </div>
-    </div>
-
-    <div class="gps-results">
-
-      <div class="gps-result-card">
-        <h3>APS 25-Year Cost</h3>
-        <div class="amount orange" id="apsTotal">$0.00</div>
-      </div>
-
-      <div class="gps-result-card payment-card">
-        <h3>New Solar Payment</h3>
-        <div class="amount purple" id="newAvgMonthly">$0.00</div>
-        <div class="lower-text">
-          <span id="percentLower">0%</span> lower than current APS bill
-        </div>
-      </div>
-
-      <div class="gps-result-card feature-card">
-        <h3>Net 25-Year Savings</h3>
-        <div class="amount green" id="totalSavings">$0.00</div>
-      </div>
-
-    </div>
-
-
-    <div class="gps-breakdown">
-      <h3>Savings Breakdown</h3>
-
-      <div class="gps-breakdown-row aps-row">
-<span>APS 25-Year Cost</span>
-        <span id="apsCostDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row savings-row">
-<span>Total Estimated 25-Year Savings</span>
-        <span id="netSavingsDisplay">$0.00</span>
-      </div>
-    </div>
-
-    <div class="gps-chart-wrap">
-      <canvas id="savingsChart"></canvas>
-    </div>
-
-    <p class="gps-disclaimer">
+</div>
+<p class="gps-disclaimer">
       Estimates are for illustration only. Utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
-
-  </div>
+</div>
 </section>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 /*
   GOOGLE SOLAR API SETUP NOTE
@@ -917,12 +891,48 @@ function setSolarStatus(message) {
 
 function showRoofResults() {
   document.getElementById("roofResults").classList.add("gps-show");
+
+  const summaryCard = document.getElementById("solarSummaryCard");
+  if (summaryCard) {
+    summaryCard.classList.add("gps-show");
+  }
 }
 
 let googleRoofMap;
+let roofLocationMarker = null;
 let roofClickListenerAdded = false;
 let lastRoofTapTime = 0;
 let panelMarkers = [];
+
+
+function updateRoofLocationMarker(lat, lng) {
+  if (!googleRoofMap) return;
+
+  const markerPosition = {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng)
+  };
+
+  if (!roofLocationMarker) {
+    roofLocationMarker = new google.maps.Marker({
+      position: markerPosition,
+      map: googleRoofMap,
+      title: "Selected home",
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        fillColor: "#dc2626",
+        fillOpacity: 1,
+        strokeColor: "#ffffff",
+        strokeWeight: 3
+      },
+      zIndex: 9999
+    });
+  } else {
+    roofLocationMarker.setPosition(markerPosition);
+    roofLocationMarker.setMap(googleRoofMap);
+  }
+}
 
 function updateMap(lat, lng) {
   const center = {
@@ -961,6 +971,8 @@ function updateMap(lat, lng) {
     googleRoofMap.setCenter(center);
     googleRoofMap.setZoom(20);
   }
+
+  updateRoofLocationMarker(lat, lng);
 }
 
 function clearPanelMarkers() {
@@ -1447,7 +1459,7 @@ Chart.register(verticalHoverLine);
 
 function calculateSavings() {
   const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
-  const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
+  const displayedApsIncrease = 0.05;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
   const solarEscalator = 0.019;
   const batteryAnnualCredit = 0;
@@ -1497,13 +1509,13 @@ function calculateSavings() {
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
-  document.getElementById("apsTotal").textContent = money(apsTotal);
-  document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
-  document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
-  document.getElementById("totalSavings").textContent = money(netSavings);
 
-  document.getElementById("apsCostDisplay").textContent = money(apsTotal);
-  document.getElementById("netSavingsDisplay").textContent = money(netSavings);
+
+  const apsTotalEl = document.getElementById("apsTotal");
+  if (apsTotalEl) apsTotalEl.textContent = money(apsTotal);
+
+  const totalSavingsEl = document.getElementById("totalSavings");
+  if (totalSavingsEl) totalSavingsEl.textContent = money(netSavings);
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
 
@@ -1669,10 +1681,7 @@ updateReportHeading("Your Home");
 setupGeoapifyAutocomplete();
 calculateSavings();
 </script>
-
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB08Feth79-2v_eUwUIBwja7e0P0nTtH_M&libraries=geometry">
+<script async="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB08Feth79-2v_eUwUIBwja7e0P0nTtH_M&amp;libraries=geometry">
 </script>
-
 </body>
 </html>
