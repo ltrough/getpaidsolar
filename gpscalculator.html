@@ -112,9 +112,45 @@ body {
 
 .gps-results {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
   margin: 35px 0;
+}
+
+.gps-result-group {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.gps-result-group.aps-group {
+  background: #fff5f3;
+  border: 2px solid #ffb4a0;
+}
+
+.gps-result-group.solar-group {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+}
+
+.gps-result-group-title {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.aps-group .gps-result-group-title {
+  color: #dc2626;
+}
+
+.solar-group .gps-result-group-title {
+  color: #16a34a;
+}
+
+.gps-result-group-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .gps-result-card {
@@ -245,7 +281,8 @@ body {
 
 @media (max-width: 900px) {
   .gps-input-grid,
-  .gps-results {
+  .gps-results,
+  .gps-result-group-cards {
     grid-template-columns: 1fr;
   }
 
@@ -357,40 +394,52 @@ body {
 
     <div class="gps-results">
 
-      <div class="gps-result-card">
-        <h3 id="apsCostCardLabel">APS 25-Year Cost</h3>
-        <div class="amount orange" id="apsTotal">$0.00</div>
-      </div>
+      <div class="gps-result-group aps-group">
+        <h3 class="gps-result-group-title">Staying with APS</h3>
 
-      <div class="gps-result-card">
-        <h3>Estimated APS Monthly Bill<br>Next Year</h3>
-        <div class="amount orange" id="apsNextYear">$0.00</div>
-        <div class="lower-text">
-          You'll save about <span id="nextYearDifference">$0.00</span>/month compared to next year's APS bill.
+        <div class="gps-result-group-cards">
+          <div class="gps-result-card">
+            <h3 id="apsCostCardLabel">APS 25-Year Cost</h3>
+            <div class="amount orange" id="apsTotal">$0.00</div>
+          </div>
+
+          <div class="gps-result-card">
+            <h3>Estimated APS Monthly Bill<br>Next Year</h3>
+            <div class="amount orange" id="apsNextYear">$0.00</div>
+            <div class="lower-text">
+              You'll save about <span id="nextYearDifference">$0.00</span>/month compared to next year's APS bill.
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="gps-result-card">
-        <h3>Monthly Cost After Rewards</h3>
-        <div class="amount purple" id="newAvgMonthly">$0.00</div>
-        <div class="lower-text">
-          <span id="percentLower">0%</span> lower than current APS bill
-        </div>
-      </div>
+      <div class="gps-result-group solar-group">
+        <h3 class="gps-result-group-title">Going with Solar</h3>
 
-      <div class="gps-result-card">
-        <h3 class="savings-period-title" style="display:flex;flex-direction:column;gap:8px;">
-          <span>Net Savings</span>
-          <select id="savingsYears" class="savings-period-select" aria-label="Select savings period" onchange="calculateSavings()">
-            <option value="1">1 Year</option>
-            <option value="5">5 Years</option>
-            <option value="10">10 Years</option>
-            <option value="15">15 Years</option>
-            <option value="20">20 Years</option>
-            <option value="25" selected>25 Years</option>
-          </select>
-        </h3>
-        <div class="amount green" id="totalSavings">$0.00</div>
+        <div class="gps-result-group-cards">
+          <div class="gps-result-card">
+            <h3>Monthly Cost After Rewards</h3>
+            <div class="amount purple" id="newAvgMonthly">$0.00</div>
+            <div class="lower-text">
+              <span id="percentLower">0%</span> lower than current APS bill
+            </div>
+          </div>
+
+          <div class="gps-result-card">
+            <h3 class="savings-period-title" style="display:flex;flex-direction:column;gap:8px;">
+              <span>Net Savings</span>
+              <select id="savingsYears" class="savings-period-select" aria-label="Select savings period" onchange="calculateSavings()">
+                <option value="1">1 Year</option>
+                <option value="5">5 Years</option>
+                <option value="10">10 Years</option>
+                <option value="15">15 Years</option>
+                <option value="20">20 Years</option>
+                <option value="25" selected>25 Years</option>
+              </select>
+            </h3>
+            <div class="amount green" id="totalSavings">$0.00</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -526,11 +575,21 @@ function calculateSavings() {
   const selectedBatteryTotal =
     batteryAnnualCredit * Math.min(selectedSavingsYears, batteryRewardYears);
 
-  const selectedApsTotal = cumulativeApsTotals[selectedIndex];
+  const oneYearProjectedIncrease = 0.14;
+
+  const selectedApsTotal =
+    selectedSavingsYears === 1
+      ? (fixedCharge + (energyPortion * (1 + oneYearProjectedIncrease))) * 12
+      : cumulativeApsTotals[selectedIndex];
+
+  const selectedSolarTotal =
+    selectedSavingsYears === 1
+      ? solarMonthly * 12
+      : cumulativeSolarTotals[selectedIndex];
 
   const selectedNetSavings =
-    cumulativeApsTotals[selectedIndex] -
-    cumulativeSolarTotals[selectedIndex] +
+    selectedApsTotal -
+    selectedSolarTotal +
     selectedBatteryTotal +
     gpsIncentive;
 
@@ -548,10 +607,17 @@ document.getElementById("apsNextYear").textContent=money(nextYearApsMonthly);
 document.getElementById("nextYearDifference").textContent=nextYearDiff.toLocaleString("en-US",{style:"currency",currency:"USD"}) ;
 document.getElementById("apsTotal").textContent = money(selectedApsTotal);
   document.getElementById("apsCostDisplay").textContent = money(selectedApsTotal);
-  document.getElementById("apsCostCardLabel").textContent =
-    `APS ${selectedSavingsYears}-Year Cost`;
-  document.getElementById("apsCostBreakdownLabel").textContent =
-    `APS ${selectedSavingsYears}-Year Cost`;
+  if (selectedSavingsYears === 1) {
+    document.getElementById("apsCostCardLabel").textContent =
+      "APS 1-Year Cost After 14% Increase";
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      "APS 1-Year Cost After 14% Increase";
+  } else {
+    document.getElementById("apsCostCardLabel").textContent =
+      `APS ${selectedSavingsYears}-Year Cost`;
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      `APS ${selectedSavingsYears}-Year Cost`;
+  }
   document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
   document.getElementById("totalSavings").textContent = money(selectedNetSavings);
@@ -560,7 +626,9 @@ document.getElementById("apsTotal").textContent = money(selectedApsTotal);
 
   const labelYears = document.getElementById("savingsYears").value;
   document.getElementById("netSavingsLabel").textContent =
-    `Total Estimated ${labelYears}-Year Savings`;
+    selectedSavingsYears === 1
+      ? "Total Estimated 1-Year Savings After APS 14% Increase"
+      : `Total Estimated ${labelYears}-Year Savings`;
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
 
