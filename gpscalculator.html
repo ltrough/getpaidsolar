@@ -258,6 +258,32 @@ body {
     gap: 4px;
   }
 }
+
+.savings-period-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.savings-period-select {
+  appearance: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font: inherit;
+  font-weight: 800;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.savings-period-select:focus {
+  outline: 2px solid #16a34a;
+  outline-offset: 2px;
+}
+
 </style>
 </head>
 
@@ -285,7 +311,7 @@ body {
 
         <div class="gps-calc-field">
           <label>APS Annual Increase %</label>
-          <input type="number" id="apsIncrease" value="5" step="0.01">
+          <input type="number" id="apsIncrease" value="5" step="0.01" oninput="calculateSavings()" onchange="calculateSavings()">
         </div>
 
         <div class="gps-calc-field">
@@ -332,7 +358,7 @@ body {
     <div class="gps-results">
 
       <div class="gps-result-card">
-        <h3>APS 25-Year Cost</h3>
+        <h3 id="apsCostCardLabel">APS 25-Year Cost</h3>
         <div class="amount orange" id="apsTotal">$0.00</div>
       </div>
 
@@ -353,7 +379,17 @@ body {
       </div>
 
       <div class="gps-result-card">
-        <h3>Net 25-Year Savings</h3>
+        <h3 class="savings-period-title" style="display:flex;flex-direction:column;gap:8px;">
+          <span>Net Savings</span>
+          <select id="savingsYears" class="savings-period-select" aria-label="Select savings period" onchange="calculateSavings()">
+            <option value="1">1 Year</option>
+            <option value="5">5 Years</option>
+            <option value="10">10 Years</option>
+            <option value="15">15 Years</option>
+            <option value="20">20 Years</option>
+            <option value="25" selected>25 Years</option>
+          </select>
+        </h3>
         <div class="amount green" id="totalSavings">$0.00</div>
       </div>
 
@@ -363,12 +399,12 @@ body {
       <h3>Savings Breakdown</h3>
 
       <div class="gps-breakdown-row red-row">
-        <span>APS 25-Year Cost</span>
+        <span id="apsCostBreakdownLabel">APS 25-Year Cost</span>
         <span id="apsCostDisplay">$0.00</span>
       </div>
 
       <div class="gps-breakdown-row">
-        <span style="color:#16a34a !important;">Total Estimated 25-Year Savings</span>
+        <span id="netSavingsLabel" style="color:#16a34a !important;">Total Estimated 25-Year Savings</span>
         <span id="netSavingsDisplay" style="color:#16a34a !important;">$0.00</span>
       </div>
     </div>
@@ -452,6 +488,8 @@ function calculateSavings() {
   const years = [];
   const apsMonthlyData = [];
   const solarMonthlyData = [];
+  const cumulativeApsTotals = [];
+  const cumulativeSolarTotals = [];
 
   let apsTotal = 0;
   let solarTotal = 0;
@@ -476,7 +514,25 @@ function calculateSavings() {
 
     apsTotal += apsMonthly * 12;
     solarTotal += solarMonthlyYear * 12;
+
+    cumulativeApsTotals.push(apsTotal);
+    cumulativeSolarTotals.push(solarTotal);
   }
+
+  const selectedSavingsYears =
+    parseInt(document.getElementById("savingsYears").value, 10) || 25;
+
+  const selectedIndex = Math.min(Math.max(selectedSavingsYears, 1), 25) - 1;
+  const selectedBatteryTotal =
+    batteryAnnualCredit * Math.min(selectedSavingsYears, batteryRewardYears);
+
+  const selectedApsTotal = cumulativeApsTotals[selectedIndex];
+
+  const selectedNetSavings =
+    cumulativeApsTotals[selectedIndex] -
+    cumulativeSolarTotals[selectedIndex] +
+    selectedBatteryTotal +
+    gpsIncentive;
 
   const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
 
@@ -490,13 +546,21 @@ function calculateSavings() {
 const nextYearDiff=Math.max(nextYearApsMonthly-newAvgMonthlyBill,0);
 document.getElementById("apsNextYear").textContent=money(nextYearApsMonthly);
 document.getElementById("nextYearDifference").textContent=nextYearDiff.toLocaleString("en-US",{style:"currency",currency:"USD"}) ;
-document.getElementById("apsTotal").textContent = money(apsTotal);
+document.getElementById("apsTotal").textContent = money(selectedApsTotal);
+  document.getElementById("apsCostDisplay").textContent = money(selectedApsTotal);
+  document.getElementById("apsCostCardLabel").textContent =
+    `APS ${selectedSavingsYears}-Year Cost`;
+  document.getElementById("apsCostBreakdownLabel").textContent =
+    `APS ${selectedSavingsYears}-Year Cost`;
   document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
-  document.getElementById("totalSavings").textContent = money(netSavings);
+  document.getElementById("totalSavings").textContent = money(selectedNetSavings);
 
-  document.getElementById("apsCostDisplay").textContent = money(apsTotal);
-  document.getElementById("netSavingsDisplay").textContent = money(netSavings);
+  document.getElementById("netSavingsDisplay").textContent = money(selectedNetSavings);
+
+  const labelYears = document.getElementById("savingsYears").value;
+  document.getElementById("netSavingsLabel").textContent =
+    `Total Estimated ${labelYears}-Year Savings`;
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
 
@@ -633,7 +697,7 @@ document.getElementById("apsTotal").textContent = money(apsTotal);
   });
 }
 
-document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
+document.querySelectorAll("#gps-savings-calculator input, #gps-savings-calculator select").forEach(input => {
   input.addEventListener("input", calculateSavings);
   input.addEventListener("change", calculateSavings);
 
@@ -643,6 +707,11 @@ document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
     }
   });
 });
+
+// Extra direct listeners ensure the savings card always refreshes immediately.
+document.getElementById("apsIncrease").addEventListener("keyup", calculateSavings);
+document.getElementById("apsIncrease").addEventListener("input", calculateSavings);
+document.getElementById("savingsYears").addEventListener("change", calculateSavings);
 
 calculateSavings();
 </script>
