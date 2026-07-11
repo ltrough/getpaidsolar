@@ -140,6 +140,8 @@ body {
 .purple { color: #8b5cf6; }
 .green { color: #16a34a; }
 .blue { color: #2563eb; }
+.red-text { color: #dc2626 !important; }
+.green-text { color: #16a34a !important; }
 
 .lower-text {
   font-size: 14px;
@@ -316,8 +318,8 @@ body {
     <div class="gps-results">
 
       <div class="gps-result-card">
-        <h3>APS 25-Year Cost</h3>
-        <div class="amount orange" id="apsTotal">$0.00</div>
+        <h3 class="red-text">APS 25-Year Cost</h3>
+        <div class="amount red-text" id="apsTotal">$0.00</div>
       </div>
 
       <div class="gps-result-card">
@@ -339,8 +341,8 @@ body {
       </div>
 
       <div class="gps-result-card">
-        <h3>Net 25-Year Savings</h3>
-        <div class="amount green" id="totalSavings">$0.00</div>
+        <h3 class="green-text">Net 25-Year Savings</h3>
+        <div class="amount green-text" id="totalSavings">$0.00</div>
       </div>
 
     </div>
@@ -360,15 +362,11 @@ body {
     <div class="gps-breakdown">
       <h3>Savings Breakdown</h3>
 
-      <div class="gps-breakdown-row">
+      <div class="gps-breakdown-row red-text">
         <span>APS 25-Year Cost</span>
         <span id="apsCostDisplay">$0.00</span>
       </div>
 
-      <div class="gps-breakdown-row">
-        <span>Solar 25-Year Cost</span>
-        <span id="solarCostDisplay">$0.00</span>
-      </div>
 
       <div class="gps-breakdown-row">
         <span>Battery Rewards Over 5 Years</span>
@@ -380,7 +378,7 @@ body {
         <span id="gpsIncentiveDisplay">$0.00</span>
       </div>
 
-      <div class="gps-breakdown-row">
+      <div class="gps-breakdown-row green-text">
         <span>Total Estimated 25-Year Savings</span>
         <span id="netSavingsDisplay">$0.00</span>
       </div>
@@ -494,7 +492,6 @@ function calculateSavings() {
   document.getElementById("totalSavings").textContent = money(netSavings);
 
   document.getElementById("apsCostDisplay").textContent = money(apsTotal);
-  document.getElementById("solarCostDisplay").textContent = money(solarTotal);
   document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
   document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
   document.getElementById("netSavingsDisplay").textContent = money(netSavings);
