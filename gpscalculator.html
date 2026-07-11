@@ -112,7 +112,7 @@ body {
 
 .gps-results {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin: 35px 0;
 }
@@ -140,8 +140,6 @@ body {
 .purple { color: #8b5cf6; }
 .green { color: #16a34a; }
 .blue { color: #2563eb; }
-.red-text { color: #dc2626 !important; }
-.green-text { color: #16a34a !important; }
 
 .lower-text {
   font-size: 14px;
@@ -205,6 +203,22 @@ body {
   border-bottom: none;
   font-size: 22px;
   font-weight: 900;
+}
+
+.gps-breakdown-row.red-row,
+.gps-breakdown-row.green-row{
+  font-size:22px;
+  font-weight:900;
+}
+
+.gps-breakdown-row.red-row,
+.gps-breakdown-row.red-row span{
+  color:#dc2626 !important;
+}
+
+.gps-breakdown-row.green-row,
+.gps-breakdown-row.green-row span{
+  color:#16a34a !important;
 }
 
 .gps-chart-wrap {
@@ -271,7 +285,7 @@ body {
 
         <div class="gps-calc-field">
           <label>APS Annual Increase %</label>
-          <input type="number" id="apsIncrease" value="3" step="0.01">
+          <input type="number" id="apsIncrease" value="5" step="0.01">
         </div>
 
         <div class="gps-calc-field">
@@ -318,8 +332,16 @@ body {
     <div class="gps-results">
 
       <div class="gps-result-card">
-        <h3 class="red-text">APS 25-Year Cost</h3>
-        <div class="amount red-text" id="apsTotal">$0.00</div>
+        <h3>APS 25-Year Cost</h3>
+        <div class="amount orange" id="apsTotal">$0.00</div>
+      </div>
+
+      <div class="gps-result-card">
+        <h3>Estimated APS Monthly Bill<br>Next Year</h3>
+        <div class="amount orange" id="apsNextYear">$0.00</div>
+        <div class="lower-text">
+          You'll save about <span id="nextYearDifference">$0.00</span>/month compared to next year's APS bill.
+        </div>
       </div>
 
       <div class="gps-result-card">
@@ -331,20 +353,28 @@ body {
       </div>
 
       <div class="gps-result-card">
-        <h3>5-Year Battery Rewards</h3>
-        <div class="amount blue" id="batteryTotal">$0.00</div>
+        <h3>Net 25-Year Savings</h3>
+        <div class="amount green" id="totalSavings">$0.00</div>
       </div>
 
-      <div class="gps-result-card">
-        <h3>GPS Cash Incentive</h3>
-        <div class="amount blue" id="gpsTotal">$0.00</div>
+    </div>
+
+    <div class="gps-breakdown">
+      <h3>Savings Breakdown</h3>
+
+      <div class="gps-breakdown-row red-row">
+        <span>APS 25-Year Cost</span>
+        <span id="apsCostDisplay">$0.00</span>
       </div>
 
-      <div class="gps-result-card">
-        <h3 class="green-text">Net 25-Year Savings</h3>
-        <div class="amount green-text" id="totalSavings">$0.00</div>
+      <div class="gps-breakdown-row">
+        <span style="color:#16a34a !important;">Total Estimated 25-Year Savings</span>
+        <span id="netSavingsDisplay" style="color:#16a34a !important;">$0.00</span>
       </div>
+    </div>
 
+    <div class="gps-chart-wrap">
+      <canvas id="savingsChart"></canvas>
     </div>
 
     <div class="estimate-notice">
@@ -359,34 +389,6 @@ body {
       </div>
     </div>
 
-    <div class="gps-breakdown">
-      <h3>Savings Breakdown</h3>
-
-      <div class="gps-breakdown-row red-text">
-        <span>APS 25-Year Cost</span>
-        <span id="apsCostDisplay">$0.00</span>
-      </div>
-
-
-      <div class="gps-breakdown-row">
-        <span>Battery Rewards Over 5 Years</span>
-        <span id="batteryRewardsDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row">
-        <span>GPS Cash Incentive</span>
-        <span id="gpsIncentiveDisplay">$0.00</span>
-      </div>
-
-      <div class="gps-breakdown-row green-text">
-        <span>Total Estimated 25-Year Savings</span>
-        <span id="netSavingsDisplay">$0.00</span>
-      </div>
-    </div>
-
-    <div class="gps-chart-wrap">
-      <canvas id="savingsChart"></canvas>
-    </div>
 
     <p class="gps-disclaimer">
       Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
@@ -484,16 +486,16 @@ function calculateSavings() {
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
-  document.getElementById("apsTotal").textContent = money(apsTotal);
+  const nextYearApsMonthly=fixedCharge+(energyPortion*(1+displayedApsIncrease));
+const nextYearDiff=Math.max(nextYearApsMonthly-newAvgMonthlyBill,0);
+document.getElementById("apsNextYear").textContent=money(nextYearApsMonthly);
+document.getElementById("nextYearDifference").textContent=nextYearDiff.toLocaleString("en-US",{style:"currency",currency:"USD"}) ;
+document.getElementById("apsTotal").textContent = money(apsTotal);
   document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
-  document.getElementById("batteryTotal").textContent = money(batteryTotal);
-  document.getElementById("gpsTotal").textContent = money(gpsIncentive);
   document.getElementById("totalSavings").textContent = money(netSavings);
 
   document.getElementById("apsCostDisplay").textContent = money(apsTotal);
-  document.getElementById("batteryRewardsDisplay").textContent = money(batteryTotal);
-  document.getElementById("gpsIncentiveDisplay").textContent = money(gpsIncentive);
   document.getElementById("netSavingsDisplay").textContent = money(netSavings);
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
