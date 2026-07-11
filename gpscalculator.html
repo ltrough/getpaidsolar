@@ -667,7 +667,7 @@ body {
         </div>
 
         <div class="gps-calc-field">
-          <label>GPS Cash Incentive</label>
+          <label>GPS Cash + Battery Incentive</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="gpsIncentive" value="0.00" step="0.01">
@@ -1275,8 +1275,6 @@ document.getElementById("showDetailedBreakdown").addEventListener("click", funct
 
   initialScenarioButtonWrap.style.display = "none";
   scenarioNav.classList.add("gps-show");
-
-  initialResultsView.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 document.getElementById("backToCurrentRates").addEventListener("click", function () {
@@ -1285,14 +1283,11 @@ document.getElementById("backToCurrentRates").addEventListener("click", function
 
   scenarioNav.classList.remove("gps-show");
   initialScenarioButtonWrap.style.display = "block";
-
-  initialResultsView.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 document.getElementById("openDetailedBreakdown").addEventListener("click", function () {
   initialResultsView.style.display = "none";
   detailedResultsView.classList.add("gps-show");
-  detailedResultsView.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 document.getElementById("hideDetailedBreakdown").addEventListener("click", function () {
@@ -1307,7 +1302,7 @@ document.getElementById("hideDetailedBreakdown").addEventListener("click", funct
   scenarioNav.classList.remove("gps-show");
   initialScenarioButtonWrap.style.display = "block";
 
-  initialResultsView.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Intentionally do not scroll. Keep the viewport fixed.
 });
 
 calculateSavings();
