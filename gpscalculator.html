@@ -79,6 +79,19 @@ body {
   background: white;
 }
 
+.gps-calc-field select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  box-sizing: border-box;
+  background: white;
+  color: #061b3a;
+  cursor: pointer;
+}
+
 .readonly-field {
   background: #ffffff !important;
   color: #061b3a;
@@ -606,6 +619,13 @@ body {
   margin-bottom: 5px;
 }
 
+
+#detailedResultsView .gps-result-card > .amount {
+  font-size: 31px;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
 </style>
 </head>
 
@@ -646,7 +666,10 @@ body {
 
         <div class="gps-calc-field">
           <label>Solar Annual Rate Lock %</label>
-          <input type="text" id="solarEscalatorDisplay" value="1.9%" readonly class="readonly-field">
+          <select id="solarEscalator" aria-label="Select solar annual rate lock">
+            <option value="1.9" selected>1.9%</option>
+            <option value="2.99">2.99%</option>
+          </select>
         </div>
 
         <div class="gps-calc-field">
@@ -884,7 +907,8 @@ function calculateSavings() {
   const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
   const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
   const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
-  const solarEscalator = 0.019;
+  const solarEscalator =
+    (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
 
@@ -904,10 +928,22 @@ function calculateSavings() {
   let apsTotal = 0;
   let solarTotal = 0;
 
+  const apsMonthlyAfter14PercentIncrease =
+    fixedCharge + (energyPortion * 1.14);
+
   for (let year = 1; year <= 25; year++) {
-    const apsMonthly =
+    // Current-rates path: starts at today's APS bill and applies the selected
+    // APS annual increase beginning in year 2.
+    const apsMonthlyCurrentRates =
       fixedCharge +
       (energyPortion * Math.pow(1 + displayedApsIncrease, year - 1));
+
+    // 14%-increase path: year 1 starts 14% higher, then the selected APS
+    // annual increase applies from year 2 onward.
+    const apsMonthlyAfter14 =
+      fixedCharge +
+      ((apsMonthlyAfter14PercentIncrease - fixedCharge) *
+        Math.pow(1 + displayedApsIncrease, year - 1));
 
     const solarMonthlyYear =
       solarMonthly * Math.pow(1 + solarEscalator, year - 1);
@@ -919,13 +955,17 @@ function calculateSavings() {
       Math.max(solarMonthlyYear - batteryCreditThisYear, 0);
 
     years.push(year);
-    apsMonthlyData.push(Number(apsMonthly.toFixed(2)));
+
+    // The chart/detailed view is the 14% scenario, so use the 14%-adjusted APS line.
+    apsMonthlyData.push(Number(apsMonthlyAfter14.toFixed(2)));
     solarMonthlyData.push(Number(solarMonthlyAfterRewards.toFixed(2)));
 
-    apsTotal += apsMonthly * 12;
+    apsTotal += apsMonthlyCurrentRates * 12;
     solarTotal += solarMonthlyYear * 12;
 
-    cumulativeApsTotals.push(apsTotal);
+    cumulativeApsTotals.push(
+      (cumulativeApsTotals[year - 2] || 0) + (apsMonthlyAfter14 * 12)
+    );
     cumulativeSolarTotals.push(solarTotal);
   }
 
@@ -936,17 +976,8 @@ function calculateSavings() {
   const selectedBatteryTotal =
     batteryAnnualCredit * Math.min(selectedSavingsYears, batteryRewardYears);
 
-  const oneYearProjectedIncrease = 0.14;
-
-  const selectedApsTotal =
-    selectedSavingsYears === 1
-      ? (fixedCharge + (energyPortion * (1 + oneYearProjectedIncrease))) * 12
-      : cumulativeApsTotals[selectedIndex];
-
-  const selectedSolarTotal =
-    selectedSavingsYears === 1
-      ? solarMonthly * 12
-      : cumulativeSolarTotals[selectedIndex];
+  const selectedApsTotal = cumulativeApsTotals[selectedIndex];
+  const selectedSolarTotal = cumulativeSolarTotals[selectedIndex];
 
   const selectedNetSavings =
     selectedApsTotal -
@@ -954,7 +985,17 @@ function calculateSavings() {
     selectedBatteryTotal +
     gpsIncentive;
 
-  const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
+  // These shared 25-year totals use the currently selected solar escalator
+  // (1.9% or 2.99%) and are reused by every summary/detail view.
+  const solarTotal25Years = cumulativeSolarTotals[24];
+  const currentRatesNetSavings25 =
+    apsTotal - solarTotal25Years + batteryTotal + gpsIncentive;
+
+  const apsAfter14Total25Years = cumulativeApsTotals[24];
+  const after14NetSavings25 =
+    apsAfter14Total25Years - solarTotal25Years + batteryTotal + gpsIncentive;
+
+  const netSavings = currentRatesNetSavings25;
 
   const newAvgMonthlyBill = Math.max(solarMonthly - monthlyBatteryCredit, 0);
 
@@ -968,8 +1009,8 @@ function calculateSavings() {
   const initialSavingsLabel = document.getElementById("initialSavingsLabel");
 
   let summaryApsMonthly = apsBill;
-  let summaryApsTotal = apsTotal;
-  let summaryNetSavings = netSavings;
+  let summaryApsTotal = apsAfter14Total25Years;
+  let summaryNetSavings = after14NetSavings25;
 
   if (showingFourteenPercentScenario) {
     const apsMonthlyAfter14 =
@@ -987,9 +1028,8 @@ function calculateSavings() {
     }
 
     summaryApsMonthly = apsMonthlyAfter14;
-    summaryApsTotal = projectedApsTotalAfter14;
-    summaryNetSavings =
-      projectedApsTotalAfter14 - solarTotal + batteryTotal + gpsIncentive;
+    summaryApsTotal = apsAfter14Total25Years;
+    summaryNetSavings = after14NetSavings25;
 
     if (initialApsMonthlyLabel) {
       initialApsMonthlyLabel.textContent =
@@ -1011,11 +1051,13 @@ function calculateSavings() {
     }
 
     if (initialApsCostLabel) {
-      initialApsCostLabel.textContent = "APS 25-Year Cost";
+      initialApsCostLabel.textContent =
+        "APS 25-Year Cost After 14% First-Year Increase";
     }
 
     if (initialSavingsLabel) {
-      initialSavingsLabel.textContent = "Net 25-Year Savings";
+      initialSavingsLabel.textContent =
+        "Net 25-Year Savings After 14% First-Year APS Increase";
     }
   }
 
@@ -1067,9 +1109,6 @@ function calculateSavings() {
       : "than your current APS bill";
   }
 
-  const apsMonthlyAfter14PercentIncrease =
-    fixedCharge + (energyPortion * 1.14);
-
   const percentLowerAfterIncrease =
     apsMonthlyAfter14PercentIncrease > 0
       ? ((apsMonthlyAfter14PercentIncrease - newAvgMonthlyBill) /
@@ -1084,32 +1123,47 @@ function calculateSavings() {
 
   document.getElementById("nextYearDifference").textContent =
     money(savingsAfter14PercentIncrease);
-document.getElementById("apsTotal").textContent = money(selectedApsTotal);
-  document.getElementById("apsCostDisplay").textContent = money(selectedApsTotal);
-  if (selectedSavingsYears === 1) {
-    document.getElementById("apsCostCardLabel").textContent =
-      "APS 1-Year Cost After 14% Increase";
-    document.getElementById("apsCostBreakdownLabel").textContent =
-      "APS 1-Year Cost After 14% Increase";
-  } else {
-    document.getElementById("apsCostCardLabel").textContent =
-      `APS ${selectedSavingsYears}-Year Cost`;
-    document.getElementById("apsCostBreakdownLabel").textContent =
-      `APS ${selectedSavingsYears}-Year Cost`;
-  }
+  document.getElementById("apsTotal").textContent = money(selectedApsTotal);
+  document.getElementById("apsCostCardLabel").textContent =
+    `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
+
   document.getElementById("newAvgMonthly").textContent = money(newAvgMonthlyBill);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
   document.getElementById("percentLowerAfterIncrease").textContent =
     percentLowerAfterIncrease.toFixed(1) + "%";
   document.getElementById("totalSavings").textContent = money(selectedNetSavings);
 
-  document.getElementById("netSavingsDisplay").textContent = money(selectedNetSavings);
+  const detailedViewIsOpen =
+    document.getElementById("detailedResultsView").classList.contains("gps-show");
 
-  const labelYears = document.getElementById("savingsYears").value;
-  document.getElementById("netSavingsLabel").textContent =
-    selectedSavingsYears === 1
-      ? "Total Estimated 1-Year Savings After APS 14% Increase"
-      : `Total Estimated ${labelYears}-Year Savings`;
+  if (detailedViewIsOpen) {
+    document.getElementById("apsCostDisplay").textContent =
+      money(selectedApsTotal);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
+    document.getElementById("netSavingsDisplay").textContent =
+      money(selectedNetSavings);
+    document.getElementById("netSavingsLabel").textContent =
+      `Total Estimated ${selectedSavingsYears}-Year Savings After APS 14% Increase`;
+  } else if (showingFourteenPercentScenario) {
+    document.getElementById("apsCostDisplay").textContent =
+      money(apsAfter14Total25Years);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      "APS 25-Year Cost After 14% Increase";
+    document.getElementById("netSavingsDisplay").textContent =
+      money(after14NetSavings25);
+    document.getElementById("netSavingsLabel").textContent =
+      "Total Estimated 25-Year Savings After APS 14% Increase";
+  } else {
+    document.getElementById("apsCostDisplay").textContent =
+      money(apsAfter14Total25Years);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      "APS 25-Year Cost After 14% First-Year Increase";
+    document.getElementById("netSavingsDisplay").textContent =
+      money(after14NetSavings25);
+    document.getElementById("netSavingsLabel").textContent =
+      "Total Estimated 25-Year Savings After 14% First-Year APS Increase";
+  }
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
 
@@ -1286,8 +1340,10 @@ document.getElementById("backToCurrentRates").addEventListener("click", function
 });
 
 document.getElementById("openDetailedBreakdown").addEventListener("click", function () {
+  document.getElementById("savingsYears").value = "25";
   initialResultsView.style.display = "none";
   detailedResultsView.classList.add("gps-show");
+  calculateSavings();
 });
 
 document.getElementById("hideDetailedBreakdown").addEventListener("click", function () {
@@ -1297,10 +1353,10 @@ document.getElementById("hideDetailedBreakdown").addEventListener("click", funct
   // Restore the original simple landing page.
   document.getElementById("savingsYears").value = "25";
   showingFourteenPercentScenario = false;
-  calculateSavings();
 
   scenarioNav.classList.remove("gps-show");
   initialScenarioButtonWrap.style.display = "block";
+  calculateSavings();
 
   // Intentionally do not scroll. Keep the viewport fixed.
 });
