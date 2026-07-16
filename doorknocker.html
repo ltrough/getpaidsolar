@@ -505,7 +505,7 @@ body {
   background: white;
   border: 2px solid #e5e7eb;
   border-radius: 16px;
-  padding: 10px 12px;
+  padding: 16px 12px;
   text-align: center;
 }
 
@@ -715,11 +715,11 @@ body {
 }
 
 .gps-comparison-card {
-  min-height: 145px;
+  min-height: 190px;
   border: 2px solid #e5e7eb;
   background: #f8fafc;
   border-radius: 18px;
-  padding: 12px 16px;
+  padding: 22px 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -771,7 +771,7 @@ body {
 }
 
 .gps-standard-summary.gps-hidden {
-  display: none !important;
+  display: none;
 }
 
 @media (max-width: 900px) {
@@ -793,113 +793,20 @@ body {
 }
 
 
-/* One-card comparison layout with savings breakdown below the toggle */
-.gps-comparison-cards.gps-single-card {
-  grid-template-columns: 1fr;
+/* Cleaner tablet Savings Breakdown */
+.gps-savings-breakdown-row{
+  padding:10px 0 !important;
 }
-
-.gps-comparison-cards.gps-single-card .gps-comparison-card {
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-  min-height: 145px;
-}
-
-.gps-savings-breakdown-panel {
-  background: #fff8db;
-  border: 2px solid #ffc400;
-  border-radius: 20px;
-  padding: 24px 26px;
-  margin: 28px 0 18px;
-  color: #061b3a;
-}
-
-.gps-savings-breakdown-panel h3 {
-  margin: 0 0 22px;
-  text-align: center;
-  font-size: 29px;
-  font-weight: 900;
-}
-
-.gps-savings-breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(6, 27, 58, 0.14);
-  font-size: 54px;
-  font-weight: 900;
-}
-
-.gps-savings-breakdown-row:last-child {
-  border-bottom: none;
-}
-
-.gps-savings-breakdown-row.aps-breakdown {
-  color: #e60012;
-}
-
-.gps-savings-breakdown-row.savings-breakdown {
-  color: #00a13a;
-}
-
-.gps-savings-breakdown-label {
-  flex: 1;
-}
-
-.gps-savings-breakdown-value {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-
-@media (max-width: 900px) {
-  .gps-savings-breakdown-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 20px;
-  }
-
-  .gps-savings-breakdown-value {
-    align-self: flex-end;
-  }
-}
-
-
-.gps-five-year-toggle-wrap {
-  display: none;
-  justify-content: center;
-  margin: -8px 0 24px;
-}
-
-.gps-five-year-toggle-wrap.gps-show {
-  display: flex;
-}
-
-.gps-five-year-toggle-btn {
-  border: 2px solid #061b3a;
-  border-radius: 14px;
-  padding: 13px 22px;
-  background: #ffffff;
-  color: #061b3a;
-  font-size: 16px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 7px 16px rgba(6, 27, 58, 0.12);
-}
-
-.gps-five-year-toggle-btn:hover {
-  background: #eff6ff;
-}
-
-
-/* Larger Savings Breakdown text for tablet */
-.gps-savings-breakdown-label,
-.gps-savings-breakdown-value{
-  font-size:54px !important;
+.gps-savings-breakdown-label{
+  font-size:32px !important;
   font-weight:900 !important;
-  line-height:1.1;
+  line-height:1.15 !important;
+}
+.gps-savings-breakdown-value{
+  font-size:36px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  font-variant-numeric:tabular-nums;
 }
 
 </style>
@@ -965,57 +872,48 @@ body {
 </div>
 </div>
 </div>
-<div class="gps-comparison-panel gps-show gps-standard-summary" id="standardSummary">
-  <div class="gps-comparison-group aps-group">
-    <h2 class="gps-comparison-title">Staying with APS</h2>
-    <div class="gps-comparison-cards gps-single-card">
-      <div class="gps-comparison-card">
-        <h3>Current APS Monthly Bill</h3>
-        <div class="gps-comparison-value aps-value" id="currentApsBillDisplay">$0.00</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="gps-comparison-group solar-group">
-    <h2 class="gps-comparison-title">Going with Solar</h2>
-    <div class="gps-comparison-cards gps-single-card">
-      <div class="gps-comparison-card">
-        <h3>New Solar Monthly Payment</h3>
-        <div class="gps-comparison-value solar-value" id="currentSolarPaymentDisplay">$0.00</div>
-        <div class="gps-comparison-save">
-          <div class="save-label">SAVE</div>
-          <div class="save-main" id="currentMonthlySavings">$0.00/mo</div>
-          
-          
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="gps-results gps-two-summary gps-standard-summary" id="standardSummary">
+<div class="gps-result-card aps-card">
+<h3>APS 25-Year Cost (5% Annual Increase)</h3>
+<div class="amount orange" id="apsTotal">$0.00</div>
+</div>
+<div class="gps-result-card feature-card">
+<h3>Net 25-Year Savings With Solar</h3>
+<div class="amount green" id="totalSavings">$0.00</div>
+</div>
 </div>
 
 <div class="gps-comparison-panel" id="aps14Comparison">
   <div class="gps-comparison-group aps-group">
     <h2 class="gps-comparison-title">Staying with APS</h2>
-    <div class="gps-comparison-cards gps-single-card">
+    <div class="gps-comparison-cards">
       <div class="gps-comparison-card">
-        <h3 id="aps14MonthlyLabel">Estimated APS Monthly Bill<br>After 14% Increase</h3>
+        <h3>Current APS Monthly Bill</h3>
         <div class="gps-comparison-value aps-value" id="aps14CurrentBill">$0.00</div>
+      </div>
+      <div class="gps-comparison-card">
+        <h3>APS 25-Year Cost After 14% First-Year Increase</h3>
+        <div class="gps-comparison-value aps-value" id="aps14Total">$0.00</div>
       </div>
     </div>
   </div>
 
   <div class="gps-comparison-group solar-group">
     <h2 class="gps-comparison-title">Going with Solar</h2>
-    <div class="gps-comparison-cards gps-single-card">
+    <div class="gps-comparison-cards">
       <div class="gps-comparison-card">
-        <h3 id="aps14SolarLabel">New Solar Monthly Payment</h3>
+        <h3>New Solar Monthly Payment</h3>
         <div class="gps-comparison-value solar-value" id="aps14SolarPayment">$0.00</div>
         <div class="gps-comparison-save">
           <div class="save-label">SAVE</div>
           <div class="save-main" id="aps14MonthlySavings">$0.00/mo</div>
-          
-          
+          <div class="save-sub" id="aps14PercentLower">0% LOWER</div>
+          <div class="save-sub">than your APS bill after the increase</div>
         </div>
+      </div>
+      <div class="gps-comparison-card">
+        <h3>Net 25-Year Savings After 14% First-Year APS Increase</h3>
+        <div class="gps-comparison-value savings-value" id="aps14NetSavings">$0.00</div>
       </div>
     </div>
   </div>
@@ -1025,28 +923,6 @@ body {
   <button class="gps-rate-toggle-btn" id="aps14ToggleBtn" type="button">
     See Savings After a 14% APS Increase
   </button>
-</div>
-
-<div class="gps-five-year-toggle-wrap" id="fiveYearToggleWrap">
-  <button class="gps-five-year-toggle-btn" id="fiveYearToggleBtn" type="button">
-    See 5-Year Savings
-  </button>
-</div>
-
-<div class="gps-savings-breakdown-panel">
-  <h3>Savings Breakdown</h3>
-  <div class="gps-savings-breakdown-row aps-breakdown">
-    <div class="gps-savings-breakdown-label" id="breakdownApsLabel">
-      APS 25-Year Cost
-    </div>
-    <div class="gps-savings-breakdown-value" id="breakdownApsValue">$0.00</div>
-  </div>
-  <div class="gps-savings-breakdown-row savings-breakdown">
-    <div class="gps-savings-breakdown-label" id="breakdownSavingsLabel">
-      25-Year Savings
-    </div>
-    <div class="gps-savings-breakdown-value" id="breakdownSavingsValue">$0.00</div>
-  </div>
 </div>
 <div class="gps-chart-wrap">
 <canvas id="savingsChart"></canvas>
@@ -1106,7 +982,6 @@ const SOLAR_API_ENDPOINT = "https://gps-solar-api.getpaidsolar.workers.dev";
 
 let chart;
 let showingAps14Comparison = false;
-let savingsView = "year1";
 let selectedPlaceLat = null;
 let selectedPlaceLng = null;
 let selectedPlaceAddress = "";
@@ -1833,9 +1708,6 @@ function calculateSavings() {
   let aps14Total = 0;
   let solarTotal = 0;
 
-  let aps14FiveYearTotal = 0;
-  let solarFiveYearTotal = 0;
-
   for (let year = 1; year <= 25; year++) {
     const apsMonthly =
       fixedCharge +
@@ -1869,37 +1741,13 @@ function calculateSavings() {
     apsTotal += apsMonthly * 12;
     aps14Total += aps14Monthly * 12;
     solarTotal += solarMonthlyYear * 12;
-
-    if (year <= 5) {
-      aps14FiveYearTotal += aps14Monthly * 12;
-      solarFiveYearTotal += solarMonthlyYear * 12;
-    }
   }
 
   const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
   const aps14NetSavings = aps14Total - solarTotal + batteryTotal + gpsIncentive;
 
-
-  const fiveYearBatteryTotal =
-    batteryAnnualCredit * Math.min(batteryRewardYears, 5);
-
-  const aps14FiveYearNetSavings =
-    aps14FiveYearTotal -
-    solarFiveYearTotal +
-    fiveYearBatteryTotal +
-    gpsIncentive;
-
-  const currentMonthlySavings = Math.max(apsBill - solarMonthly, 0);
-  const currentPercentLower = apsBill > 0
-    ? (currentMonthlySavings / apsBill) * 100
-    : 0;
-
   const apsAfter14Increase =
     fixedCharge + (energyPortion * 1.14);
-
-  const yearOneApsCost = apsAfter14Increase * 12;
-  const yearOneSolarCost = solarMonthly * 12;
-  const yearOneSavings = yearOneApsCost - yearOneSolarCost;
 
   const aps14MonthlySavings =
     Math.max(apsAfter14Increase - solarMonthly, 0);
@@ -1908,146 +1756,35 @@ function calculateSavings() {
     ? (aps14MonthlySavings / apsAfter14Increase) * 100
     : 0;
 
-  const apsYearFiveMonthly =
-    fixedCharge +
-    (energyPortion * 1.14 * Math.pow(1 + displayedApsIncrease, 4));
+  const apsTotalEl = document.getElementById("apsTotal");
+  if (apsTotalEl) apsTotalEl.textContent = money(apsTotal);
 
-  const solarYearFiveMonthly =
-    solarMonthly * Math.pow(1 + solarEscalator, 4);
-
-  const yearFiveMonthlySavings =
-    Math.max(apsYearFiveMonthly - solarYearFiveMonthly, 0);
-
-  const yearFivePercentLower = apsYearFiveMonthly > 0
-    ? (yearFiveMonthlySavings / apsYearFiveMonthly) * 100
-    : 0;
-
-  const currentApsBillDisplayEl = document.getElementById("currentApsBillDisplay");
-  if (currentApsBillDisplayEl) currentApsBillDisplayEl.textContent = money(apsBill);
-
-  const currentSolarPaymentDisplayEl = document.getElementById("currentSolarPaymentDisplay");
-  if (currentSolarPaymentDisplayEl) currentSolarPaymentDisplayEl.textContent = money(solarMonthly);
-
-  const currentMonthlySavingsEl = document.getElementById("currentMonthlySavings");
-  if (currentMonthlySavingsEl) {
-    currentMonthlySavingsEl.textContent = money(currentMonthlySavings) + "/mo";
-  }
-
+  const totalSavingsEl = document.getElementById("totalSavings");
+  if (totalSavingsEl) totalSavingsEl.textContent = money(netSavings);
 
   const aps14CurrentBillEl = document.getElementById("aps14CurrentBill");
-  const aps14SolarPaymentEl = document.getElementById("aps14SolarPayment");
-  const aps14MonthlySavingsEl = document.getElementById("aps14MonthlySavings");
-  const aps14PercentLowerEl = document.getElementById("aps14PercentLower");
-  const aps14MonthlyLabelEl = document.getElementById("aps14MonthlyLabel");
-  const aps14SolarLabelEl = document.getElementById("aps14SolarLabel");
+  if (aps14CurrentBillEl) aps14CurrentBillEl.textContent = money(apsBill);
 
-  if (showingAps14Comparison && savingsView === "year5") {
-    if (aps14MonthlyLabelEl) {
-      aps14MonthlyLabelEl.innerHTML =
-        "Estimated APS Monthly Bill<br>in Year 5";
-    }
-    if (aps14SolarLabelEl) {
-      aps14SolarLabelEl.textContent =
-        "Estimated Solar Monthly Payment in Year 5";
-    }
-    if (aps14CurrentBillEl) {
-      aps14CurrentBillEl.textContent = money(apsYearFiveMonthly);
-    }
-    if (aps14SolarPaymentEl) {
-      aps14SolarPaymentEl.textContent = money(solarYearFiveMonthly);
-    }
-    if (aps14MonthlySavingsEl) {
-      aps14MonthlySavingsEl.textContent =
-        money(yearFiveMonthlySavings) + "/mo";
-    }
-  } else {
-    if (aps14MonthlyLabelEl) {
-      aps14MonthlyLabelEl.innerHTML =
-        "Estimated APS Monthly Bill<br>After 14% Increase";
-    }
-    if (aps14SolarLabelEl) {
-      aps14SolarLabelEl.textContent =
-        "New Solar Monthly Payment";
-    }
-    if (aps14CurrentBillEl) {
-      aps14CurrentBillEl.textContent = money(apsAfter14Increase);
-    }
-    if (aps14SolarPaymentEl) {
-      aps14SolarPaymentEl.textContent = money(solarMonthly);
-    }
-    if (aps14MonthlySavingsEl) {
-      aps14MonthlySavingsEl.textContent =
-        money(aps14MonthlySavings) + "/mo";
-    }
-    if (aps14PercentLowerEl) {
-      aps14PercentLowerEl.textContent =
-        aps14PercentLower.toFixed(1) + "% LOWER";
-    }
+  const aps14TotalEl = document.getElementById("aps14Total");
+  if (aps14TotalEl) aps14TotalEl.textContent = money(aps14Total);
+
+  const aps14SolarPaymentEl = document.getElementById("aps14SolarPayment");
+  if (aps14SolarPaymentEl) aps14SolarPaymentEl.textContent = money(solarMonthly);
+
+  const aps14MonthlySavingsEl = document.getElementById("aps14MonthlySavings");
+  if (aps14MonthlySavingsEl) {
+    aps14MonthlySavingsEl.textContent = money(aps14MonthlySavings) + "/mo";
   }
 
-  const breakdownApsLabelEl = document.getElementById("breakdownApsLabel");
-  const breakdownApsValueEl = document.getElementById("breakdownApsValue");
-  const breakdownSavingsLabelEl = document.getElementById("breakdownSavingsLabel");
-  const breakdownSavingsValueEl = document.getElementById("breakdownSavingsValue");
+  const aps14PercentLowerEl = document.getElementById("aps14PercentLower");
+  if (aps14PercentLowerEl) {
+    aps14PercentLowerEl.textContent =
+      aps14PercentLower.toFixed(1) + "% LOWER";
+  }
 
-  if (showingAps14Comparison && savingsView === "year5") {
-    if (breakdownApsLabelEl) {
-      breakdownApsLabelEl.textContent =
-        "5-Year APS Cost";
-    }
-    if (breakdownApsValueEl) {
-      breakdownApsValueEl.textContent = money(aps14FiveYearTotal);
-    }
-    if (breakdownSavingsLabelEl) {
-      breakdownSavingsLabelEl.textContent =
-        "5-Year Savings";
-    }
-    if (breakdownSavingsValueEl) {
-      breakdownSavingsValueEl.textContent = money(aps14FiveYearNetSavings);
-    }
-  } else if (showingAps14Comparison && savingsView === "year25") {
-    if (breakdownApsLabelEl) {
-      breakdownApsLabelEl.textContent = "25-Year APS Cost";
-    }
-    if (breakdownApsValueEl) {
-      breakdownApsValueEl.textContent = money(aps14Total);
-    }
-    if (breakdownSavingsLabelEl) {
-      breakdownSavingsLabelEl.textContent = "25-Year Savings";
-    }
-    if (breakdownSavingsValueEl) {
-      breakdownSavingsValueEl.textContent = money(aps14NetSavings);
-    }
-  } else if (showingAps14Comparison) {
-    if (breakdownApsLabelEl) {
-      breakdownApsLabelEl.textContent =
-        "Year 1 APS Cost";
-    }
-    if (breakdownApsValueEl) {
-      breakdownApsValueEl.textContent = money(yearOneApsCost);
-    }
-    if (breakdownSavingsLabelEl) {
-      breakdownSavingsLabelEl.textContent =
-        "Year 1 Savings";
-    }
-    if (breakdownSavingsValueEl) {
-      breakdownSavingsValueEl.textContent = money(yearOneSavings);
-    }
-  } else {
-    if (breakdownApsLabelEl) {
-      breakdownApsLabelEl.textContent =
-        "APS 25-Year Cost";
-    }
-    if (breakdownApsValueEl) {
-      breakdownApsValueEl.textContent = money(apsTotal);
-    }
-    if (breakdownSavingsLabelEl) {
-      breakdownSavingsLabelEl.textContent =
-        "25-Year Savings";
-    }
-    if (breakdownSavingsValueEl) {
-      breakdownSavingsValueEl.textContent = money(netSavings);
-    }
+  const aps14NetSavingsEl = document.getElementById("aps14NetSavings");
+  if (aps14NetSavingsEl) {
+    aps14NetSavingsEl.textContent = money(aps14NetSavings);
   }
 
   const ctx = document.getElementById("savingsChart").getContext("2d");
@@ -2193,49 +1930,21 @@ function toggleAps14Comparison() {
   const standardSummary = document.getElementById("standardSummary");
   const comparisonPanel = document.getElementById("aps14Comparison");
   const toggleBtn = document.getElementById("aps14ToggleBtn");
-  const fiveYearToggleWrap = document.getElementById("fiveYearToggleWrap");
-  const fiveYearToggleBtn = document.getElementById("fiveYearToggleBtn");
 
   if (showingAps14Comparison) {
-    standardSummary.classList.remove("gps-show");
     standardSummary.classList.add("gps-hidden");
     comparisonPanel.classList.add("gps-show");
     toggleBtn.textContent = "← Back to Current APS Rates";
-    fiveYearToggleWrap.classList.add("gps-show");
   } else {
-    savingsView = "year1";
     standardSummary.classList.remove("gps-hidden");
-    standardSummary.classList.add("gps-show");
     comparisonPanel.classList.remove("gps-show");
     toggleBtn.textContent = "See Savings After a 14% APS Increase";
-    fiveYearToggleWrap.classList.remove("gps-show");
-    fiveYearToggleBtn.textContent = "See 5-Year Savings";
-  }
-
-  calculateSavings();
-}
-
-function toggleFiveYearSavings() {
-  if (!showingAps14Comparison) return;
-
-  const fiveYearToggleBtn = document.getElementById("fiveYearToggleBtn");
-
-  if (savingsView === "year1") {
-    savingsView = "year5";
-    fiveYearToggleBtn.textContent = "← Back to 25-Year Savings";
-  } else if (savingsView === "year5") {
-    savingsView = "year25";
-    fiveYearToggleBtn.textContent = "See 5-Year Savings";
-  } else {
-    savingsView = "year1";
-    fiveYearToggleBtn.textContent = "See 5-Year Savings";
   }
 
   calculateSavings();
 }
 
 document.getElementById("aps14ToggleBtn").addEventListener("click", toggleAps14Comparison);
-document.getElementById("fiveYearToggleBtn").addEventListener("click", toggleFiveYearSavings);
 
 document.getElementById("useLocationBtn").addEventListener("click", useCurrentLocation);
 
