@@ -1870,6 +1870,7 @@ function calculateSavings() {
   const netSavings = apsTotal - solarTotal + batteryTotal + gpsIncentive;
   const aps14NetSavings = aps14Total - solarTotal + batteryTotal + gpsIncentive;
 
+
   const fiveYearBatteryTotal =
     batteryAnnualCredit * Math.min(batteryRewardYears, 5);
 
@@ -1886,6 +1887,10 @@ function calculateSavings() {
 
   const apsAfter14Increase =
     fixedCharge + (energyPortion * 1.14);
+
+  const yearOneApsCost = apsAfter14Increase * 12;
+  const yearOneSolarCost = solarMonthly * 12;
+  const yearOneSavings = yearOneApsCost - yearOneSolarCost;
 
   const aps14MonthlySavings =
     Math.max(apsAfter14Increase - solarMonthly, 0);
@@ -1994,17 +1999,17 @@ function calculateSavings() {
   } else if (showingAps14Comparison) {
     if (breakdownApsLabelEl) {
       breakdownApsLabelEl.textContent =
-        "APS 25-Year Cost After 14% First-Year Increase";
+        "Estimated APS Cost - Year 1 After 14% Increase";
     }
     if (breakdownApsValueEl) {
-      breakdownApsValueEl.textContent = money(aps14Total);
+      breakdownApsValueEl.textContent = money(yearOneApsCost);
     }
     if (breakdownSavingsLabelEl) {
       breakdownSavingsLabelEl.textContent =
-        "Total Estimated 25-Year Savings After 14% First-Year APS Increase";
+        "Estimated Year 1 Savings After 14% APS Increase";
     }
     if (breakdownSavingsValueEl) {
-      breakdownSavingsValueEl.textContent = money(aps14NetSavings);
+      breakdownSavingsValueEl.textContent = money(yearOneSavings);
     }
   } else {
     if (breakdownApsLabelEl) {
