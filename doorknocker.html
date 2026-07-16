@@ -505,7 +505,7 @@ body {
   background: white;
   border: 2px solid #e5e7eb;
   border-radius: 16px;
-  padding: 16px 12px;
+  padding: 10px 12px;
   text-align: center;
 }
 
@@ -715,11 +715,11 @@ body {
 }
 
 .gps-comparison-card {
-  min-height: 190px;
+  min-height: 145px;
   border: 2px solid #e5e7eb;
   background: #f8fafc;
   border-radius: 18px;
-  padding: 22px 16px;
+  padding: 12px 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -802,7 +802,7 @@ body {
   max-width: 420px;
   width: 100%;
   margin: 0 auto;
-  min-height: 215px;
+  min-height: 145px;
 }
 
 .gps-savings-breakdown-panel {
@@ -976,8 +976,8 @@ body {
         <div class="gps-comparison-save">
           <div class="save-label">SAVE</div>
           <div class="save-main" id="currentMonthlySavings">$0.00/mo</div>
-          <div class="save-sub" id="currentPercentLower">0% LOWER</div>
-          <div class="save-sub">than your current APS bill</div>
+          
+          
         </div>
       </div>
     </div>
@@ -1004,8 +1004,8 @@ body {
         <div class="gps-comparison-save">
           <div class="save-label">SAVE</div>
           <div class="save-main" id="aps14MonthlySavings">$0.00/mo</div>
-          <div class="save-sub" id="aps14PercentLower">0% LOWER</div>
-          <div class="save-sub" id="aps14SavingsComparisonText">than APS after a 14% increase</div>
+          
+          
         </div>
       </div>
     </div>
@@ -1919,10 +1919,6 @@ function calculateSavings() {
     currentMonthlySavingsEl.textContent = money(currentMonthlySavings) + "/mo";
   }
 
-  const currentPercentLowerEl = document.getElementById("currentPercentLower");
-  if (currentPercentLowerEl) {
-    currentPercentLowerEl.textContent = currentPercentLower.toFixed(1) + "% LOWER";
-  }
 
   const aps14CurrentBillEl = document.getElementById("aps14CurrentBill");
   const aps14SolarPaymentEl = document.getElementById("aps14SolarPayment");
@@ -1930,8 +1926,6 @@ function calculateSavings() {
   const aps14PercentLowerEl = document.getElementById("aps14PercentLower");
   const aps14MonthlyLabelEl = document.getElementById("aps14MonthlyLabel");
   const aps14SolarLabelEl = document.getElementById("aps14SolarLabel");
-  const aps14SavingsComparisonTextEl =
-    document.getElementById("aps14SavingsComparisonText");
 
   if (showingAps14Comparison && showingFiveYearSavings) {
     if (aps14MonthlyLabelEl) {
@@ -1951,14 +1945,6 @@ function calculateSavings() {
     if (aps14MonthlySavingsEl) {
       aps14MonthlySavingsEl.textContent =
         money(yearFiveMonthlySavings) + "/mo";
-    }
-    if (aps14PercentLowerEl) {
-      aps14PercentLowerEl.textContent =
-        yearFivePercentLower.toFixed(1) + "% LOWER";
-    }
-    if (aps14SavingsComparisonTextEl) {
-      aps14SavingsComparisonTextEl.textContent =
-        "than APS in year 5";
     }
   } else {
     if (aps14MonthlyLabelEl) {
@@ -1982,10 +1968,6 @@ function calculateSavings() {
     if (aps14PercentLowerEl) {
       aps14PercentLowerEl.textContent =
         aps14PercentLower.toFixed(1) + "% LOWER";
-    }
-    if (aps14SavingsComparisonTextEl) {
-      aps14SavingsComparisonTextEl.textContent =
-        "than APS after a 14% increase";
     }
   }
 
