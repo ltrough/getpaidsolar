@@ -58,7 +58,7 @@ body {
 .gps-calc-field label {
   font-weight: 800;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-size: 16px;
 }
 
@@ -66,14 +66,14 @@ body {
   color: #6b7280;
   font-size: 13px;
   margin-top: 7px;
-  line-height: 1.35;
+  line-height: 1.2;
 }
 
 .gps-calc-field input {
   width: 100%;
   padding: 15px;
   border: 2px solid #d1d5db;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 18px;
   box-sizing: border-box;
   background: white;
@@ -326,7 +326,7 @@ body {
 }
 
 .estimate-notice-title {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 900;
   color: #dc2626;
   margin-bottom: 10px;
@@ -897,7 +897,7 @@ body {
 /* Balanced Savings Breakdown text */
 .gps-savings-breakdown-label,
 .gps-savings-breakdown-value{
-  font-size:32px !important;
+  font-size:24px !important;
   font-weight:900 !important;
   line-height:1.15 !important;
 }
@@ -905,6 +905,108 @@ body {
 .gps-savings-breakdown-row{
   padding:8px 0 !important;
 }
+
+/* Fixed two-column Savings Breakdown fields */
+.gps-savings-breakdown-row{
+  display:grid !important;
+  grid-template-columns:minmax(0, 1fr) auto !important;
+  align-items:center !important;
+  column-gap:24px !important;
+  padding:12px 0 !important;
+}
+
+.gps-savings-breakdown-label,
+.gps-savings-breakdown-value{
+  font-size:28px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+}
+
+.gps-savings-breakdown-label{
+  text-align:left !important;
+  min-width:0;
+}
+
+.gps-savings-breakdown-value{
+  text-align:right !important;
+  justify-self:end !important;
+  white-space:nowrap !important;
+  min-width:190px;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Keep the same two-column alignment on tablets */
+@media (max-width:900px){
+  .gps-savings-breakdown-row{
+    display:grid !important;
+    grid-template-columns:minmax(0, 1fr) auto !important;
+    align-items:center !important;
+    column-gap:18px !important;
+  }
+
+  .gps-savings-breakdown-value{
+    align-self:center !important;
+    min-width:170px;
+  }
+}
+
+
+/* Custom chart tooltip */
+.gps-chart-wrap {
+  position: relative;
+}
+
+.gps-chart-tooltip {
+  position:absolute;
+  display:none;
+  min-width:118px;
+  padding:5px 7px;
+  background:#fff;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  box-shadow:0 3px 8px rgba(15,23,42,.14);
+  pointer-events:none;
+  z-index:20;
+  transform:translate(-50%,-115%);
+  font-family:Arial,Helvetica,sans-serif;
+}
+.gps-chart-tooltip-year{
+  color:#061b3a;
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+.gps-chart-tooltip-row{
+  display:grid;
+  grid-template-columns:34px auto;
+  align-items:center;
+  column-gap:4px;
+  font-size:11px;
+  font-weight:900;
+  line-height:1.15;
+}
+
+.gps-chart-tooltip-row .label {
+  text-align: left;
+}
+
+.gps-chart-tooltip-row .value {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gps-chart-tooltip-row.aps {
+  color: #dc2626;
+}
+
+.gps-chart-tooltip-row.solar {
+  color: #7c3aed;
+}
+
+.gps-chart-tooltip-row.save {
+  color: #16a34a;
+}
+
 </style>
 </head>
 <body>
@@ -1052,7 +1154,7 @@ body {
   </div>
 </div>
 <div class="gps-chart-wrap">
-<canvas id="savingsChart"></canvas>
+<canvas id="savingsChart"></canvas><div class="gps-chart-tooltip" id="gpsChartTooltip"></div>
 </div><div class="gps-solar-summary-card gps-under-chart" id="solarSummaryCard">
 <h3>Roof Solar Preview</h3>
 <div class="gps-address-pill">
@@ -2099,40 +2201,65 @@ function calculateSavings() {
 
       plugins: {
         tooltip: {
-          enabled: true,
-          mode: "index",
-          intersect: false,
-          backgroundColor: "#ffffff",
-          titleColor: "#061b3a",
-          bodyColor: "#374151",
-          borderColor: "#d1d5db",
-          borderWidth: 1,
-          padding: 14,
-          displayColors: true,
-          boxWidth: 10,
-          boxHeight: 10,
-          titleFont: {
-            size: 13,
-            weight: "bold"
-          },
-          bodyFont: {
-            size: 13,
-            weight: "normal"
-          },
-          callbacks: {
-            title: function(context) {
-              return "Year " + context[0].label;
-            },
-            label: function(context) {
-              return context.dataset.label + "     " + money(context.parsed.y);
-            },
-            afterBody: function(context) {
-              const aps = context[0].parsed.y;
-              const solar = context[1].parsed.y;
-              const savings = aps - solar;
+          enabled: false,
+          external: function(context) {
+            const tooltip = context.tooltip;
+            const tooltipEl = document.getElementById("gpsChartTooltip");
+            const chartCanvas = context.chart.canvas;
 
-              return "\nEstimated monthly savings     " + money(savings);
+            if (!tooltipEl || tooltip.opacity === 0) {
+              if (tooltipEl) tooltipEl.style.display = "none";
+              return;
             }
+
+            const dataPoints = tooltip.dataPoints || [];
+            const apsPoint = dataPoints.find(point => point.datasetIndex === 0);
+            const solarPoint = dataPoints.find(point => point.datasetIndex === 1);
+
+            if (!apsPoint || !solarPoint) {
+              tooltipEl.style.display = "none";
+              return;
+            }
+
+            const apsValue = apsPoint.parsed.y;
+            const solarValue = solarPoint.parsed.y;
+            const savingsValue = apsValue - solarValue;
+
+            tooltipEl.innerHTML =
+              '<div class="gps-chart-tooltip-year">Year ' + apsPoint.label + '</div>' +
+              '<div class="gps-chart-tooltip-row aps">' +
+                '<span class="label">APS</span>' +
+                '<span class="value">' + money(apsValue) + '</span>' +
+              '</div>' +
+              '<div class="gps-chart-tooltip-row solar">' +
+                '<span class="label">Solar</span>' +
+                '<span class="value">' + money(solarValue) + '</span>' +
+              '</div>' +
+              '<div class="gps-chart-tooltip-row save">' +
+                '<span class="label">Save</span>' +
+                '<span class="value">' + money(savingsValue) + '</span>' +
+              '</div>';
+
+            const canvasRect = chartCanvas.getBoundingClientRect();
+            const wrapRect = chartCanvas.parentElement.getBoundingClientRect();
+
+            let left =
+              (canvasRect.left - wrapRect.left) +
+              tooltip.caretX;
+
+            let top =
+              (canvasRect.top - wrapRect.top) +
+              tooltip.caretY;
+
+            const tooltipWidth = 170;
+            const minLeft = tooltipWidth / 2 + 8;
+            const maxLeft = wrapRect.width - tooltipWidth / 2 - 8;
+
+            left = Math.max(minLeft, Math.min(left, maxLeft));
+
+            tooltipEl.style.left = (left + 18) + "px";
+            tooltipEl.style.top = (top - 4) + "px";
+            tooltipEl.style.display = "block";
           }
         },
 
