@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS 25-Year Solar Savings Calculator</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #061b3a;
+  color: white;
+}
+
+.gps-calc-section {
+  background: #061b3a;
+  padding: 70px 20px;
+}
+
+.gps-calc-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: white;
+  color: #061b3a;
+  border-radius: 24px;
+  padding: 40px;
+}
+
+.gps-calc-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.gps-calc-subtitle {
+  text-align: center;
+  font-size: 19px;
+  margin-bottom: 35px;
+  color: #4b5563;
+}
+
+.gps-input-panel {
+  background: #f8fafc;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 35px;
+}
+
+.gps-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 30px;
+}
+
+.gps-calc-field label {
+  font-weight: 800;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.gps-help-text {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.35;
+}
+
+.gps-calc-field input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 18px;
+  box-sizing: border-box;
+  background: white;
+}
+
+.gps-calc-field select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  box-sizing: border-box;
+  background: white;
+  color: #061b3a;
+  cursor: pointer;
+}
+
+.readonly-field {
+  background: #ffffff !important;
+  color: #061b3a;
+  font-weight: 700;
+  cursor: default;
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.money-input span {
+  padding: 15px 16px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #061b3a;
+  background: #eef2f7;
+  border-right: 1px solid #d1d5db;
+}
+
+.money-input input {
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none;
+}
+
+.gps-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin: 35px 0;
+}
+
+.gps-result-group {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.gps-result-group.aps-group {
+  background: #fff5f3;
+  border: 2px solid #ffb4a0;
+}
+
+.gps-result-group.solar-group {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+}
+
+.gps-result-group-title {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.aps-group .gps-result-group-title {
+  color: #dc2626;
+}
+
+.solar-group .gps-result-group-title {
+  color: #16a34a;
+}
+
+.gps-result-group-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.gps-result-card {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 22px 14px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+}
+
+.gps-result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.amount {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.orange { color: #ff5a1f; }
+.purple { color: #8b5cf6; }
+.green { color: #16a34a; }
+.blue { color: #2563eb; }
+
+.lower-text {
+  font-size: 14px;
+  font-weight: 900;
+  color: #16a34a;
+  margin-top: 8px;
+}
+
+.estimate-notice {
+  background: #fff5f5;
+  border: 3px solid #dc2626;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 25px 0;
+  color: #991b1b;
+  line-height: 1.8;
+}
+
+.estimate-notice-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.estimate-notice-main {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.estimate-notice-sub {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.gps-breakdown {
+  background: #fff8db;
+  border: 2px solid #ffc400;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 30px 0;
+  color: #061b3a;
+}
+
+.gps-breakdown h3 {
+  margin-top: 0;
+  font-size: 26px;
+  text-align: center;
+}
+
+.gps-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(6,21,47,0.18);
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gps-breakdown-row:last-child {
+  border-bottom: none;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.gps-breakdown-row.red-row,
+.gps-breakdown-row.green-row{
+  font-size:22px;
+  font-weight:900;
+}
+
+.gps-breakdown-row.red-row,
+.gps-breakdown-row.red-row span{
+  color:#dc2626 !important;
+}
+
+.gps-breakdown-row.green-row,
+.gps-breakdown-row.green-row span{
+  color:#16a34a !important;
+}
+
+.gps-chart-wrap {
+  margin-top: 35px;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  border: 1px solid #e5e7eb;
+  height: 460px;
+}
+
+.gps-chart-wrap canvas {
+  width: 100% !important;
+  height: 420px !important;
+}
+
+.gps-disclaimer {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 22px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .gps-input-grid,
+  .gps-results,
+  .gps-result-group-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-calc-title {
+    font-size: 32px;
+  }
+
+  .gps-breakdown-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.savings-period-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.savings-period-select {
+  appearance: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font: inherit;
+  font-weight: 800;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.savings-period-select:focus {
+  outline: 2px solid #16a34a;
+  outline-offset: 2px;
+}
+
+
+.savings-highlight {
+  margin-top: 16px;
+  padding: 14px 12px;
+  border: 2px solid #16a34a;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 100%);
+  color: #166534;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.14);
+}
+
+.savings-highlight-title {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.savings-highlight-value {
+  font-size: 28px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #15803d;
+  margin-bottom: 4px;
+}
+
+.savings-highlight-sub {
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #166534;
+}
+
+
+.savings-highlight.projected-increase {
+  margin-top: 12px;
+  background: linear-gradient(180deg, #ecfdf5 0%, #f7fee7 100%);
+  border-color: #15803d;
+}
+
+
+.initial-results-view {
+  display: block;
+  margin: 35px 0;
+}
+
+.initial-results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.initial-result-group {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.initial-result-group.aps-initial {
+  background: #fff5f3;
+  border: 2px solid #ffb4a0;
+}
+
+.initial-result-group.solar-initial {
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+}
+
+.initial-result-title {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.aps-initial .initial-result-title {
+  color: #dc2626;
+}
+
+.solar-initial .initial-result-title {
+  color: #16a34a;
+}
+
+.initial-result-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.initial-result-card {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 22px 14px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+}
+
+.initial-result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.initial-result-card .amount {
+  font-size: 31px;
+  font-weight: 900;
+}
+
+.breakdown-button-wrap {
+  text-align: center;
+  margin: 20px 0 10px;
+}
+
+.breakdown-button {
+  border: none;
+  border-radius: 14px;
+  padding: 15px 24px;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  background: #061b3a;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(6, 27, 58, 0.20);
+}
+
+.breakdown-button:hover {
+  background: #0b2a56;
+}
+
+.detailed-results-view {
+  display: none;
+}
+
+.detailed-results-view.gps-show {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .initial-results-grid,
+  .initial-result-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.initial-key-savings {
+  margin-top: 14px;
+  color: #15803d;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.initial-key-savings .key-label {
+  display: block;
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 3px;
+}
+
+.initial-key-savings .key-value {
+  display: block;
+  font-size: 27px;
+  line-height: 1.05;
+  color: #166534;
+  margin-bottom: 4px;
+}
+
+.initial-key-savings .key-sub {
+  display: block;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+
+.scenario-nav {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 760px;
+  margin: 20px auto 10px;
+  padding: 14px 18px;
+  border: 2px solid #dbe3ee;
+  border-radius: 16px;
+  background: #f8fafc;
+  box-shadow: 0 8px 18px rgba(6, 27, 58, 0.10);
+}
+
+.scenario-nav.gps-show {
+  display: flex;
+}
+
+.scenario-nav-btn {
+  border: none;
+  background: transparent;
+  color: #061b3a;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.scenario-nav-btn:hover {
+  background: #eaf0f7;
+}
+
+@media (max-width: 650px) {
+  .scenario-nav {
+    flex-direction: column;
+  }
+
+  .scenario-nav-btn {
+    width: 100%;
+  }
+}
+
+
+.detail-key-savings {
+  margin-top: 16px;
+  color: #15803d;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.detail-key-label {
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.detail-key-value {
+  font-size: 28px;
+  line-height: 1.05;
+  color: #166534;
+  margin-bottom: 5px;
+}
+
+.detail-key-sub {
+  font-size: 16px;
+  line-height: 1.25;
+  color: #15803d;
+}
+
+
+.combined-savings-message .key-label {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.combined-savings-message .key-value {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.combined-savings-message .key-percent {
+  display: block;
+  font-size: 24px;
+  line-height: 1.05;
+  color: #166534;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+
+.combined-detail-savings .detail-key-label {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.combined-detail-savings .detail-key-value {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.combined-detail-savings .detail-key-percent {
+  font-size: 24px;
+  line-height: 1.05;
+  color: #166534;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+
+
+#detailedResultsView .gps-result-card > .amount {
+  font-size: 31px;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+
+
+/* Hide percent-lower wording on the two simple views.
+   The detailed-results view keeps its percentage and comparison wording. */
+#initialResultsView .simple-percent-verbiage {
+  display: none !important;
+}
+
+/* Client PDF export controls */
+.pdf-download-bottom {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.download-pdf-button {
+  border: none;
+  border-radius: 12px;
+  padding: 15px 28px;
+  min-height: 52px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.20);
+}
+
+.download-pdf-button:hover {
+  background: #15803d;
+}
+
+.download-pdf-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+/* Off-screen, letter-page-width copy used only for PDF generation. */
+.pdf-capture-host {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 760px;
+  background: #ffffff;
+  z-index: -1;
+}
+
+.pdf-capture {
+  width: 760px !important;
+  max-width: none !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 24px 28px 28px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  background: #ffffff !important;
+}
+
+.pdf-capture .pdf-export-controls,
+.pdf-capture .breakdown-button-wrap,
+.pdf-capture .scenario-nav {
+  display: none !important;
+}
+
+.pdf-capture .gps-calc-title {
+  font-size: 32px;
+  margin: 0 0 7px;
+}
+
+.pdf-capture .gps-calc-subtitle {
+  font-size: 15px;
+  line-height: 1.35;
+  margin-bottom: 20px;
+}
+
+.pdf-capture .gps-input-panel {
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+}
+
+.pdf-capture .gps-input-grid {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px 18px;
+}
+
+.pdf-capture .gps-calc-field label {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.pdf-capture .gps-calc-field input,
+.pdf-capture .gps-calc-field select {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.pdf-capture .money-input span {
+  padding: 10px 12px;
+  font-size: 16px;
+}
+
+.pdf-capture .gps-help-text {
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.pdf-capture .initial-results-view,
+.pdf-capture .gps-results {
+  margin: 20px 0;
+}
+
+.pdf-capture .initial-results-grid,
+.pdf-capture .gps-results {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px;
+}
+
+.pdf-capture .initial-result-group,
+.pdf-capture .gps-result-group {
+  padding: 13px;
+  border-radius: 15px;
+}
+
+.pdf-capture .initial-result-title,
+.pdf-capture .gps-result-group-title {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.pdf-capture .initial-result-cards,
+.pdf-capture .gps-result-group-cards {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px;
+}
+
+.pdf-capture .initial-result-card,
+.pdf-capture .gps-result-card {
+  padding: 14px 9px;
+  border-radius: 12px;
+}
+
+.pdf-capture .initial-result-card h3,
+.pdf-capture .gps-result-card h3 {
+  font-size: 11px;
+  line-height: 1.25;
+  margin: 0 0 8px;
+}
+
+.pdf-capture .initial-result-card .amount,
+.pdf-capture #detailedResultsView .gps-result-card > .amount,
+.pdf-capture .amount {
+  font-size: 22px;
+}
+
+.pdf-capture .combined-savings-message .key-label,
+.pdf-capture .combined-detail-savings .detail-key-label {
+  font-size: 12px;
+}
+
+.pdf-capture .combined-savings-message .key-value,
+.pdf-capture .combined-detail-savings .detail-key-value {
+  font-size: 19px;
+}
+
+.pdf-capture .combined-savings-message .key-percent,
+.pdf-capture .combined-detail-savings .detail-key-percent {
+  font-size: 17px;
+}
+
+.pdf-capture .initial-key-savings .key-sub,
+.pdf-capture .detail-key-sub {
+  font-size: 11px;
+}
+
+.pdf-capture .gps-breakdown {
+  padding: 16px 18px;
+  margin: 18px 0 0;
+  border-radius: 13px;
+}
+
+.pdf-capture .gps-breakdown h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.pdf-capture .gps-breakdown-row,
+.pdf-capture .gps-breakdown-row.red-row,
+.pdf-capture .gps-breakdown-row.green-row {
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.pdf-capture .gps-chart-wrap {
+  height: 380px;
+  margin-top: 0;
+  padding: 18px;
+  border-radius: 12px;
+  break-before: page;
+  page-break-before: always;
+}
+
+.pdf-capture .gps-chart-wrap img {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: contain;
+}
+
+.pdf-capture .estimate-notice {
+  padding: 15px 17px;
+  margin: 18px 0 0;
+  border-width: 2px;
+  border-radius: 11px;
+  line-height: 1.45;
+}
+
+.pdf-capture .estimate-notice-title {
+  font-size: 17px;
+  margin-bottom: 7px;
+}
+
+.pdf-capture .estimate-notice-main {
+  font-size: 12px;
+}
+
+.pdf-capture .estimate-notice-sub {
+  font-size: 11px;
+  margin-top: 7px;
+}
+
+.pdf-capture .gps-disclaimer {
+  font-size: 9px;
+  margin-top: 12px;
+}
+
+.pdf-capture .gps-input-panel,
+.pdf-capture .initial-result-group,
+.pdf-capture .gps-result-group,
+.pdf-capture .gps-breakdown,
+.pdf-capture .gps-chart-wrap,
+.pdf-capture .estimate-notice {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@media (max-width: 900px) {
+  .download-pdf-button {
+    width: 100%;
+  }
+}
+
+
+.partial-offset-summary {
+  grid-column: 1 / -1;
+  background: #eef6ff;
+  border: 2px solid #93c5fd;
+  border-radius: 16px;
+  padding: 18px;
+  color: #0f3b66;
+  line-height: 1.45;
+}
+
+.partial-offset-summary-title {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.partial-offset-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.partial-offset-summary-item {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+
+.partial-offset-summary-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.partial-offset-summary-value {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f3b66;
+}
+
+.partial-offset-warning {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .partial-offset-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<section id="gps-savings-calculator" class="gps-calc-section">
+  <div class="gps-calc-container">
+
+    <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
+
+    <p class="gps-calc-subtitle">
+      Estimate your solar savings using your current APS bill, solar payment, partial solar offset, battery rate shifting, battery rewards, and GPS incentives.
+    </p>
+
+    <div class="gps-input-panel">
+      <div class="gps-input-grid">
+
+        <div class="gps-calc-field">
+          <label>Average APS Monthly Bill</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="apsBill" value="268.84" step="0.01">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>APS Annual Increase %</label>
+          <input type="number" id="apsIncrease" value="5" step="0.01" oninput="calculateSavings()" onchange="calculateSavings()">
+        </div>
+
+        <div class="gps-calc-field">
+          <label>New Solar Monthly Payment</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="solarMonthly" value="237.28" step="0.01">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Solar Annual Rate Lock %</label>
+          <select id="solarEscalator" aria-label="Select solar annual rate lock">
+            <option value="1.9" selected>1.9%</option>
+            <option value="2.99">2.99%</option>
+          </select>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>APS VPP Annual Reward (5 Years)</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="batteryCredit" value="0.00" step="0.01">
+          </div>
+          <div class="gps-help-text">
+  Estimated annual APS Storage Rewards / VPP payment.
+  <a href="https://www.aps.com/en/About/Sustainability-and-Innovation/Technology-and-Innovation/Storage-Rewards"
+     target="_blank"
+     rel="noopener">
+     Learn about APS Storage Rewards
+  </a>.
+  Calculator counts this for 5 years only.
+</div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>GPS Cash Incentive</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="gpsIncentive" value="0.00" step="0.01">
+          </div>
+        </div>
+
+
+        <div class="gps-calc-field">
+          <label>Annual Home Energy Usage (kWh)</label>
+          <input type="number" id="annualUsageKwh" value="0" step="1" min="0">
+          <div class="gps-help-text">
+            Enter the customer's annual usage from the APS bill history or solar proposal.
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Solar Energy Offset %</label>
+          <input type="number" id="solarOffsetPercent" value="100" step="0.1" min="0" max="100">
+          <div class="gps-help-text">
+            Example: enter 64 for a system expected to produce 64% of annual usage.
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Off-Peak Grid Energy Rate ($/kWh)</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="offPeakRate" value="0.06" step="0.001" min="0">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Off-Peak Rate Annual Increase %</label>
+          <input type="number" id="offPeakRateIncrease" value="5" step="0.01" min="0">
+          <div class="gps-help-text">
+            Set this to 0% only when modeling a flat $0.06 rate for all 25 years.
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Usable Battery Energy (kWh)</label>
+          <input type="number" id="usableBatteryKwh" value="27" step="0.1" min="0">
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Average 4–7 PM Energy Use (kWh/day)</label>
+          <input type="number" id="peakUsageKwh" value="25" step="0.1" min="0">
+          <div class="gps-help-text">
+            Used to verify that the batteries can cover the entire 4–7 PM period.
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>APS On-Peak Rate (4–7 PM) ($/kWh)</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="peakRate" value="0.30" step="0.001" min="0">
+          </div>
+        </div>
+
+        <div class="gps-calc-field">
+          <label>Peak Days per Year</label>
+          <input type="number" id="peakDaysPerYear" value="260" step="1" min="0" max="366">
+          <div class="gps-help-text">
+            Default is approximately 5 weekdays × 52 weeks.
+          </div>
+        </div>
+
+        <div id="partialOffsetSummary" class="partial-offset-summary">
+          <div class="partial-offset-summary-title">Partial Offset + Battery Rate-Shifting Estimate</div>
+          <div id="partialOffsetExplanation">
+            Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.
+          </div>
+          <div class="partial-offset-summary-grid">
+            <div class="partial-offset-summary-item">
+              <div class="partial-offset-summary-label">Remaining Grid Energy</div>
+              <div class="partial-offset-summary-value" id="remainingGridKwhDisplay">0 kWh/mo</div>
+            </div>
+            <div class="partial-offset-summary-item">
+              <div class="partial-offset-summary-label">Estimated APS Cost After Solar</div>
+              <div class="partial-offset-summary-value" id="remainingGridCostDisplay">$0.00/mo</div>
+            </div>
+            <div class="partial-offset-summary-item">
+              <div class="partial-offset-summary-label">Battery Peak Coverage</div>
+              <div class="partial-offset-summary-value" id="batteryCoverageDisplay">100%</div>
+            </div>
+          </div>
+          <div class="partial-offset-warning" id="batteryCoverageWarning"></div>
+          <div class="gps-help-text" style="margin-top:10px;">
+            The purple chart line includes the solar payment, the estimated remaining APS bill,
+            and then subtracts any applicable battery/VPP reward.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="initialResultsView" class="initial-results-view">
+      <div class="initial-results-grid">
+
+        <div class="initial-result-group aps-initial">
+          <h3 class="initial-result-title">Staying with APS</h3>
+          <div class="initial-result-cards">
+            <div class="initial-result-card">
+              <h3 id="initialApsMonthlyLabel">Current APS Monthly Bill</h3>
+              <div class="amount orange" id="initialCurrentAps">$0.00</div>
+            </div>
+
+            <div class="initial-result-card">
+              <h3 id="initialApsCostLabel">APS 25-Year Cost</h3>
+              <div class="amount orange" id="initialAps25">$0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="initial-result-group solar-initial">
+          <h3 class="initial-result-title">Going with Solar</h3>
+          <div class="initial-result-cards">
+            <div class="initial-result-card">
+              <h3>Solar Payment + Estimated APS Bill<br>After Rewards</h3>
+              <div class="amount purple" id="initialSolarMonthly">$0.00</div>
+              <div class="initial-key-savings combined-savings-message">
+                <span class="key-label">SAVE</span>
+                <span class="key-value"><span id="initialMonthlySavings">$0.00</span>/mo</span>
+                <span class="key-percent simple-percent-verbiage"><span id="initialPercentLower">0%</span> LOWER</span>
+                <span class="key-sub simple-percent-verbiage" id="initialPercentContext">than your current APS bill</span>
+                <span id="initialMonthlySavingsContext" style="display:none;"></span>
+              </div>
+            </div>
+
+            <div class="initial-result-card">
+              <h3 id="initialSavingsLabel">Net 25-Year Savings</h3>
+              <div class="amount green" id="initialSavings25">$0.00</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="breakdown-button-wrap" id="initialScenarioButtonWrap">
+        <button type="button" id="showDetailedBreakdown" class="breakdown-button">
+          See Savings After a 14% APS Increase
+        </button>
+      </div>
+
+      <div id="scenarioNav" class="scenario-nav">
+        <button type="button" id="backToCurrentRates" class="scenario-nav-btn">
+          ← Current Rates
+        </button>
+
+        <button type="button" id="openDetailedBreakdown" class="scenario-nav-btn">
+          View Detailed Breakdown →
+        </button>
+      </div>
+    </div>
+
+    <div id="detailedResultsView" class="detailed-results-view">
+    <div class="gps-results">
+
+      <div class="gps-result-group aps-group">
+        <h3 class="gps-result-group-title">Staying with APS</h3>
+
+        <div class="gps-result-group-cards">
+          <div class="gps-result-card">
+            <h3 id="apsMonthlyCardLabel">Estimated APS Monthly Bill<br>After 14% Increase</h3>
+            <div class="amount orange" id="apsNextYear">$0.00</div>
+          </div>
+
+          <div class="gps-result-card">
+            <h3 id="apsCostCardLabel">APS 25-Year Cost</h3>
+            <div class="amount orange" id="apsTotal">$0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gps-result-group solar-group">
+        <h3 class="gps-result-group-title">Going with Solar</h3>
+
+        <div class="gps-result-group-cards">
+          <div class="gps-result-card">
+            <h3 id="solarMonthlyCardLabel">Solar Payment + Estimated APS Bill After Rewards</h3>
+            <div class="amount purple" id="newAvgMonthly">$0.00</div>
+            <div class="detail-key-savings combined-detail-savings">
+              <div class="detail-key-label">SAVE</div>
+              <div class="detail-key-value">
+                <span id="nextYearDifference">$0.00</span>/mo
+              </div>
+              <div class="detail-key-percent">
+                <span id="percentLowerAfterIncrease">0%</span> LOWER
+              </div>
+              <div class="detail-key-sub" id="detailSavingsContext">
+                than APS after a 14% increase
+              </div>
+              <span id="percentLower" style="display:none;">0%</span>
+            </div>
+          </div>
+
+          <div class="gps-result-card">
+            <h3 class="savings-period-title" style="display:flex;flex-direction:column;gap:8px;">
+              <span>Net Savings</span>
+              <select id="savingsYears" class="savings-period-select" aria-label="Select savings period" onchange="calculateSavings()">
+                <option value="1">1 Year</option>
+                <option value="5">5 Years</option>
+                <option value="10">10 Years</option>
+                <option value="15">15 Years</option>
+                <option value="20">20 Years</option>
+                <option value="25" selected>25 Years</option>
+              </select>
+            </h3>
+            <div class="amount green" id="totalSavings">$0.00</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+      <div class="breakdown-button-wrap">
+        <button type="button" id="hideDetailedBreakdown" class="breakdown-button">
+          Back to Simple View
+        </button>
+      </div>
+    </div>
+
+    <div class="gps-breakdown">
+      <h3>Savings Breakdown</h3>
+
+      <div class="gps-breakdown-row red-row">
+        <span id="apsCostBreakdownLabel">APS 25-Year Cost</span>
+        <span id="apsCostDisplay">$0.00</span>
+      </div>
+
+      <div class="gps-breakdown-row">
+        <span id="netSavingsLabel" style="color:#16a34a !important;">Total Estimated 25-Year Savings</span>
+        <span id="netSavingsDisplay" style="color:#16a34a !important;">$0.00</span>
+      </div>
+    </div>
+
+    <div class="gps-chart-wrap">
+      <canvas id="savingsChart"></canvas>
+    </div>
+
+    <div class="estimate-notice">
+      <div class="estimate-notice-title">IMPORTANT ESTIMATE NOTICE</div>
+
+      <div class="estimate-notice-main">
+        The figures shown above are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.
+      </div>
+
+      <div class="estimate-notice-sub">
+        Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, battery charging losses, battery reserve settings, equipment limits, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.
+      </div>
+    </div>
+
+
+    <p class="gps-disclaimer">
+      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+    </p>
+
+    <div class="pdf-download-bottom pdf-export-controls">
+      <button type="button" id="downloadClientPdf" class="download-pdf-button">
+        Download PDF
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+let chart;
+let showingFourteenPercentScenario = false;
+
+function money(value) {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+const verticalHoverLine = {
+  id: "verticalHoverLine",
+  afterDraw(chart) {
+    if (chart.tooltip && chart.tooltip._active && chart.tooltip._active.length) {
+      const ctx = chart.ctx;
+      const x = chart.tooltip._active[0].element.x;
+      const topY = chart.chartArea.top;
+      const bottomY = chart.chartArea.bottom;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, topY);
+      ctx.lineTo(x, bottomY);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#9ca3af";
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+};
+
+Chart.register(verticalHoverLine);
+
+function calculateSavings() {
+  const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
+  const displayedApsIncrease = (parseFloat(document.getElementById("apsIncrease").value) || 0) / 100;
+  const solarMonthly = parseFloat(document.getElementById("solarMonthly").value) || 0;
+  const solarEscalator =
+    (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
+  const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
+  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+
+  const annualUsageKwh = Math.max(parseFloat(document.getElementById("annualUsageKwh").value) || 0, 0);
+  const solarOffsetPercent = Math.min(Math.max(parseFloat(document.getElementById("solarOffsetPercent").value) || 0, 0), 100);
+  const offPeakRate = Math.max(parseFloat(document.getElementById("offPeakRate").value) || 0, 0);
+  const offPeakRateIncrease = Math.max((parseFloat(document.getElementById("offPeakRateIncrease").value) || 0) / 100, 0);
+  const usableBatteryKwh = Math.max(parseFloat(document.getElementById("usableBatteryKwh").value) || 0, 0);
+  const peakUsageKwh = Math.max(parseFloat(document.getElementById("peakUsageKwh").value) || 0, 0);
+  const peakRate = Math.max(parseFloat(document.getElementById("peakRate").value) || 0, 0);
+  const peakDaysPerYear = Math.max(parseFloat(document.getElementById("peakDaysPerYear").value) || 0, 0);
+
+  const fixedCharge = 13.785;
+  const energyPortion = Math.max(apsBill - fixedCharge, 0);
+
+  const remainingGridAnnualKwh =
+    annualUsageKwh * (1 - (solarOffsetPercent / 100));
+  const remainingGridMonthlyKwh = remainingGridAnnualKwh / 12;
+
+  const batteryCoveragePercent =
+    peakUsageKwh > 0
+      ? Math.min((usableBatteryKwh / peakUsageKwh) * 100, 100)
+      : 100;
+
+  const uncoveredPeakKwhPerDay =
+    Math.max(peakUsageKwh - usableBatteryKwh, 0);
+
+  // Base remaining grid energy is priced at the off-peak rate. If the battery
+  // cannot cover the full 4–7 PM period, only the uncovered portion receives
+  // the additional peak-rate premium.
+  const firstYearOffPeakEnergyCost =
+    remainingGridAnnualKwh * offPeakRate;
+
+  const firstYearPeakPremium =
+    uncoveredPeakKwhPerDay *
+    peakDaysPerYear *
+    Math.max(peakRate - offPeakRate, 0);
+
+  const partialOffsetIsActive =
+    annualUsageKwh > 0 && solarOffsetPercent < 100;
+
+  const firstYearRemainingGridMonthlyCost =
+    partialOffsetIsActive
+      ? fixedCharge + ((firstYearOffPeakEnergyCost + firstYearPeakPremium) / 12)
+      : 0;
+
+  const remainingGridKwhDisplay = document.getElementById("remainingGridKwhDisplay");
+  const remainingGridCostDisplay = document.getElementById("remainingGridCostDisplay");
+  const batteryCoverageDisplay = document.getElementById("batteryCoverageDisplay");
+  const batteryCoverageWarning = document.getElementById("batteryCoverageWarning");
+  const partialOffsetExplanation = document.getElementById("partialOffsetExplanation");
+
+  if (remainingGridKwhDisplay) {
+    remainingGridKwhDisplay.textContent =
+      remainingGridMonthlyKwh.toLocaleString("en-US", { maximumFractionDigits: 0 }) + " kWh/mo";
+  }
+
+  if (remainingGridCostDisplay) {
+    remainingGridCostDisplay.textContent = money(firstYearRemainingGridMonthlyCost) + "/mo";
+  }
+
+  if (batteryCoverageDisplay) {
+    batteryCoverageDisplay.textContent = batteryCoveragePercent.toFixed(1) + "%";
+  }
+
+  if (partialOffsetExplanation) {
+    partialOffsetExplanation.textContent = partialOffsetIsActive
+      ? `${solarOffsetPercent.toFixed(1)}% of annual energy is supplied by solar. The remaining ${(100 - solarOffsetPercent).toFixed(1)}% is modeled as grid energy, primarily purchased at the off-peak rate.`
+      : "Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.";
+  }
+
+  if (batteryCoverageWarning) {
+    batteryCoverageWarning.textContent =
+      uncoveredPeakKwhPerDay <= 0
+        ? `The entered battery capacity covers the full ${peakUsageKwh.toFixed(1)} kWh 4–7 PM requirement.`
+        : `Battery capacity is short by ${uncoveredPeakKwhPerDay.toFixed(1)} kWh per peak day, so that portion is priced at the entered peak rate.`;
+  }
+
+  const batteryRewardYears = 5;
+  const monthlyBatteryCredit = batteryAnnualCredit / 12;
+  const batteryTotal = batteryAnnualCredit * batteryRewardYears;
+
+  const years = [];
+  const apsMonthlyData = [];
+  const solarMonthlyData = [];
+  const cumulativeApsTotals = [];
+  const cumulativeSolarTotals = [];
+
+  let apsTotal = 0;
+  let solarTotal = 0;
+
+  const apsMonthlyAfter14PercentIncrease =
+    fixedCharge + (energyPortion * 1.14);
+
+  for (let year = 1; year <= 25; year++) {
+    // Current-rates path: starts at today's APS bill and applies the selected
+    // APS annual increase beginning in year 2.
+    const apsMonthlyCurrentRates =
+      fixedCharge +
+      (energyPortion * Math.pow(1 + displayedApsIncrease, year - 1));
+
+    // 14%-increase path: year 1 starts 14% higher, then the selected APS
+    // annual increase applies from year 2 onward.
+    const apsMonthlyAfter14 =
+      fixedCharge +
+      ((apsMonthlyAfter14PercentIncrease - fixedCharge) *
+        Math.pow(1 + displayedApsIncrease, year - 1));
+
+    const solarMonthlyYear =
+      solarMonthly * Math.pow(1 + solarEscalator, year - 1);
+
+    const remainingGridMonthlyCostYear =
+      partialOffsetIsActive
+        ? fixedCharge +
+          (((firstYearOffPeakEnergyCost + firstYearPeakPremium) *
+            Math.pow(1 + offPeakRateIncrease, year - 1)) / 12)
+        : 0;
+
+    const combinedSolarAndGridMonthlyYear =
+      solarMonthlyYear + remainingGridMonthlyCostYear;
+
+    const batteryCreditThisYear =
+      year <= batteryRewardYears ? monthlyBatteryCredit : 0;
+
+    const solarMonthlyAfterRewards =
+      Math.max(combinedSolarAndGridMonthlyYear - batteryCreditThisYear, 0);
+
+    years.push(year);
+
+    // The chart/detailed view is the 14% scenario, so use the 14%-adjusted APS line.
+    apsMonthlyData.push(Number(apsMonthlyAfter14.toFixed(2)));
+    solarMonthlyData.push(Number(solarMonthlyAfterRewards.toFixed(2)));
+
+    apsTotal += apsMonthlyCurrentRates * 12;
+    solarTotal += combinedSolarAndGridMonthlyYear * 12;
+
+    cumulativeApsTotals.push(
+      (cumulativeApsTotals[year - 2] || 0) + (apsMonthlyAfter14 * 12)
+    );
+    cumulativeSolarTotals.push(solarTotal);
+  }
+
+  const selectedSavingsYears =
+    parseInt(document.getElementById("savingsYears").value, 10) || 25;
+
+  const selectedIndex = Math.min(Math.max(selectedSavingsYears, 1), 25) - 1;
+  const selectedBatteryTotal =
+    batteryAnnualCredit * Math.min(selectedSavingsYears, batteryRewardYears);
+
+  const selectedApsTotal = cumulativeApsTotals[selectedIndex];
+  const selectedSolarTotal = cumulativeSolarTotals[selectedIndex];
+
+  const selectedNetSavings =
+    selectedApsTotal -
+    selectedSolarTotal +
+    selectedBatteryTotal +
+    gpsIncentive;
+
+  // These shared 25-year totals use the currently selected solar escalator
+  // (1.9% or 2.99%) and are reused by every summary/detail view.
+  const solarTotal25Years = cumulativeSolarTotals[24];
+  const currentRatesNetSavings25 =
+    apsTotal - solarTotal25Years + batteryTotal + gpsIncentive;
+
+  const apsAfter14Total25Years = cumulativeApsTotals[24];
+  const after14NetSavings25 =
+    apsAfter14Total25Years - solarTotal25Years + batteryTotal + gpsIncentive;
+
+  const netSavings = currentRatesNetSavings25;
+
+  const newAvgMonthlyBill = Math.max(
+    solarMonthly + firstYearRemainingGridMonthlyCost - monthlyBatteryCredit,
+    0
+  );
+
+  const initialCurrentAps = document.getElementById("initialCurrentAps");
+  const initialAps25 = document.getElementById("initialAps25");
+  const initialSolarMonthly = document.getElementById("initialSolarMonthly");
+  const initialSavings25 = document.getElementById("initialSavings25");
+
+  const initialApsMonthlyLabel = document.getElementById("initialApsMonthlyLabel");
+  const initialApsCostLabel = document.getElementById("initialApsCostLabel");
+  const initialSavingsLabel = document.getElementById("initialSavingsLabel");
+
+  let summaryApsMonthly = apsBill;
+  let summaryApsTotal = apsAfter14Total25Years;
+  let summaryNetSavings = after14NetSavings25;
+
+  if (showingFourteenPercentScenario) {
+    const apsMonthlyAfter14 =
+      fixedCharge + (energyPortion * 1.14);
+
+    let projectedApsTotalAfter14 = 0;
+
+    for (let year = 1; year <= 25; year++) {
+      const projectedMonthly =
+        fixedCharge +
+        ((apsMonthlyAfter14 - fixedCharge) *
+          Math.pow(1 + displayedApsIncrease, year - 1));
+
+      projectedApsTotalAfter14 += projectedMonthly * 12;
+    }
+
+    summaryApsMonthly = apsMonthlyAfter14;
+    summaryApsTotal = apsAfter14Total25Years;
+    summaryNetSavings = after14NetSavings25;
+
+    if (initialApsMonthlyLabel) {
+      initialApsMonthlyLabel.textContent =
+        "Estimated APS Monthly Bill After 14% Increase";
+    }
+
+    if (initialApsCostLabel) {
+      initialApsCostLabel.textContent =
+        "APS 25-Year Cost After 14% Increase";
+    }
+
+    if (initialSavingsLabel) {
+      initialSavingsLabel.textContent =
+        "Net 25-Year Savings After 14% APS Increase";
+    }
+  } else {
+    if (initialApsMonthlyLabel) {
+      initialApsMonthlyLabel.textContent = "Current APS Monthly Bill";
+    }
+
+    if (initialApsCostLabel) {
+      initialApsCostLabel.textContent =
+        "APS 25-Year Cost After 14% First-Year Increase";
+    }
+
+    if (initialSavingsLabel) {
+      initialSavingsLabel.textContent =
+        "Net 25-Year Savings After 14% First-Year APS Increase";
+    }
+  }
+
+  if (initialCurrentAps) initialCurrentAps.textContent = money(summaryApsMonthly);
+  if (initialAps25) initialAps25.textContent = money(summaryApsTotal);
+  if (initialSolarMonthly) initialSolarMonthly.textContent = money(newAvgMonthlyBill);
+  if (initialSavings25) initialSavings25.textContent = money(summaryNetSavings);
+
+  const percentLower = apsBill > 0
+    ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
+    : 0;
+
+  const initialMonthlySavings = document.getElementById("initialMonthlySavings");
+  const initialPercentLower = document.getElementById("initialPercentLower");
+
+  const summaryComparisonBill = showingFourteenPercentScenario
+    ? fixedCharge + (energyPortion * 1.14)
+    : apsBill;
+
+  const summaryMonthlySavings =
+    Math.max(summaryComparisonBill - newAvgMonthlyBill, 0);
+
+  const summaryPercentLower = summaryComparisonBill > 0
+    ? (summaryMonthlySavings / summaryComparisonBill) * 100
+    : 0;
+
+  if (initialMonthlySavings) {
+    initialMonthlySavings.textContent = money(summaryMonthlySavings);
+  }
+
+  if (initialPercentLower) {
+    initialPercentLower.textContent = summaryPercentLower.toFixed(1) + "%";
+  }
+
+  const initialMonthlySavingsContext =
+    document.getElementById("initialMonthlySavingsContext");
+  const initialPercentContext =
+    document.getElementById("initialPercentContext");
+
+  if (initialMonthlySavingsContext) {
+    initialMonthlySavingsContext.textContent = showingFourteenPercentScenario
+      ? "compared to APS after a 14% increase."
+      : "compared to your current APS bill.";
+  }
+
+  if (initialPercentContext) {
+    initialPercentContext.textContent = showingFourteenPercentScenario
+      ? "than APS after a 14% increase"
+      : "than your current APS bill";
+  }
+
+  // Detailed-view monthly figures follow the selected year.
+  // This changes only the displayed monthly comparison; cumulative cost and
+  // net-savings calculations remain exactly the same.
+  const selectedApsMonthly = apsMonthlyData[selectedIndex];
+  const selectedSolarMonthlyAfterRewards = solarMonthlyData[selectedIndex];
+
+  const selectedMonthlySavings =
+    Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0);
+
+  const selectedPercentLower =
+    selectedApsMonthly > 0
+      ? (selectedMonthlySavings / selectedApsMonthly) * 100
+      : 0;
+
+  const apsMonthlyCardLabel = document.getElementById("apsMonthlyCardLabel");
+  const solarMonthlyCardLabel = document.getElementById("solarMonthlyCardLabel");
+
+  if (apsMonthlyCardLabel) {
+    apsMonthlyCardLabel.innerHTML =
+      `Estimated APS Monthly Bill<br>in Year ${selectedSavingsYears}`;
+  }
+
+  if (solarMonthlyCardLabel) {
+    solarMonthlyCardLabel.textContent =
+      `Solar Payment + Estimated APS Bill After Rewards in Year ${selectedSavingsYears}`;
+  }
+
+  document.getElementById("apsNextYear").textContent =
+    money(selectedApsMonthly);
+
+  document.getElementById("nextYearDifference").textContent =
+    money(selectedMonthlySavings);
+  document.getElementById("apsTotal").textContent = money(selectedApsTotal);
+  document.getElementById("apsCostCardLabel").textContent =
+    `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
+
+  document.getElementById("newAvgMonthly").textContent =
+    money(selectedSolarMonthlyAfterRewards);
+  document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
+  document.getElementById("percentLowerAfterIncrease").textContent =
+    selectedPercentLower.toFixed(1) + "%";
+
+  const detailSavingsContext = document.getElementById("detailSavingsContext");
+  if (detailSavingsContext) {
+    detailSavingsContext.textContent =
+      `than APS in year ${selectedSavingsYears}`;
+  }
+
+  document.getElementById("totalSavings").textContent = money(selectedNetSavings);
+
+  const detailedViewIsOpen =
+    document.getElementById("detailedResultsView").classList.contains("gps-show");
+
+  if (detailedViewIsOpen) {
+    document.getElementById("apsCostDisplay").textContent =
+      money(selectedApsTotal);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
+    document.getElementById("netSavingsDisplay").textContent =
+      money(selectedNetSavings);
+    document.getElementById("netSavingsLabel").textContent =
+      `Total Estimated ${selectedSavingsYears}-Year Savings After APS 14% Increase`;
+  } else if (showingFourteenPercentScenario) {
+    document.getElementById("apsCostDisplay").textContent =
+      money(apsAfter14Total25Years);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      "APS 25-Year Cost After 14% Increase";
+    document.getElementById("netSavingsDisplay").textContent =
+      money(after14NetSavings25);
+    document.getElementById("netSavingsLabel").textContent =
+      "Total Estimated 25-Year Savings After APS 14% Increase";
+  } else {
+    document.getElementById("apsCostDisplay").textContent =
+      money(apsAfter14Total25Years);
+    document.getElementById("apsCostBreakdownLabel").textContent =
+      "APS 25-Year Cost After 14% First-Year Increase";
+    document.getElementById("netSavingsDisplay").textContent =
+      money(after14NetSavings25);
+    document.getElementById("netSavingsLabel").textContent =
+      "Total Estimated 25-Year Savings After 14% First-Year APS Increase";
+  }
+
+  const ctx = document.getElementById("savingsChart").getContext("2d");
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: "Pre-solar",
+          data: apsMonthlyData,
+          borderColor: "#ff5a1f",
+          backgroundColor: "#ff5a1f",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 3,
+          pointHoverRadius: 7
+        },
+        {
+          label: "Solar + Remaining APS",
+          data: solarMonthlyData,
+          borderColor: "#8b5cf6",
+          backgroundColor: "#8b5cf6",
+          borderWidth: 4,
+          tension: 0.25,
+          pointRadius: 3,
+          pointHoverRadius: 7
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+
+      plugins: {
+        tooltip: {
+          enabled: true,
+          mode: "index",
+          intersect: false,
+          backgroundColor: "#ffffff",
+          titleColor: "#061b3a",
+          bodyColor: "#374151",
+          borderColor: "#d1d5db",
+          borderWidth: 1,
+          padding: 14,
+          displayColors: true,
+          boxWidth: 10,
+          boxHeight: 10,
+          titleFont: {
+            size: 13,
+            weight: "bold"
+          },
+          bodyFont: {
+            size: 13,
+            weight: "normal"
+          },
+          callbacks: {
+            title: function(context) {
+              return "Year " + context[0].label;
+            },
+            label: function(context) {
+              return context.dataset.label + "     " + money(context.parsed.y);
+            },
+            afterBody: function(context) {
+              const aps = context[0].parsed.y;
+              const solar = context[1].parsed.y;
+              const savings = aps - solar;
+
+              return "\nMonthly difference     ↓ " + money(savings);
+            }
+          }
+        },
+
+        legend: {
+          position: "bottom",
+          labels: {
+            font: {
+              size: 18,
+              weight: "bold"
+            }
+          }
+        }
+      },
+
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Combined monthly energy cost",
+            font: {
+              size: 16,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 14
+            },
+            callback: function(value) {
+              return "$" + value.toLocaleString();
+            }
+          },
+          grid: {
+            color: "#d1d5db"
+          }
+        },
+
+        x: {
+          title: {
+            display: true,
+            text: "Years",
+            font: {
+              size: 14,
+              weight: "bold"
+            }
+          },
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+document.querySelectorAll("#gps-savings-calculator input, #gps-savings-calculator select").forEach(input => {
+  input.addEventListener("input", calculateSavings);
+  input.addEventListener("change", calculateSavings);
+
+  input.addEventListener("blur", function () {
+    if (this.closest(".money-input")) {
+      this.value = (parseFloat(this.value) || 0).toFixed(2);
+    }
+  });
+});
+
+// Extra direct listeners ensure the savings card always refreshes immediately.
+document.getElementById("apsIncrease").addEventListener("keyup", calculateSavings);
+document.getElementById("apsIncrease").addEventListener("input", calculateSavings);
+document.getElementById("savingsYears").addEventListener("change", calculateSavings);
+
+const initialResultsView = document.getElementById("initialResultsView");
+const detailedResultsView = document.getElementById("detailedResultsView");
+
+const initialScenarioButtonWrap =
+  document.getElementById("initialScenarioButtonWrap");
+const scenarioNav = document.getElementById("scenarioNav");
+
+document.getElementById("showDetailedBreakdown").addEventListener("click", function () {
+  showingFourteenPercentScenario = true;
+  calculateSavings();
+
+  initialScenarioButtonWrap.style.display = "none";
+  scenarioNav.classList.add("gps-show");
+});
+
+document.getElementById("backToCurrentRates").addEventListener("click", function () {
+  showingFourteenPercentScenario = false;
+  calculateSavings();
+
+  scenarioNav.classList.remove("gps-show");
+  initialScenarioButtonWrap.style.display = "block";
+});
+
+document.getElementById("openDetailedBreakdown").addEventListener("click", function () {
+  document.getElementById("savingsYears").value = "25";
+  initialResultsView.style.display = "none";
+  detailedResultsView.classList.add("gps-show");
+  calculateSavings();
+});
+
+document.getElementById("hideDetailedBreakdown").addEventListener("click", function () {
+  detailedResultsView.classList.remove("gps-show");
+  initialResultsView.style.display = "block";
+
+  // Restore the original simple landing page.
+  document.getElementById("savingsYears").value = "25";
+  showingFourteenPercentScenario = false;
+
+  scenarioNav.classList.remove("gps-show");
+  initialScenarioButtonWrap.style.display = "block";
+  calculateSavings();
+
+  // Intentionally do not scroll. Keep the viewport fixed.
+});
+
+
+
+async function createPdfChartImage() {
+  if (!chart || !chart.data || !chart.data.datasets) return null;
+
+  const allValues = chart.data.datasets.flatMap(dataset =>
+    (dataset.data || []).map(Number).filter(Number.isFinite)
+  );
+
+  if (!allValues.length) return chart.toBase64Image("image/png", 1);
+
+  const dataMin = Math.min(...allValues);
+  const dataMax = Math.max(...allValues);
+  const spread = Math.max(dataMax - dataMin, 50);
+  const padding = Math.max(spread * 0.12, 20);
+  const step = spread > 500 ? 100 : spread > 250 ? 50 : 25;
+  const yMin = Math.max(0, Math.floor((dataMin - padding) / step) * step);
+  const yMax = Math.ceil((dataMax + padding) / step) * step;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 1600;
+  canvas.height = 820;
+  const ctx = canvas.getContext("2d");
+
+  const pdfChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [...chart.data.labels],
+      datasets: chart.data.datasets.map(dataset => ({
+        label: dataset.label,
+        data: [...dataset.data],
+        borderColor: dataset.borderColor,
+        backgroundColor: dataset.backgroundColor,
+        borderWidth: 5,
+        tension: 0.25,
+        pointRadius: 4,
+        pointHoverRadius: 4,
+        fill: false
+      }))
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      maintainAspectRatio: false,
+      layout: { padding: { top: 20, right: 28, bottom: 10, left: 16 } },
+      plugins: {
+        tooltip: { enabled: false },
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 28,
+            boxHeight: 18,
+            padding: 24,
+            font: { size: 24, weight: "bold" },
+            color: "#374151"
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: yMin,
+          max: yMax,
+          title: {
+            display: true,
+            text: "Combined monthly energy cost",
+            color: "#374151",
+            font: { size: 24, weight: "bold" }
+          },
+          ticks: {
+            color: "#374151",
+            font: { size: 19 },
+            callback(value) { return "$" + Number(value).toLocaleString(); }
+          },
+          grid: { color: "#d1d5db" }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Years",
+            color: "#374151",
+            font: { size: 22, weight: "bold" }
+          },
+          ticks: { color: "#374151", font: { size: 17 } },
+          grid: { color: "rgba(209,213,219,0.55)" }
+        }
+      }
+    }
+  });
+
+  pdfChart.update("none");
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const image = canvas.toDataURL("image/png", 1.0);
+  pdfChart.destroy();
+  return image;
+}
+
+async function downloadClientPdf() {
+  const button = document.getElementById("downloadClientPdf");
+  calculateSavings();
+
+  button.disabled = true;
+  button.textContent = "Creating PDF...";
+
+  try {
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const jsPDFConstructor =
+      (window.jspdf && window.jspdf.jsPDF) ||
+      window.jsPDF ||
+      (window.html2pdf && window.html2pdf.jsPDF);
+
+    if (!jsPDFConstructor) {
+      throw new Error("jsPDF library did not load. Check the internet connection and refresh the page.");
+    }
+
+    const pdf = new jsPDFConstructor({
+      orientation: "portrait",
+      unit: "pt",
+      format: "letter",
+      compress: true
+    });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 42;
+    const contentWidth = pageWidth - margin * 2;
+
+    const navy = [6, 27, 58];
+    const gray = [75, 85, 99];
+    const lightGray = [248, 250, 252];
+    const lineGray = [226, 232, 240];
+    const orange = [255, 90, 31];
+    const red = [220, 38, 38];
+    const paleRed = [255, 245, 243];
+    const green = [22, 163, 74];
+    const darkGreen = [21, 128, 61];
+    const paleGreen = [240, 253, 244];
+    const purple = [139, 92, 246];
+    const yellow = [255, 248, 219];
+
+    const value = id => document.getElementById(id)?.textContent?.trim() || "";
+    const inputValue = id => document.getElementById(id)?.value || "0";
+    const moneyFromInput = id => money(parseFloat(inputValue(id)) || 0);
+    const isDetailed = document.getElementById("detailedResultsView").classList.contains("gps-show");
+
+    function setText(color, size, style = "normal") {
+      pdf.setTextColor(...color);
+      pdf.setFont("helvetica", style);
+      pdf.setFontSize(size);
+    }
+
+    function wrappedText(text, x, y, maxWidth, lineHeight, color = gray, size = 10, style = "normal") {
+      setText(color, size, style);
+      const lines = pdf.splitTextToSize(String(text), maxWidth);
+      pdf.text(lines, x, y);
+      return y + lines.length * lineHeight;
+    }
+
+    function sectionTitle(text, y) {
+      setText(navy, 18, "bold");
+      pdf.text(text, margin, y);
+      pdf.setDrawColor(...lineGray);
+      pdf.setLineWidth(1);
+      pdf.line(margin, y + 8, pageWidth - margin, y + 8);
+      return y + 26;
+    }
+
+    function assumptionBox(x, y, w, label, val) {
+      pdf.setFillColor(...lightGray);
+      pdf.setDrawColor(...lineGray);
+      pdf.roundedRect(x, y, w, 52, 8, 8, "FD");
+      setText(gray, 9, "bold");
+      pdf.text(label, x + 12, y + 17);
+      setText(navy, 14, "bold");
+      pdf.text(val, x + 12, y + 38);
+    }
+
+    function resultGroup(x, y, w, title, fill, border, titleColor, cards) {
+      const groupHeight = 170;
+      pdf.setFillColor(...fill);
+      pdf.setDrawColor(...border);
+      pdf.setLineWidth(1.4);
+      pdf.roundedRect(x, y, w, groupHeight, 12, 12, "FD");
+      setText(titleColor, 16, "bold");
+      pdf.text(title, x + w / 2, y + 25, { align: "center" });
+
+      const gap = 10;
+      const cardW = (w - 30 - gap) / 2;
+      cards.forEach((card, index) => {
+        const cx = x + 10 + index * (cardW + gap);
+        const cy = y + 38;
+        pdf.setFillColor(248, 250, 252);
+        pdf.setDrawColor(...lineGray);
+        pdf.roundedRect(cx, cy, cardW, 120, 9, 9, "FD");
+        setText(gray, 8.5, "bold");
+        const labelLines = pdf.splitTextToSize(card.label, cardW - 16);
+        pdf.text(labelLines, cx + cardW / 2, cy + 20, { align: "center" });
+        setText(card.color, card.valueSize || 17, "bold");
+        pdf.text(card.value, cx + cardW / 2, cy + 58, { align: "center" });
+
+        if (card.extra && card.extra.length) {
+          let ey = cy + 77;
+          card.extra.forEach(extraLine => {
+            setText(extraLine.color || darkGreen, extraLine.size || 10, "bold");
+            pdf.text(extraLine.text, cx + cardW / 2, ey, { align: "center" });
+            ey += extraLine.spacing || 14;
+          });
+        }
+      });
+      return y + groupHeight;
+    }
+
+    // PAGE 1 — client-ready summary
+    setText(navy, 25, "bold");
+    pdf.text("GPS Solar Savings Estimate", pageWidth / 2, 52, { align: "center" });
+    setText(gray, 11, "normal");
+    pdf.text("Personalized comparison based on the calculator values shown at download time", pageWidth / 2, 71, { align: "center" });
+
+    let y = 96;
+    y = sectionTitle("Estimate assumptions", y);
+
+    const gap = 12;
+    const colW = (contentWidth - gap) / 2;
+    assumptionBox(margin, y, colW, "Average APS monthly bill", moneyFromInput("apsBill"));
+    assumptionBox(margin + colW + gap, y, colW, "APS annual increase", `${parseFloat(inputValue("apsIncrease") || 0).toFixed(2).replace(/\.00$/, "")}%`);
+    y += 62;
+    assumptionBox(margin, y, colW, "New solar monthly payment", moneyFromInput("solarMonthly"));
+    assumptionBox(margin + colW + gap, y, colW, "Solar annual rate lock", `${inputValue("solarEscalator")}%`);
+    y += 62;
+    assumptionBox(margin, y, colW, "APS VPP annual reward (5 years)", moneyFromInput("batteryCredit"));
+    assumptionBox(margin + colW + gap, y, colW, "GPS cash incentive", moneyFromInput("gpsIncentive"));
+
+    y += 78;
+    y = sectionTitle(isDetailed ? "Detailed savings results" : "25-year savings summary", y);
+
+    const resultGap = 14;
+    const groupW = (contentWidth - resultGap) / 2;
+
+    let apsMonthlyLabel;
+    let apsMonthlyValue;
+    let apsCostLabel;
+    let apsCostValue;
+    let solarMonthlyValue;
+    let savingsValue;
+    let savingsLabel;
+    let monthlySave;
+    let percentSave;
+    let context;
+
+    if (isDetailed) {
+      apsMonthlyLabel = "Estimated APS monthly bill after 14% increase";
+      apsMonthlyValue = value("apsNextYear");
+      apsCostLabel = value("apsCostCardLabel");
+      apsCostValue = value("apsTotal");
+      solarMonthlyValue = value("newAvgMonthly");
+      savingsValue = value("totalSavings");
+      savingsLabel = `Net ${inputValue("savingsYears")}-year savings`;
+      monthlySave = value("nextYearDifference") + "/mo";
+      percentSave = value("percentLowerAfterIncrease") + " LOWER";
+      context = value("detailSavingsContext");
+    } else {
+      apsMonthlyLabel = value("initialApsMonthlyLabel");
+      apsMonthlyValue = value("initialCurrentAps");
+      apsCostLabel = value("initialApsCostLabel");
+      apsCostValue = value("initialAps25");
+      solarMonthlyValue = value("initialSolarMonthly");
+      savingsValue = value("initialSavings25");
+      savingsLabel = value("initialSavingsLabel");
+      monthlySave = value("initialMonthlySavings") + "/mo";
+      percentSave = value("initialPercentLower") + " LOWER";
+      context = value("initialPercentContext");
+    }
+
+    resultGroup(margin, y, groupW, "Staying with APS", paleRed, [255, 180, 160], red, [
+      { label: apsMonthlyLabel, value: apsMonthlyValue, color: orange, valueSize: 17 },
+      { label: apsCostLabel, value: apsCostValue, color: orange, valueSize: 16 }
+    ]);
+
+    resultGroup(margin + groupW + resultGap, y, groupW, "Going with Solar", paleGreen, [134, 239, 172], green, [
+      {
+        label: "Solar payment + estimated APS bill after rewards",
+        value: solarMonthlyValue,
+        color: purple,
+        valueSize: 17,
+        extra: isDetailed
+          ? [
+              { text: "SAVE " + monthlySave, color: darkGreen, size: 10 },
+              { text: percentSave, color: darkGreen, size: 11 },
+              { text: context, color: darkGreen, size: 7.5, spacing: 10 }
+            ]
+          : [
+              { text: "SAVE " + monthlySave, color: darkGreen, size: 10 }
+            ]
+      },
+      { label: savingsLabel, value: savingsValue, color: green, valueSize: 16 }
+    ]);
+
+    y += 188;
+    pdf.setFillColor(...yellow);
+    pdf.setDrawColor(255, 196, 0);
+    pdf.roundedRect(margin, y, contentWidth, 92, 10, 10, "FD");
+    setText(navy, 16, "bold");
+    pdf.text("Savings Breakdown", margin + 16, y + 24);
+    setText(red, 10.5, "bold");
+    pdf.text(value("apsCostBreakdownLabel"), margin + 16, y + 48);
+    pdf.text(value("apsCostDisplay"), pageWidth - margin - 16, y + 48, { align: "right" });
+    pdf.setDrawColor(210, 210, 190);
+    pdf.line(margin + 16, y + 58, pageWidth - margin - 16, y + 58);
+    setText(green, 10.5, "bold");
+    pdf.text(value("netSavingsLabel"), margin + 16, y + 78);
+    pdf.text(value("netSavingsDisplay"), pageWidth - margin - 16, y + 78, { align: "right" });
+
+    setText(gray, 8, "normal");
+    pdf.text("Get Paid Solar • Estimate prepared " + new Date().toLocaleDateString("en-US"), margin, pageHeight - 24);
+    pdf.text("Page 1 of 2", pageWidth - margin, pageHeight - 24, { align: "right" });
+
+    // PAGE 2 — chart and important notice
+    pdf.addPage();
+    setText(navy, 22, "bold");
+    pdf.text("25-Year Monthly Cost Comparison", pageWidth / 2, 50, { align: "center" });
+    setText(gray, 10.5, "normal");
+    pdf.text("Projected APS cost compared with solar payment plus the remaining APS bill", pageWidth / 2, 68, { align: "center" });
+
+    const chartImage = await createPdfChartImage();
+    if (chartImage) {
+      pdf.setFillColor(255, 255, 255);
+      pdf.setDrawColor(...lineGray);
+      pdf.roundedRect(margin, 88, contentWidth, 335, 10, 10, "FD");
+      pdf.addImage(chartImage, "PNG", margin + 12, 102, contentWidth - 24, 305, undefined, "FAST");
+    }
+
+    let noticeY = 448;
+    pdf.setFillColor(255, 245, 245);
+    pdf.setDrawColor(...red);
+    pdf.setLineWidth(1.5);
+    pdf.roundedRect(margin, noticeY, contentWidth, 220, 10, 10, "FD");
+    setText(red, 16, "bold");
+    pdf.text("IMPORTANT ESTIMATE NOTICE", margin + 16, noticeY + 27);
+
+    let textY = noticeY + 50;
+    textY = wrappedText(
+      "The figures shown are estimates only and are based on your current energy usage, current utility rates, estimated solar production, projected utility rate increases, and available incentive programs.",
+      margin + 16, textY, contentWidth - 32, 14, [153, 27, 27], 10.5, "bold"
+    );
+    textY += 8;
+    wrappedText(
+      "Actual savings may be higher or lower depending on future energy consumption, weather conditions, utility rate changes, battery charging losses, battery reserve settings, equipment limits, home upgrades, electric vehicle charging, pool usage, occupancy changes, solar production, and participation in available programs. Savings amounts, utility costs, battery rewards, and incentive payments are not guaranteed.",
+      margin + 16, textY, contentWidth - 32, 13, [153, 27, 27], 9.5, "normal"
+    );
+
+    wrappedText(
+      "Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.",
+      margin, 698, contentWidth, 11, gray, 8.5, "normal"
+    );
+
+    setText(gray, 8, "normal");
+    pdf.text("Get Paid Solar • Estimate prepared " + new Date().toLocaleDateString("en-US"), margin, pageHeight - 24);
+    pdf.text("Page 2 of 2", pageWidth - margin, pageHeight - 24, { align: "right" });
+
+    const today = new Date().toISOString().slice(0, 10);
+    pdf.save(`GPS-Solar-Savings-${today}.pdf`);
+  } catch (error) {
+    console.error("PDF creation failed:", error);
+    alert("The PDF could not be created. Please refresh the page and try again.");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Download PDF";
+  }
+}
+
+document.getElementById("downloadClientPdf").addEventListener("click", downloadClientPdf);
+
+
+calculateSavings();
+</script>
+
+</body>
+</html>
