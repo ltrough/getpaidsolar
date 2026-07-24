@@ -1195,6 +1195,45 @@ body {
   text-align: center;
 }
 
+
+
+/* Simplified 14% and 5-year comparison views: no inner cards or extra labels */
+#aps14Comparison .gps-comparison-group {
+  padding: 26px 22px 24px;
+}
+
+#aps14Comparison .gps-comparison-title {
+  margin-bottom: 20px;
+}
+
+#aps14Comparison .gps-comparison-cards,
+#aps14Comparison .gps-comparison-card {
+  display: block;
+}
+
+#aps14Comparison .gps-comparison-card {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+#aps14Comparison .gps-comparison-card h3 {
+  display: none !important;
+}
+
+#aps14Comparison .gps-comparison-value {
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 900;
+  text-align: center;
+}
+
+#aps14Comparison .gps-comparison-save {
+  margin-top: 16px;
+}
+
 </style>
 </head>
 <body>
@@ -1277,7 +1316,7 @@ body {
     <h2 class="gps-comparison-title">Staying with APS</h2>
     <div class="gps-comparison-cards gps-single-card">
       <div class="gps-comparison-card">
-        <h3 id="aps14MonthlyLabel">Estimated APS Monthly Bill<br>After 14% Increase</h3>
+        <h3 id="aps14MonthlyLabel" aria-hidden="true"></h3>
         <div class="gps-comparison-value aps-value" id="aps14CurrentBill">$0.00</div>
       </div>
     </div>
@@ -1287,13 +1326,11 @@ body {
     <h2 class="gps-comparison-title">Going with Solar</h2>
     <div class="gps-comparison-cards gps-single-card">
       <div class="gps-comparison-card">
-        <h3 id="aps14SolarLabel">New Solar Monthly Payment</h3>
+        <h3 id="aps14SolarLabel" aria-hidden="true"></h3>
         <div class="gps-comparison-value solar-value" id="aps14SolarPayment">$0.00</div>
         <div class="gps-comparison-save">
           <div class="save-label">SAVE</div>
           <div class="save-main" id="aps14MonthlySavings">$0.00/mo</div>
-          
-          
         </div>
       </div>
     </div>
