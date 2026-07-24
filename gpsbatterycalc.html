@@ -1293,8 +1293,12 @@ function calculateSavings() {
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
   const gpsIncentive = 0;
 
+
   const annualUsageKwh = Math.max(parseFloat(document.getElementById("annualUsageKwh").value) || 0, 0);
   const solarOffsetPercent = Math.min(Math.max(parseFloat(document.getElementById("solarOffsetPercent").value) || 0, 0), 100);
+  // A zero solar payment means there is no active solar proposal.
+  // Keep every solar result at zero until a solar payment is entered.
+  const solarScenarioActive = solarMonthly > 0;
   const offPeakRate = Math.max(parseFloat(document.getElementById("offPeakRate").value) || 0, 0);
   const offPeakRateIncrease = displayedApsIncrease;
   const usableBatteryKwh = Math.max(parseFloat(document.getElementById("usableBatteryKwh").value) || 0, 0);
@@ -1329,7 +1333,10 @@ function calculateSavings() {
     Math.max(peakRate - offPeakRate, 0);
 
   const partialOffsetIsActive =
-    annualUsageKwh > 0 && solarOffsetPercent < 100;
+    solarScenarioActive &&
+    annualUsageKwh > 0 &&
+    solarOffsetPercent > 0 &&
+    solarOffsetPercent < 100;
 
   const firstYearRemainingGridMonthlyCost =
     partialOffsetIsActive
@@ -1344,28 +1351,39 @@ function calculateSavings() {
 
   if (remainingGridKwhDisplay) {
     remainingGridKwhDisplay.textContent =
-      remainingGridMonthlyKwh.toLocaleString("en-US", { maximumFractionDigits: 0 }) + " kWh/mo";
+      partialOffsetIsActive
+        ? remainingGridMonthlyKwh.toLocaleString("en-US", { maximumFractionDigits: 0 }) + " kWh/mo"
+        : "0 kWh/mo";
   }
 
   if (remainingGridCostDisplay) {
-    remainingGridCostDisplay.textContent = money(firstYearRemainingGridMonthlyCost) + "/mo";
+    remainingGridCostDisplay.textContent =
+      partialOffsetIsActive
+        ? money(firstYearRemainingGridMonthlyCost) + "/mo"
+        : "$0.00/mo";
   }
 
   if (batteryCoverageDisplay) {
-    batteryCoverageDisplay.textContent = batteryCoveragePercent.toFixed(1) + "%";
+    batteryCoverageDisplay.textContent =
+      partialOffsetIsActive
+        ? batteryCoveragePercent.toFixed(1) + "%"
+        : "0.0%";
   }
 
   if (partialOffsetExplanation) {
     partialOffsetExplanation.textContent = partialOffsetIsActive
       ? `${solarOffsetPercent.toFixed(1)}% of annual energy is supplied by solar. The remaining ${(100 - solarOffsetPercent).toFixed(1)}% is modeled as grid energy, primarily purchased at the off-peak rate.`
-      : "Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.";
+      : "Enter a solar payment, solar offset, and applicable battery/grid rates to calculate this estimate.";
   }
 
   if (batteryCoverageWarning) {
-    batteryCoverageWarning.textContent =
-      uncoveredPeakKwhPerDay <= 0
-        ? `The entered battery capacity covers the full ${peakUsageKwh.toFixed(1)} kWh 4–7 PM requirement.`
-        : `Battery capacity is short by ${uncoveredPeakKwhPerDay.toFixed(1)} kWh per peak day, so that portion is priced at the entered peak rate.`;
+    batteryCoverageWarning.textContent = partialOffsetIsActive
+      ? (
+          uncoveredPeakKwhPerDay <= 0
+            ? `The entered battery capacity covers the full ${peakUsageKwh.toFixed(1)} kWh 4–7 PM requirement.`
+            : `Battery capacity is short by ${uncoveredPeakKwhPerDay.toFixed(1)} kWh per peak day, so that portion is priced at the entered peak rate.`
+        )
+      : "";
   }
 
   const batteryRewardYears = 5;
@@ -1421,7 +1439,9 @@ function calculateSavings() {
 
     // The chart/detailed view is the 14% scenario, so use the 14%-adjusted APS line.
     apsMonthlyData.push(Number(apsMonthlyAfter14.toFixed(2)));
-    solarMonthlyData.push(Number(solarMonthlyAfterRewards.toFixed(2)));
+    solarMonthlyData.push(
+      solarScenarioActive ? Number(solarMonthlyAfterRewards.toFixed(2)) : 0
+    );
 
     apsTotal += apsMonthlyCurrentRates * 12;
     solarTotal += combinedSolarAndGridMonthlyYear * 12;
@@ -1460,10 +1480,12 @@ function calculateSavings() {
 
   const netSavings = currentRatesNetSavings25;
 
-  const newAvgMonthlyBill = Math.max(
-    solarMonthly + firstYearRemainingGridMonthlyCost - monthlyBatteryCredit,
-    0
-  );
+  const newAvgMonthlyBill = solarScenarioActive
+    ? Math.max(
+        solarMonthly + firstYearRemainingGridMonthlyCost - monthlyBatteryCredit,
+        0
+      )
+    : 0;
 
   const initialCurrentAps = document.getElementById("initialCurrentAps");
   const initialAps25 = document.getElementById("initialAps25");
@@ -1477,6 +1499,10 @@ function calculateSavings() {
   let summaryApsMonthly = apsBill;
   let summaryApsTotal = apsAfter14Total25Years;
   let summaryNetSavings = after14NetSavings25;
+
+  if (!solarScenarioActive) {
+    summaryNetSavings = 0;
+  }
 
   if (showingFourteenPercentScenario) {
     const apsMonthlyAfter14 =
@@ -1529,10 +1555,10 @@ function calculateSavings() {
 
   if (initialCurrentAps) initialCurrentAps.textContent = money(summaryApsMonthly);
   if (initialAps25) initialAps25.textContent = money(summaryApsTotal);
-  if (initialSolarMonthly) initialSolarMonthly.textContent = money(newAvgMonthlyBill);
-  if (initialSavings25) initialSavings25.textContent = money(summaryNetSavings);
+  if (initialSolarMonthly) initialSolarMonthly.textContent = money(solarScenarioActive ? newAvgMonthlyBill : 0);
+  if (initialSavings25) initialSavings25.textContent = money(solarScenarioActive ? summaryNetSavings : 0);
 
-  const percentLower = apsBill > 0
+  const percentLower = solarScenarioActive && apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
     : 0;
 
@@ -1544,9 +1570,9 @@ function calculateSavings() {
     : apsBill;
 
   const summaryMonthlySavings =
-    Math.max(summaryComparisonBill - newAvgMonthlyBill, 0);
+    solarScenarioActive ? Math.max(summaryComparisonBill - newAvgMonthlyBill, 0) : 0;
 
-  const summaryPercentLower = summaryComparisonBill > 0
+  const summaryPercentLower = solarScenarioActive && summaryComparisonBill > 0
     ? (summaryMonthlySavings / summaryComparisonBill) * 100
     : 0;
 
@@ -1581,11 +1607,12 @@ function calculateSavings() {
   const selectedApsMonthly = apsMonthlyData[selectedIndex];
   const selectedSolarMonthlyAfterRewards = solarMonthlyData[selectedIndex];
 
-  const selectedMonthlySavings =
-    Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0);
+  const selectedMonthlySavings = solarScenarioActive
+    ? Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0)
+    : 0;
 
   const selectedPercentLower =
-    selectedApsMonthly > 0
+    solarScenarioActive && selectedApsMonthly > 0
       ? (selectedMonthlySavings / selectedApsMonthly) * 100
       : 0;
 
@@ -1612,7 +1639,7 @@ function calculateSavings() {
     `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
 
   document.getElementById("newAvgMonthly").textContent =
-    money(selectedSolarMonthlyAfterRewards);
+    money(solarScenarioActive ? selectedSolarMonthlyAfterRewards : 0);
   document.getElementById("percentLower").textContent = percentLower.toFixed(1) + "%";
   document.getElementById("percentLowerAfterIncrease").textContent =
     selectedPercentLower.toFixed(1) + "%";
@@ -1623,7 +1650,7 @@ function calculateSavings() {
       `than APS in year ${selectedSavingsYears}`;
   }
 
-  document.getElementById("totalSavings").textContent = money(selectedNetSavings);
+  document.getElementById("totalSavings").textContent = money(solarScenarioActive ? selectedNetSavings : 0);
 
   const detailedViewIsOpen =
     document.getElementById("detailedResultsView").classList.contains("gps-show");
@@ -1634,7 +1661,7 @@ function calculateSavings() {
     document.getElementById("apsCostBreakdownLabel").textContent =
       `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
     document.getElementById("netSavingsDisplay").textContent =
-      money(selectedNetSavings);
+      money(solarScenarioActive ? selectedNetSavings : 0);
     document.getElementById("netSavingsLabel").textContent =
       `Total Estimated ${selectedSavingsYears}-Year Savings After APS 14% Increase`;
   } else if (showingFourteenPercentScenario) {
@@ -1643,7 +1670,7 @@ function calculateSavings() {
     document.getElementById("apsCostBreakdownLabel").textContent =
       "APS 25-Year Cost After 14% Increase";
     document.getElementById("netSavingsDisplay").textContent =
-      money(after14NetSavings25);
+      money(solarScenarioActive ? after14NetSavings25 : 0);
     document.getElementById("netSavingsLabel").textContent =
       "Total Estimated 25-Year Savings After APS 14% Increase";
   } else {
@@ -1652,7 +1679,7 @@ function calculateSavings() {
     document.getElementById("apsCostBreakdownLabel").textContent =
       "APS 25-Year Cost After 14% First-Year Increase";
     document.getElementById("netSavingsDisplay").textContent =
-      money(after14NetSavings25);
+      money(solarScenarioActive ? after14NetSavings25 : 0);
     document.getElementById("netSavingsLabel").textContent =
       "Total Estimated 25-Year Savings After 14% First-Year APS Increase";
   }
