@@ -1721,6 +1721,12 @@ function calculateSavings() {
             size: 13,
             weight: "normal"
           },
+          footerColor: "#16a34a",
+          footerFont: {
+            size: 18,
+            weight: "bold"
+          },
+          footerMarginTop: 10,
           callbacks: {
             title: function(context) {
               return "Year " + context[0].label;
@@ -1728,12 +1734,12 @@ function calculateSavings() {
             label: function(context) {
               return context.dataset.label + "     " + money(context.parsed.y);
             },
-            afterBody: function(context) {
+            footer: function(context) {
               const aps = context[0].parsed.y;
               const solar = context[1].parsed.y;
               const savings = aps - solar;
 
-              return "\nMonthly difference     ↓ " + money(savings);
+              return "MONTHLY DIFFERENCE  ↓  " + money(savings);
             }
           }
         },
