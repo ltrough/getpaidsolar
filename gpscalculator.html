@@ -1162,6 +1162,11 @@ const verticalHoverLine = {
 };
 
 Chart.register(verticalHoverLine);
+Chart.register({
+  id:"greenTooltipDiff",
+  afterBodyDraw(){}
+});
+
 
 function calculateSavings() {
   const apsBill = parseFloat(document.getElementById("apsBill").value) || 0;
@@ -1508,13 +1513,22 @@ function calculateSavings() {
           boxWidth: 10,
           boxHeight: 10,
           titleFont: {
-            size: 13,
+            size: 15,
             weight: "bold"
           },
           bodyFont: {
-            size: 13,
+            size: 14,
             weight: "normal"
           },
+          footerFont:{
+            size:18,
+            weight:"bold"
+          },
+          labelTextColor: function(ctx){
+            if(ctx.datasetIndex===1) return "#8b5cf6";
+            return "#ff5a1f";
+          },
+          footerColor:"#22c55e",
           callbacks: {
             title: function(context) {
               return "Year " + context[0].label;
@@ -1522,12 +1536,11 @@ function calculateSavings() {
             label: function(context) {
               return context.dataset.label + "     " + money(context.parsed.y);
             },
-            afterBody: function(context) {
-              const aps = context[0].parsed.y;
-              const solar = context[1].parsed.y;
-              const savings = aps - solar;
-
-              return "\nMonthly difference     ↓ " + money(savings);
+            footer: function(context){
+              const aps=context[0].parsed.y;
+              const solar=context[1].parsed.y;
+              const savings=aps-solar;
+              return "MONTHLY DIFFERENCE     "+money(savings);
             }
           }
         },

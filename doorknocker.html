@@ -957,54 +957,242 @@ body {
 }
 
 .gps-chart-tooltip {
-  position:absolute;
-  display:none;
-  min-width:118px;
-  padding:5px 7px;
-  background:#fff;
-  border:1px solid #cbd5e1;
-  border-radius:10px;
-  box-shadow:0 3px 8px rgba(15,23,42,.14);
-  pointer-events:none;
-  z-index:20;
-  transform:translate(-50%,-115%);
-  font-family:Arial,Helvetica,sans-serif;
+  position: absolute;
+  display: none;
+  width: 310px;
+  box-sizing: border-box;
+  padding: 12px 13px 11px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+  pointer-events: none;
+  z-index: 20;
+  transform: translate(-50%, -112%);
+  font-family: Arial, Helvetica, sans-serif;
 }
-.gps-chart-tooltip-year{
-  color:#061b3a;
-  font-size:14px;
-  font-weight:900;
-  margin-bottom:4px;
+
+.gps-chart-tooltip-year {
+  color: #061b3a;
+  font-size: 15px;
+  font-weight: 900;
+  margin-bottom: 7px;
 }
-.gps-chart-tooltip-row{
-  display:grid;
-  grid-template-columns:34px auto;
-  align-items:center;
-  column-gap:4px;
-  font-size:11px;
-  font-weight:900;
-  line-height:1.15;
+
+.gps-chart-tooltip-row {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 5px;
+  margin: 3px 0;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.gps-chart-tooltip-swatch {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
+.gps-chart-tooltip-row.aps .gps-chart-tooltip-swatch {
+  background: #ff5a1f;
+}
+
+.gps-chart-tooltip-row.solar .gps-chart-tooltip-swatch {
+  background: #8b5cf6;
 }
 
 .gps-chart-tooltip-row .label {
   text-align: left;
+  white-space: nowrap;
 }
 
 .gps-chart-tooltip-row .value {
   text-align: right;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.gps-chart-tooltip-row.aps {
-  color: #dc2626;
+.gps-chart-tooltip-difference {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 18px;
+  margin-top: 6px;
+  color: #00c853;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
 }
 
-.gps-chart-tooltip-row.solar {
-  color: #7c3aed;
+.gps-chart-tooltip-difference .label,
+.gps-chart-tooltip-difference .value {
+  white-space: nowrap;
 }
 
-.gps-chart-tooltip-row.save {
-  color: #16a34a;
+.gps-chart-tooltip-difference .value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+  .gps-chart-tooltip {
+    width: 280px;
+  }
+
+  .gps-chart-tooltip-difference {
+    font-size: 15px;
+    column-gap: 10px;
+  }
+}
+
+
+/* Editable bill fields displayed directly inside the comparison tiles */
+.gps-tile-money-input {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  max-width: 230px;
+}
+
+.gps-tile-money-input span {
+  padding: 11px 12px;
+  font-size: 25px;
+  font-weight: 900;
+  background: #eef2f7;
+  border-right: 1px solid #d1d5db;
+}
+
+.gps-tile-money-input input {
+  width: 150px;
+  padding: 10px 12px;
+  border: 0;
+  outline: none;
+  background: #ffffff;
+  font-size: 27px;
+  font-weight: 900;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.gps-tile-money-input.aps-tile-input span,
+.gps-tile-money-input.aps-tile-input input {
+  color: #ff4f0a;
+}
+
+.gps-tile-money-input.solar-tile-input span,
+.gps-tile-money-input.solar-tile-input input {
+  color: #8b5cf6;
+}
+
+
+/* Simplified current bill tiles: one visible card per side */
+#standardSummary .gps-comparison-group {
+  padding: 26px 22px 24px;
+}
+
+#standardSummary .gps-comparison-title {
+  margin-bottom: 20px;
+}
+
+#standardSummary .gps-comparison-cards,
+#standardSummary .gps-comparison-card {
+  display: block;
+}
+
+#standardSummary .gps-comparison-card {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+#standardSummary .gps-tile-money-input {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#standardSummary .gps-comparison-save {
+  margin-top: 16px;
+}
+
+
+/* Click-to-edit bill amounts: display like plain text until selected */
+#standardSummary .gps-tile-money-input {
+  width: auto;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 10px;
+  transition: background .18s ease, box-shadow .18s ease;
+}
+
+#standardSummary .gps-tile-money-input:hover {
+  background: rgba(255,255,255,.55);
+}
+
+#standardSummary .gps-tile-money-input span {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 31px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+#standardSummary .gps-tile-money-input input {
+  width: 118px;
+  padding: 0;
+  border: 0 !important;
+  outline: 0;
+  background: transparent;
+  font-size: 31px;
+  line-height: 1.1;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+#standardSummary .gps-tile-money-input input::-webkit-inner-spin-button,
+#standardSummary .gps-tile-money-input input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#standardSummary .gps-tile-money-input.gps-editing {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px #94a3b8;
+}
+
+#standardSummary .gps-tile-money-input.gps-editing input {
+  cursor: text;
+}
+
+#standardSummary .gps-edit-hint {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
 }
 
 </style>
@@ -1052,41 +1240,27 @@ body {
 </div>
 </div>
 </div>
-<div class="gps-input-panel">
-<div class="gps-input-grid">
-<div class="gps-calc-field">
-<label>Current Average APS Monthly Bill</label>
-<div class="money-input">
-<span>$</span>
-<input id="apsBill" step="0.01" type="number" value="250.00"/>
-</div>
-</div>
-<div class="gps-calc-field">
-<label>New Solar Monthly Payment</label>
-<div class="money-input">
-<span>$</span>
-<input id="solarMonthly" step="0.01" type="number" value="200.00"/>
-</div>
-</div>
-</div>
-</div>
 <div class="gps-comparison-panel gps-show gps-standard-summary" id="standardSummary">
   <div class="gps-comparison-group aps-group">
-    <h2 class="gps-comparison-title">Staying with APS</h2>
+    <h2 class="gps-comparison-title">Current APS Bill</h2>
     <div class="gps-comparison-cards gps-single-card">
       <div class="gps-comparison-card">
-        <h3>Current APS Monthly Bill</h3>
-        <div class="gps-comparison-value aps-value" id="currentApsBillDisplay">$0.00</div>
+        <div class="gps-tile-money-input aps-tile-input">
+          <span>$</span>
+          <input id="apsBill" step="0.01" type="number" value="250.00" aria-label="Current APS bill" readonly/>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="gps-comparison-group solar-group">
-    <h2 class="gps-comparison-title">Going with Solar</h2>
+    <h2 class="gps-comparison-title">New Solar Bill</h2>
     <div class="gps-comparison-cards gps-single-card">
       <div class="gps-comparison-card">
-        <h3>New Solar Monthly Payment</h3>
-        <div class="gps-comparison-value solar-value" id="currentSolarPaymentDisplay">$0.00</div>
+        <div class="gps-tile-money-input solar-tile-input">
+          <span>$</span>
+          <input id="solarMonthly" step="0.01" type="number" value="200.00" aria-label="New solar bill" readonly/>
+        </div>
         <div class="gps-comparison-save">
           <div class="save-label">SAVE</div>
           <div class="save-main" id="currentMonthlySavings">$0.00/mo</div>
@@ -2228,15 +2402,17 @@ function calculateSavings() {
             tooltipEl.innerHTML =
               '<div class="gps-chart-tooltip-year">Year ' + apsPoint.label + '</div>' +
               '<div class="gps-chart-tooltip-row aps">' +
-                '<span class="label">APS</span>' +
+                '<span class="gps-chart-tooltip-swatch"></span>' +
+                '<span class="label">Pre-solar</span>' +
                 '<span class="value">' + money(apsValue) + '</span>' +
               '</div>' +
               '<div class="gps-chart-tooltip-row solar">' +
-                '<span class="label">Solar</span>' +
+                '<span class="gps-chart-tooltip-swatch"></span>' +
+                '<span class="label">Post-solar</span>' +
                 '<span class="value">' + money(solarValue) + '</span>' +
               '</div>' +
-              '<div class="gps-chart-tooltip-row save">' +
-                '<span class="label">Save</span>' +
+              '<div class="gps-chart-tooltip-difference">' +
+                '<span class="label">MONTHLY DIFFERENCE</span>' +
                 '<span class="value">' + money(savingsValue) + '</span>' +
               '</div>';
 
@@ -2251,7 +2427,7 @@ function calculateSavings() {
               (canvasRect.top - wrapRect.top) +
               tooltip.caretY;
 
-            const tooltipWidth = 170;
+            const tooltipWidth = window.innerWidth <= 520 ? 280 : 310;
             const minLeft = tooltipWidth / 2 + 8;
             const maxLeft = wrapRect.width - tooltipWidth / 2 - 8;
 
@@ -2381,6 +2557,57 @@ document.getElementById("manualAddress").addEventListener("keydown", function (e
   }
 });
 
+
+function setupClickToEditBills() {
+  ["apsBill", "solarMonthly"].forEach(function(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+
+    const wrapper = input.closest(".gps-tile-money-input");
+    let originalValue = input.value;
+
+    function beginEdit() {
+      originalValue = input.value;
+      input.readOnly = false;
+      if (wrapper) wrapper.classList.add("gps-editing");
+      input.focus();
+      input.select();
+    }
+
+    function finishEdit() {
+      input.value = (parseFloat(input.value) || 0).toFixed(2);
+      input.readOnly = true;
+      if (wrapper) wrapper.classList.remove("gps-editing");
+      calculateSavings();
+    }
+
+    if (wrapper) {
+      wrapper.addEventListener("click", function() {
+        if (input.readOnly) beginEdit();
+      });
+    }
+
+    input.addEventListener("click", function(event) {
+      if (input.readOnly) {
+        event.preventDefault();
+        beginEdit();
+      }
+    });
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        input.blur();
+      } else if (event.key === "Escape") {
+        input.value = originalValue;
+        input.blur();
+      }
+    });
+
+    input.addEventListener("blur", finishEdit);
+  });
+}
+
 document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
   input.addEventListener("input", calculateSavings);
   input.addEventListener("change", calculateSavings);
@@ -2394,6 +2621,7 @@ document.querySelectorAll("#gps-savings-calculator input").forEach(input => {
 
 updateReportHeading("Your Home");
 setupGeoapifyAutocomplete();
+setupClickToEditBills();
 calculateSavings();
 </script>
 <script async="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB08Feth79-2v_eUwUIBwja7e0P0nTtH_M&amp;libraries=geometry">
