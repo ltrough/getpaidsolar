@@ -998,14 +998,16 @@ body {
 </div>
         </div>
 
-        <div class="gps-calc-field">
-          <label>GPS Cash Incentive</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="gpsIncentive" value="0.00" step="0.01">
-          </div>
-        </div>
 
+        
+
+        
+
+        
+
+        
+
+        
 
         <div class="gps-calc-field">
           <label>Annual Home Energy Usage (kWh)</label>
@@ -1013,62 +1015,36 @@ body {
           <div class="gps-help-text">
             Enter the customer's annual usage from the APS bill history or solar proposal.
           </div>
-        </div>
-
-        <div class="gps-calc-field">
+        </div><div class="gps-calc-field">
           <label>Solar Energy Offset %</label>
           <input type="number" id="solarOffsetPercent" value="100" step="0.1" min="0" max="100">
           <div class="gps-help-text">
             Example: enter 64 for a system expected to produce 64% of annual usage.
           </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Off-Peak Grid Energy Rate ($/kWh)</label>
-          <div class="money-input">
-            <span>$</span>
-            <input type="number" id="offPeakRate" value="0.06" step="0.001" min="0">
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Off-Peak Rate Annual Increase %</label>
-          <input type="number" id="offPeakRateIncrease" value="5" step="0.01" min="0">
-          <div class="gps-help-text">
-            Set this to 0% only when modeling a flat $0.06 rate for all 25 years.
-          </div>
-        </div>
-
-        <div class="gps-calc-field">
+        </div><div class="gps-calc-field">
           <label>Usable Battery Energy (kWh)</label>
           <input type="number" id="usableBatteryKwh" value="27" step="0.1" min="0">
         </div>
 
         <div class="gps-calc-field">
-          <label>Average 4–7 PM Energy Use (kWh/day)</label>
+          <label>Highest 4–7 PM Energy Use (kWh/day)</label>
           <input type="number" id="peakUsageKwh" value="25" step="0.1" min="0">
           <div class="gps-help-text">
             Used to verify that the batteries can cover the entire 4–7 PM period.
           </div>
-        </div>
-
-        <div class="gps-calc-field">
+        </div><div class="gps-calc-field">
+          <label>Off-Peak Grid Energy Rate ($/kWh)</label>
+          <div class="money-input">
+            <span>$</span>
+            <input type="number" id="offPeakRate" value="0.06" step="0.001" min="0">
+          </div>
+        </div><div class="gps-calc-field">
           <label>APS On-Peak Rate (4–7 PM) ($/kWh)</label>
           <div class="money-input">
             <span>$</span>
             <input type="number" id="peakRate" value="0.30" step="0.001" min="0">
           </div>
-        </div>
-
-        <div class="gps-calc-field">
-          <label>Peak Days per Year</label>
-          <input type="number" id="peakDaysPerYear" value="260" step="1" min="0" max="366">
-          <div class="gps-help-text">
-            Default is approximately 5 weekdays × 52 weeks.
-          </div>
-        </div>
-
-        <div id="partialOffsetSummary" class="partial-offset-summary">
+        </div><div id="partialOffsetSummary" class="partial-offset-summary">
           <div class="partial-offset-summary-title">Partial Offset + Battery Rate-Shifting Estimate</div>
           <div id="partialOffsetExplanation">
             Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.
@@ -1315,16 +1291,16 @@ function calculateSavings() {
   const solarEscalator =
     (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
-  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+  const gpsIncentive = 0;
 
   const annualUsageKwh = Math.max(parseFloat(document.getElementById("annualUsageKwh").value) || 0, 0);
   const solarOffsetPercent = Math.min(Math.max(parseFloat(document.getElementById("solarOffsetPercent").value) || 0, 0), 100);
   const offPeakRate = Math.max(parseFloat(document.getElementById("offPeakRate").value) || 0, 0);
-  const offPeakRateIncrease = Math.max((parseFloat(document.getElementById("offPeakRateIncrease").value) || 0) / 100, 0);
+  const offPeakRateIncrease = displayedApsIncrease;
   const usableBatteryKwh = Math.max(parseFloat(document.getElementById("usableBatteryKwh").value) || 0, 0);
   const peakUsageKwh = Math.max(parseFloat(document.getElementById("peakUsageKwh").value) || 0, 0);
   const peakRate = Math.max(parseFloat(document.getElementById("peakRate").value) || 0, 0);
-  const peakDaysPerYear = Math.max(parseFloat(document.getElementById("peakDaysPerYear").value) || 0, 0);
+  const peakDaysPerYear = 260;
 
   const fixedCharge = 13.785;
   const energyPortion = Math.max(apsBill - fixedCharge, 0);
@@ -2107,7 +2083,7 @@ async function downloadClientPdf() {
     assumptionBox(margin + colW + gap, y, colW, "Solar annual rate lock", `${inputValue("solarEscalator")}%`);
     y += 62;
     assumptionBox(margin, y, colW, "APS VPP annual reward (5 years)", moneyFromInput("batteryCredit"));
-    assumptionBox(margin + colW + gap, y, colW, "GPS cash incentive", moneyFromInput("gpsIncentive"));
+    assumptionBox(margin + colW + gap, y, colW, "Peak days modeled per year", "260");
 
     y += 78;
     y = sectionTitle(isDetailed ? "Detailed savings results" : "25-year savings summary", y);
