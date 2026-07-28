@@ -919,6 +919,7 @@ body {
         <div class="gps-calc-field">
           <label>Solar Annual Rate Lock %</label>
           <select id="solarEscalator" aria-label="Select solar annual rate lock">
+            <option value="0">0%</option>
             <option value="1.9" selected>1.9%</option>
             <option value="2.99">2.99%</option>
           </select>
@@ -1252,7 +1253,7 @@ function calculateSavings() {
     : 0;
 
   // These shared 25-year totals use the currently selected solar escalator
-  // (1.9% or 2.99%) and are reused by every summary/detail view.
+  // (0%, 1.9%, or 2.99%) and are reused by every summary/detail view.
   const solarTotal25Years = cumulativeSolarTotals[24];
   const currentRatesNetSavings25 =
     apsTotal - solarTotal25Years + batteryTotal + gpsIncentive;
