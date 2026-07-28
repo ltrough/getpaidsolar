@@ -438,10 +438,17 @@ function calculate(){
   const partialSavings = hasPartialProposal ? stayingApsTotal - partialTotal : 0;
   const fullSavings = hasFullProposal ? stayingApsTotal - fullTotal : 0;
 
-  const partialStart = hasPartialProposal ? partialSolar + partialAps : 0;
+  const adjustedPartialAps = showingFourteenPercentScenario ? partialAps * 1.14 : partialAps;
+  const adjustedFullAps = showingFourteenPercentScenario ? fullAps * 1.14 : fullAps;
+
+  const partialStart = hasPartialProposal
+    ? partialSolar + adjustedPartialAps
+    : 0;
+
   const monthlyVpp = hasFullProposal ? vpp / 12 : 0;
+
   const fullAfterRewards = hasFullProposal
-    ? Math.max(fullSolar + fullAps - monthlyVpp,0)
+    ? Math.max(fullSolar + adjustedFullAps - monthlyVpp,0)
     : 0;
 
   const displayedApsMonthly = showingFourteenPercentScenario
