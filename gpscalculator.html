@@ -1244,11 +1244,12 @@ function calculateSavings() {
   const selectedApsTotal = cumulativeApsTotals[selectedIndex];
   const selectedSolarTotal = cumulativeSolarTotals[selectedIndex];
 
-  const selectedNetSavings =
-    selectedApsTotal -
-    selectedSolarTotal +
-    selectedBatteryTotal +
-    gpsIncentive;
+  const selectedNetSavings = solarMonthly > 0
+    ? selectedApsTotal -
+      selectedSolarTotal +
+      selectedBatteryTotal +
+      gpsIncentive
+    : 0;
 
   // These shared 25-year totals use the currently selected solar escalator
   // (1.9% or 2.99%) and are reused by every summary/detail view.
@@ -1260,9 +1261,16 @@ function calculateSavings() {
   const after14NetSavings25 =
     apsAfter14Total25Years - solarTotal25Years + batteryTotal + gpsIncentive;
 
-  const netSavings = currentRatesNetSavings25;
+  // When there is no solar payment entered, treat the calculator as having
+  // no active solar proposal. APS projections remain visible, but every
+  // savings figure must be zero instead of implying free solar.
+  const hasSolarProposal = solarMonthly > 0;
 
-  const newAvgMonthlyBill = Math.max(solarMonthly - monthlyBatteryCredit, 0);
+  const netSavings = hasSolarProposal ? currentRatesNetSavings25 : 0;
+
+  const newAvgMonthlyBill = hasSolarProposal
+    ? Math.max(solarMonthly - monthlyBatteryCredit, 0)
+    : 0;
 
   const initialCurrentAps = document.getElementById("initialCurrentAps");
   const initialAps25 = document.getElementById("initialAps25");
@@ -1275,7 +1283,7 @@ function calculateSavings() {
 
   let summaryApsMonthly = apsBill;
   let summaryApsTotal = apsAfter14Total25Years;
-  let summaryNetSavings = after14NetSavings25;
+  let summaryNetSavings = hasSolarProposal ? after14NetSavings25 : 0;
 
   if (showingFourteenPercentScenario) {
     const apsMonthlyAfter14 =
@@ -1294,7 +1302,7 @@ function calculateSavings() {
 
     summaryApsMonthly = apsMonthlyAfter14;
     summaryApsTotal = apsAfter14Total25Years;
-    summaryNetSavings = after14NetSavings25;
+    summaryNetSavings = hasSolarProposal ? after14NetSavings25 : 0;
 
     if (initialApsMonthlyLabel) {
       initialApsMonthlyLabel.textContent =
@@ -1342,10 +1350,11 @@ function calculateSavings() {
     ? fixedCharge + (energyPortion * 1.14)
     : apsBill;
 
-  const summaryMonthlySavings =
-    Math.max(summaryComparisonBill - newAvgMonthlyBill, 0);
+  const summaryMonthlySavings = hasSolarProposal
+    ? Math.max(summaryComparisonBill - newAvgMonthlyBill, 0)
+    : 0;
 
-  const summaryPercentLower = summaryComparisonBill > 0
+  const summaryPercentLower = hasSolarProposal && summaryComparisonBill > 0
     ? (summaryMonthlySavings / summaryComparisonBill) * 100
     : 0;
 
@@ -1380,11 +1389,12 @@ function calculateSavings() {
   const selectedApsMonthly = apsMonthlyData[selectedIndex];
   const selectedSolarMonthlyAfterRewards = solarMonthlyData[selectedIndex];
 
-  const selectedMonthlySavings =
-    Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0);
+  const selectedMonthlySavings = hasSolarProposal
+    ? Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0)
+    : 0;
 
   const selectedPercentLower =
-    selectedApsMonthly > 0
+    hasSolarProposal && selectedApsMonthly > 0
       ? (selectedMonthlySavings / selectedApsMonthly) * 100
       : 0;
 
@@ -1442,7 +1452,7 @@ function calculateSavings() {
     document.getElementById("apsCostBreakdownLabel").textContent =
       "APS 25-Year Cost After 14% Increase";
     document.getElementById("netSavingsDisplay").textContent =
-      money(after14NetSavings25);
+      money(hasSolarProposal ? after14NetSavings25 : 0);
     document.getElementById("netSavingsLabel").textContent =
       "Total Estimated 25-Year Savings After APS 14% Increase";
   } else {
@@ -1451,7 +1461,7 @@ function calculateSavings() {
     document.getElementById("apsCostBreakdownLabel").textContent =
       "APS 25-Year Cost After 14% First-Year Increase";
     document.getElementById("netSavingsDisplay").textContent =
-      money(after14NetSavings25);
+      money(hasSolarProposal ? after14NetSavings25 : 0);
     document.getElementById("netSavingsLabel").textContent =
       "Total Estimated 25-Year Savings After 14% First-Year APS Increase";
   }
