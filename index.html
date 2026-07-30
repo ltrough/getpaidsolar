@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Get Paid Solar | GPS</title>
+<title>Arizona Solar &amp; Battery Savings | Get Paid Solar</title>
 
 <link rel="icon" type="image/png" href="images/favicon.png">
 
@@ -971,6 +971,548 @@ body{
     border-bottom:1px solid #ddd;
   }
 }
+
+/* ===== CLEAN HEADER + HERO UPDATE ===== */
+.header{
+  min-height:92px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:30px;
+  padding:14px 7%;
+  background:#041024;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  box-sizing:border-box;
+}
+
+.gps-logo{
+  width:min(300px,42vw);
+  max-height:76px;
+  object-fit:contain;
+}
+
+.banner-content{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  text-align:right;
+}
+
+.pay-banner-text{
+  display:none;
+}
+
+.phone{
+  margin:0;
+  color:#ffffff;
+  font-size:16px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.phone strong{
+  display:block;
+  color:#ffc400;
+  font-size:24px;
+  line-height:1.2;
+}
+
+.hero{
+  padding:40px 7% 64px;
+  background:linear-gradient(120deg,#06152f 0%,#062b63 52%,#06152f 100%);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(420px,.95fr);
+  gap:58px;
+  align-items:center;
+}
+
+.hero-copy{
+  max-width:680px;
+}
+
+.hero-eyebrow{
+  color:#ffc400;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.tagline{
+  margin:0 0 20px;
+  font-size:clamp(35px,4vw,62px);
+  line-height:1.02;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.tagline .yellow{
+  display:block;
+}
+
+.hero h1{
+  font-size:clamp(28px,3vw,46px);
+  line-height:1.08;
+  margin:0 0 22px;
+  text-transform:none;
+  color:white;
+}
+
+.hero h1 .green{
+  display:block;
+  margin-top:8px;
+  color:#20b832;
+  font-size:.78em;
+  text-transform:uppercase;
+}
+
+.hero p{
+  max-width:640px;
+  margin:0;
+  font-size:20px;
+  line-height:1.6;
+  color:#e9f1ff;
+}
+
+.hero-badges{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:28px 0 30px;
+}
+
+.hero-badge{
+  display:flex;
+  align-items:center;
+  min-height:54px;
+  padding:13px 16px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:13px;
+  background:rgba(255,255,255,.08);
+  font-size:17px;
+  font-weight:800;
+  line-height:1.25;
+  cursor:default;
+  transition:
+      transform .22s ease,
+      box-shadow .22s ease,
+      border-color .22s ease,
+      background .22s ease;
+}
+
+.hero-badge:hover{
+  transform:translateY(-5px) scale(1.03);
+  background:rgba(255,255,255,.14);
+  border-color:#ffc400;
+  box-shadow:
+      0 12px 28px rgba(0,0,0,.35),
+      0 0 18px rgba(255,196,0,.22);
+}
+
+.hero-badge::before{
+  content:"✓";
+  margin-right:10px;
+  color:#20b832;
+  font-size:21px;
+  font-weight:900;
+  transition:transform .22s ease;
+}
+
+.hero-badge:hover::before{
+  transform:scale(1.2);
+}
+
+.cta-button{
+  display:inline-block;
+  background:#ffc400;
+  color:#06152f;
+  padding:17px 26px;
+  border:0;
+  border-radius:11px;
+  text-decoration:none;
+  font-size:18px;
+  font-weight:900;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 7px 18px rgba(0,0,0,.24);
+}
+
+.cta-button:hover{
+  background:#ffd84d;
+  transform:translateY(-3px);
+  box-shadow:0 14px 30px rgba(0,0,0,.30);
+}
+
+.hero-image-card{
+  min-height:560px;
+  position:relative;
+  overflow:hidden;
+  border:2px solid #ffc400;
+  border-radius:24px;
+  background:#020b1d;
+  box-shadow:0 16px 35px rgba(0,0,0,.35);
+}
+
+.hero-pw3-image{
+  width:100%;
+  height:100%;
+  min-height:560px;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+}
+
+.hero-image-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(3,13,33,.94) 0%,rgba(3,13,33,.20) 55%,rgba(3,13,33,.04) 100%);
+}
+
+.hero-image-content{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:30px;
+}
+
+.hero-image-content h2{
+  margin:0 0 9px;
+  font-size:31px;
+  line-height:1.08;
+  text-transform:uppercase;
+}
+
+.hero-image-content p{
+  margin:0 0 20px;
+  font-size:17px;
+  line-height:1.45;
+  color:#f1f5f9;
+}
+
+.hero-image-stat{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero-image-stat span{
+  display:inline-block;
+  padding:9px 12px;
+  border-radius:9px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22);
+  font-size:14px;
+  font-weight:800;
+}
+
+.tesla-credit{
+  margin-top:13px;
+  font-size:12px;
+  color:#cbd5e1;
+}
+
+@media(max-width:900px){
+  .header{
+    min-height:auto;
+    padding:13px 5%;
+    flex-direction:row;
+    gap:16px;
+  }
+
+  .gps-logo{
+    width:min(210px,48vw);
+    max-height:60px;
+  }
+
+  .phone{
+    font-size:12px;
+  }
+
+  .phone strong{
+    font-size:17px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    padding:42px 5%;
+    gap:34px;
+    text-align:left;
+  }
+
+  .hero-badges{
+    grid-template-columns:1fr;
+  }
+
+  .hero-image-card,
+  .hero-pw3-image{
+    min-height:430px;
+  }
+
+  .hero-image-content{
+    padding:24px;
+  }
+
+  .hero-image-content h2{
+    font-size:25px;
+  }
+}
+
+@media(max-width:560px){
+  .header{
+    align-items:flex-start;
+  }
+
+  .phone{
+    text-align:right;
+  }
+
+  .phone .review-label{
+    display:none;
+  }
+
+  .hero{
+    padding-top:34px;
+  }
+
+  .tagline{
+    font-size:36px;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .hero p{
+    font-size:17px;
+  }
+
+  .cta-button{
+    width:100%;
+    box-sizing:border-box;
+    text-align:center;
+  }
+}
+
+
+/* ===== REFINED HERO TYPOGRAPHY ===== */
+.hero-copy{
+  position:relative;
+  max-width:700px;
+}
+
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  width:auto;
+  margin:0 0 22px;
+  padding:9px 14px;
+  border:1px solid rgba(255,196,0,.45);
+  border-radius:999px;
+  background:rgba(255,196,0,.08);
+  color:#ffc400;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.hero-eyebrow::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ffc400;
+  box-shadow:0 0 0 5px rgba(255,196,0,.13);
+  flex:0 0 auto;
+}
+
+.tagline{
+  position:relative;
+  margin:0 0 28px;
+  padding-bottom:22px;
+  font-size:clamp(42px,4.8vw,72px);
+  line-height:.98;
+  font-weight:900;
+  letter-spacing:-1.5px;
+  text-transform:uppercase;
+}
+
+.tagline::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:118px;
+  height:6px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ffc400 0%,#20b832 100%);
+}
+
+.tagline .yellow{
+  display:block;
+  margin-top:7px;
+  color:#ffc400;
+  font-size:1em;
+}
+
+.hero-message{
+  margin:0 0 22px;
+  padding:18px 20px;
+  border-left:5px solid #20b832;
+  border-radius:0 14px 14px 0;
+  background:linear-gradient(90deg,rgba(32,184,50,.13),rgba(255,255,255,.035));
+}
+
+.hero h1{
+  margin:0;
+  font-size:clamp(27px,2.7vw,42px);
+  line-height:1.12;
+  font-weight:800;
+  color:#ffffff;
+  text-transform:none;
+}
+
+.hero h1 .green{
+  display:inline-block;
+  margin:8px 0 0;
+  padding:6px 11px;
+  border-radius:8px;
+  background:rgba(32,184,50,.14);
+  color:#42d653;
+  font-size:.72em;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+.hero-intro{
+  position:relative;
+  max-width:630px;
+  margin:0;
+  padding-left:18px;
+  color:#e7eefb;
+  font-size:19px;
+  line-height:1.65;
+}
+
+.hero-intro::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.45em;
+  bottom:.45em;
+  width:2px;
+  background:rgba(255,196,0,.65);
+}
+
+.hero-trust-row{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:26px 0 4px;
+}
+
+.hero-trust-item{
+  padding:14px 12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  background:rgba(3,17,43,.35);
+  text-align:center;
+}
+
+.hero-trust-item strong{
+  display:block;
+  margin-bottom:3px;
+  color:#ffc400;
+  font-size:21px;
+  line-height:1;
+}
+
+.hero-trust-item span{
+  color:#dbe7f7;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+@media(max-width:900px){
+  .tagline{
+    font-size:clamp(40px,9vw,62px);
+  }
+
+  .hero-trust-row{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:560px){
+  .hero-eyebrow{
+    font-size:12px;
+    letter-spacing:1px;
+    padding:8px 11px;
+  }
+
+  .tagline{
+    font-size:40px;
+    letter-spacing:-.8px;
+  }
+
+  .hero-message{
+    padding:15px 16px;
+  }
+
+  .hero-trust-row{
+    grid-template-columns:1fr;
+  }
+
+  .hero-trust-item{
+    text-align:left;
+  }
+
+  .hero-trust-item strong,
+  .hero-trust-item span{
+    display:inline;
+  }
+
+  .hero-trust-item strong{
+    margin-right:8px;
+  }
+}
+
+
+/* ===== FINAL HERO EYEBROW STYLE ===== */
+.hero-eyebrow{
+  display:block;
+  width:auto;
+  margin:0 0 24px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:none;
+  color:#ffc400;
+  font-size:clamp(20px,1.7vw,27px);
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.hero-eyebrow::before{
+  display:none;
+  content:none;
+}
+
+@media(max-width:560px){
+  .hero-eyebrow{
+    font-size:18px;
+    line-height:1.25;
+    letter-spacing:1.2px;
+  }
+}
+
 </style>
 
 <!-- Google tag (gtag.js) -->
@@ -987,170 +1529,86 @@ body{
 
 <body>
 
-<header class="header">
-
-    <img src="images/gps-logo-transparent.png"
-         alt="Get Paid Solar"
-         class="gps-logo">
-
-    <div class="banner-content">
-
-        <div class="pay-banner-text">
-            WE PAY YOU!!
-        </div>
-
-        <div class="phone">
-            Call/Text: (602) 688-9812
-        </div>
-
-    </div>
-
-</header>
-
 <section class="hero">
-  <div>
+  <div class="hero-copy">
+    <div class="hero-eyebrow">Arizona Solar &amp; Battery Solutions</div>
+
     <div class="tagline">
-      Save Money.<br>
-      <span class="yellow">Get Paid.</span><br>
-      Live Better.
+      Power Your Home.
+      <span class="yellow">Protect Your Budget.</span>
     </div>
 
-    <h1>
-      Go Solar With GPS —<br>
-      Start Saving Today<br>
-      <span class="green">& Get Paid!</span>
-    </h1>
+    <div class="hero-message">
+      <h1>
+        Lower Your Electric Bill
+        <span class="green">With $0 Money Down</span>
+      </h1>
+    </div>
 
-    <p>
-      Get Paid Solar helps qualifying homeowners reduce monthly electric costs,
-      avoid future APS/SRP rate hikes, and receive cash upon installation.
+    <p class="hero-intro">
+      Explore solar and battery solutions designed to reduce your monthly energy
+      costs, protect you from future APS/SRP rate increases, and provide more
+      predictable payments.
     </p>
 
-    <div class="bullets">
-      ✔ $1–2K Paid Upon Installation<br>
-      ✔ 20–40% Savings Compared To APS/SRP<br>
-      ✔ No Money Down<br>
-      ✔ No Loans. No Liens.<br>
-      ✔ $1,000 Referral Bonus
+    <div class="hero-badges">
+      <div class="hero-badge">$0 Money Down</div>
+      <div class="hero-badge">20–40% Savings</div>
+      <div class="hero-badge">No Traditional Solar Loan</div>
+      <div class="hero-badge">No Property Lien</div>
+      <div class="hero-badge">Dependable Payments</div>
+      <div class="hero-badge">$1,000 Referral Bonus</div>
     </div>
 
-<button class="cta-button" onclick="openLeadForm()">
-  START FREE REVIEW
-</button>
+    <button class="cta-button" onclick="openLeadForm()">
+      GET MY FREE ENERGY SAVINGS REVIEW
+    </button>
   </div>
 
   <div class="hero-image-card">
-    <div class="cash-overlay">
+    <img
+      src="https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/powerwall-3-support-hero"
+      alt="Tesla Powerwall 3 installed in a residential garage"
+      class="hero-pw3-image"
+    >
 
-      <div class="cash-row">
-        <img src="images/cash-stack.png" alt="Cash incentive" class="cash-icon">
+    <div class="hero-image-shade"></div>
 
-        <div class="cash-text">
-          <h3>WE PAY YOU</h3>
+    <div class="hero-image-content">
+      <h2>Solar + Battery Control</h2>
+      <p>
+        Store energy, reduce expensive peak-hour usage, and add backup-power
+        protection with a professionally designed home energy system.
+      </p>
 
-          <div class="cash">
-            $1 - 2K<br>CASH
-          </div>
-
-          <p class="cash-subtext">
-            Paid to you upon installation!
-          </p>
-        </div>
+      <div class="hero-image-stat">
+        <span>Peak-Rate Protection</span>
+        <span>Backup Power Options</span>
+        <span>Smart Energy Control</span>
       </div>
 
-      <hr class="gold-divider">
-
-      <div class="savings-section">
-        <h2>Average Client Savings</h2>
-
-        <div class="savings">
-          $30,000 Over 25 Years*
-        </div>
-
-        <p class="savings-note">
-          Based on a typical 10kW system while avoiding APS/SRP rate hikes.
-        </p>
-      </div>
-
+      <div class="tesla-credit">Powerwall image courtesy of Tesla, Inc.</div>
     </div>
   </div>
-</section>
-
-<section class="qualify-section">
-
-  <h2>Could Your Home</h2>
-  <img src="images/Qualify.png" alt="Qualify?" class="qualify-img">
-
-  <p class="qualify-subtitle">You May Be Eligible If You:</p>
-
-  <div class="qualify-list">
-    <div>✓ Own your home</div>
-    <div>✓ Your electric bill averages <strong>$100+ per month</strong></div>
-    <div>✓ Have good credit, typically <strong>650+</strong></div>
-    <div>✓ Your roof receives adequate sunlight</div>
-    <div>✓ Want protection from future <strong>APS/SRP</strong> rate increases</div>
-  </div>
-
-  <img src="images/AlreadyHaveSolar.png" alt="Already Have Solar" class="already-solar-img">
-  
-  <button class="qualify-button" onclick="openLeadForm()">
-    START FREE REVIEW
-</button>
-
-  <h3 class="section-title">How It Works</h3>
-
-<div class="steps-grid">
-
-    <div class="step-card">
-        <img src="images/CheckList.png" alt="Free Energy Review">
-        <h4>FREE ENERGY REVIEW</h4>
-        <p>
-            We review your current
-            utility bill and energy usage.
-        </p>
-    </div>
-
-    <div class="step-card">
-        <img src="images/SolarDesign.png" alt="Custom Solar Design" class="step-icon">
-        <h4>CUSTOM SOLAR DESIGN</h4>
-        <p>
-            We determine if your home
-            qualifies and estimate your
-            potential savings.
-        </p>
-    </div>
-
-    <div class="step-card">
-        <img src="images/get-paid.png" alt="Get Paid & Start Saving">
-        <h4>GET PAID & START SAVING</h4>
-        <p>
-            Receive <span class="red">$1,000–$2,000</span>
-            paid to you upon installation
-            and start saving on electricity.
-        </p>
-    </div>
-
-</div>
-
 </section>
 
 <section class="benefits">
   <div class="benefit">
     <img src="images/shield.png" class="benefit-icon" alt="Dependable Payments">
     <h3>Dependable Payments</h3>
-    <p>Static monthly payments.</p>
+    <p>More predictable monthly energy costs.</p>
   </div>
 
   <div class="benefit">
     <img src="images/piggy-bank.png" class="benefit-icon" alt="Savings">
     <h3>20–40% Savings</h3>
-    <p>Compared to APS/SRP.</p>
+    <p>Compared to APS/SRP for qualifying homeowners.</p>
   </div>
 
   <div class="benefit">
     <img src="images/no-money-down.png" class="benefit-icon" alt="No Money Down">
     <h3>No Money Down</h3>
-    <p>No loans. No liens.</p>
+    <p>No traditional solar loan. No property lien.</p>
   </div>
 
   <div class="benefit">
@@ -1166,6 +1624,66 @@ body{
   </div>
 </section>
 
+
+
+
+<section class="qualify-section">
+
+  <h2>Could Your Home</h2>
+  <img src="images/Qualify.png" alt="Qualify?" class="qualify-img">
+
+  <p class="qualify-subtitle">You May Be Eligible If You:</p>
+
+  <div class="qualify-list">
+    <div>✓ Own your home</div>
+    <div>✓ Your electric bill averages <strong>$100+ per month</strong></div>
+    <div>✓ Meet program credit requirements</div>
+    <div>✓ Your roof receives adequate sunlight</div>
+    <div>✓ Want protection from future <strong>APS/SRP</strong> rate increases</div>
+  </div>
+
+  <img src="images/AlreadyHaveSolar.png" alt="Already Have Solar" class="already-solar-img">
+  
+  <button class="qualify-button" onclick="openLeadForm()">
+    GET MY FREE ENERGY SAVINGS REVIEW
+</button>
+
+  <h3 class="section-title">How It Works</h3>
+
+<div class="steps-grid">
+
+    <div class="step-card">
+        <img src="images/CheckList.png" alt="Free Energy Review">
+        <h4>FREE ENERGY REVIEW</h4>
+        <p>
+            We review your current utility bill,
+            rate plan, and energy usage.
+        </p>
+    </div>
+
+    <div class="step-card">
+        <img src="images/SolarDesign.png" alt="Custom Solar Design" class="step-icon">
+        <h4>CUSTOM SOLAR DESIGN</h4>
+        <p>
+            We determine if your home qualifies
+            and estimate your potential monthly
+            and long-term savings.
+        </p>
+    </div>
+
+    <div class="step-card">
+        <img src="images/get-paid.png" alt="Install Solar and Start Saving">
+        <h4>INSTALL & START SAVING</h4>
+        <p>
+            Your system is professionally installed,
+            activated, and configured to help reduce
+            your dependence on APS or SRP.
+        </p>
+    </div>
+
+</div>
+
+</section>
 
 <section class="news-articles">
 <h2 class="section-heading">Arizona Energy & Utility News</h2>
@@ -1197,7 +1715,7 @@ body{
 
     <p>
         APS has launched a Storage Rewards pilot program that allows qualifying homeowners
-        with battery systems to earn <span style="color:red; font-weight:bold; font-size:1.4em;">$110</span>  pr KW compensation for supporting Arizona's electrical grid
+        with battery systems to earn <span style="color:red; font-weight:bold; font-size:1.4em;">$110</span> per kW compensation for supporting Arizona's electrical grid
         during periods of high demand.
     </p>
 
@@ -1208,24 +1726,6 @@ body{
     </a>
 </div>
 
-
-
-<div class="news-card">
-    <h3>💰 APS Will Pay You For Extra Solar Credits</h3>
-
-    <p>
-        If your solar system generates more energy credits than you use, APS lets those
-        credits accumulate throughout the year. At your annual reconciliation, if your
-        remaining credit balance is more than <strong>$25</strong>, APS will mail you
-        a check for the remaining balance.
-    </p>
-
-    <a href="https://www.aps.com/en/Residential/Service-Plans/Understanding-Solar/Solar-Transition"
-       target="_blank"
-       rel="noopener">
-        Learn How APS Solar Credits Work
-    </a>
-</div>
 
 
 <div class="news-card">
@@ -1281,7 +1781,7 @@ body{
     </div>
 
     <button class="footer-qualify-button" onclick="openLeadForm()">
-        START FREE REVIEW
+        GET MY FREE ENERGY SAVINGS REVIEW
     </button>
 
 </section>
@@ -1291,8 +1791,9 @@ body{
 
     <p>
         Get Paid Solar is proud to be an Authorized Dealer Partner of
-        Our World Energy, helping Arizona homeowners save money,
-        avoid future utility rate increases, and get paid for going solar.
+        Our World Energy, helping Arizona homeowners lower energy costs,
+        reduce exposure to utility rate increases, and explore solar and
+        battery options with no money down.
     </p>
 </section>
 
@@ -1300,7 +1801,7 @@ body{
 <footer class="footer">
 
     <div class="footer-tagline">
-        SAVE MONEY. | GET PAID. | LIVE BETTER.
+        SAVE MONEY. | GAIN CONTROL. | LIVE BETTER.
     </div>
 
     <div class="footer-copyright">
@@ -1321,7 +1822,7 @@ body{
   <div class="modal-content">
     <span class="close" onclick="closeLeadForm()">&times;</span>
 
-    <h2>START FREE REVIEW</h2>
+    <h2>GET MY FREE ENERGY SAVINGS REVIEW</h2>
     <p>Fill out the form below.
 
 After submitting, you'll be able to choose a convenient time for your free 15-minute Energy Savings Review..</p>
