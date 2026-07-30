@@ -994,7 +994,7 @@ body{
 .banner-content{
   display:flex;
   flex-direction:column;
-  align-items:flex-end;
+  align-items:flex-start;
   text-align:right;
 }
 
@@ -1513,6 +1513,915 @@ body{
   }
 }
 
+
+/* ===== HOMEPAGE 20% SAVINGS CALCULATOR ===== */
+.home-savings-calculator{
+  background:#ffffff;
+  color:#06152f;
+  padding:72px 7%;
+}
+
+.home-calc-shell{
+  max-width:1120px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);
+  gap:48px;
+  align-items:center;
+}
+
+.home-calc-copy .home-calc-kicker{
+  display:inline-block;
+  margin-bottom:14px;
+  color:#138a20;
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.home-calc-copy h2{
+  margin:0 0 18px;
+  color:#06152f;
+  font-size:clamp(38px,4vw,58px);
+  line-height:1.03;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.home-calc-copy h2 span{
+  color:#138a20;
+}
+
+.home-calc-copy p{
+  margin:0 0 24px;
+  color:#475569;
+  font-size:20px;
+  line-height:1.6;
+}
+
+.home-calc-points{
+  display:grid;
+  gap:12px;
+  margin-top:24px;
+}
+
+.home-calc-point{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  color:#06152f;
+  font-size:17px;
+  font-weight:800;
+  line-height:1.4;
+}
+
+.home-calc-point::before{
+  content:"✓";
+  color:#20b832;
+  font-size:21px;
+  font-weight:900;
+}
+
+.home-calc-card{
+  position:relative;
+  overflow:hidden;
+  padding:32px;
+  border:3px solid #ffc400;
+  border-radius:24px;
+  background:linear-gradient(145deg,#06152f 0%,#0b326d 100%);
+  color:#ffffff;
+  box-shadow:0 18px 40px rgba(6,21,47,.24);
+}
+
+.home-calc-card::before{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  right:-100px;
+  top:-110px;
+  border-radius:50%;
+  background:rgba(255,196,0,.10);
+}
+
+.home-calc-card h3{
+  position:relative;
+  margin:0 0 8px;
+  text-align:center;
+  font-size:29px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.home-calc-card-subtitle{
+  position:relative;
+  max-width:560px;
+  margin:0 auto 25px;
+  text-align:center;
+  color:#dbeafe;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.home-calc-input-label{
+  display:block;
+  margin-bottom:9px;
+  font-size:16px;
+  font-weight:900;
+}
+
+.home-calc-money-input{
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,.34);
+  border-radius:14px;
+  background:#ffffff;
+  box-shadow:0 6px 15px rgba(0,0,0,.15);
+}
+
+.home-calc-money-input span{
+  padding:16px 17px;
+  color:#06152f;
+  background:#eef2f7;
+  border-right:1px solid #cbd5e1;
+  font-size:25px;
+  font-weight:900;
+}
+
+.home-calc-money-input input{
+  width:100%;
+  min-width:0;
+  padding:16px;
+  border:0;
+  outline:0;
+  color:#06152f;
+  background:#ffffff;
+  font-size:25px;
+  font-weight:900;
+  box-sizing:border-box;
+}
+
+.home-calc-results{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:22px;
+}
+
+.home-calc-result{
+  padding:20px 15px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  text-align:center;
+  transition:transform .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.home-calc-result:hover{
+  transform:translateY(-3px);
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,196,0,.8);
+}
+
+.home-calc-result.primary{
+  grid-column:1 / -1;
+  background:linear-gradient(180deg,rgba(32,184,50,.19),rgba(32,184,50,.08));
+  border-color:rgba(74,222,128,.55);
+}
+
+.home-calc-result-label{
+  margin-bottom:8px;
+  color:#dbeafe;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.home-calc-result-value{
+  color:#ffffff;
+  font-size:30px;
+  line-height:1.05;
+  font-weight:900;
+}
+
+.home-calc-result.primary .home-calc-result-value{
+  color:#55e36a;
+  font-size:44px;
+}
+
+.home-calc-result-note{
+  margin-top:7px;
+  color:#cbd5e1;
+  font-size:13px;
+  font-weight:700;
+}
+
+.home-calc-savings-strip{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-top:18px;
+  padding:17px 18px;
+  border-radius:14px;
+  background:#fff8db;
+  color:#06152f;
+  font-size:17px;
+  font-weight:900;
+}
+
+.home-calc-savings-strip strong{
+  color:#138a20;
+  font-size:23px;
+  white-space:nowrap;
+}
+
+.home-calc-button{
+  width:100%;
+  margin-top:22px;
+  padding:17px 22px;
+  border:0;
+  border-radius:12px;
+  background:#ffc400;
+  color:#06152f;
+  font-size:17px;
+  font-weight:900;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 7px 17px rgba(0,0,0,.22);
+  transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.home-calc-button:hover{
+  transform:translateY(-3px);
+  background:#ffd84d;
+  box-shadow:0 13px 27px rgba(0,0,0,.28);
+}
+
+.home-calc-disclaimer{
+  margin:15px 0 0;
+  color:#cbd5e1;
+  font-size:12px;
+  line-height:1.45;
+  text-align:center;
+}
+
+@media(max-width:900px){
+  .home-savings-calculator{
+    padding:55px 5%;
+  }
+
+  .home-calc-shell{
+    grid-template-columns:1fr;
+    gap:32px;
+  }
+
+  .home-calc-card{
+    padding:27px 21px;
+  }
+}
+
+@media(max-width:560px){
+  .home-calc-copy h2{
+    font-size:37px;
+  }
+
+  .home-calc-copy p{
+    font-size:17px;
+  }
+
+  .home-calc-results{
+    grid-template-columns:1fr;
+  }
+
+  .home-calc-result.primary{
+    grid-column:auto;
+  }
+
+  .home-calc-savings-strip{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:5px;
+  }
+}
+
+
+/* ===== ROBUST 25-YEAR HOMEPAGE SAVINGS CALCULATOR ===== */
+.home-savings-calculator{
+  background:#ffffff;
+  color:#06152f;
+  padding:72px 7%;
+}
+
+.home-calc-container{
+  max-width:1160px;
+  margin:0 auto;
+}
+
+.home-calc-heading{
+  max-width:860px;
+  margin:0 auto 34px;
+  text-align:center;
+}
+
+.home-calc-kicker{
+  display:inline-block;
+  margin-bottom:12px;
+  color:#138a20;
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.home-calc-heading h2{
+  margin:0 0 14px;
+  color:#06152f;
+  font-size:clamp(38px,4.5vw,60px);
+  line-height:1.02;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.home-calc-heading h2 span{
+  color:#138a20;
+}
+
+.home-calc-heading p{
+  max-width:780px;
+  margin:0 auto;
+  color:#526072;
+  font-size:19px;
+  line-height:1.55;
+}
+
+.home-calc-panel{
+  overflow:visible;
+  border:3px solid #ffc400;
+  border-radius:25px;
+  background:#06152f;
+  box-shadow:0 20px 45px rgba(6,21,47,.22);
+}
+
+.home-calc-input-area{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:22px;
+  padding:30px;
+  background:linear-gradient(135deg,#06152f 0%,#0b326d 100%);
+}
+
+.home-calc-input-card{
+  overflow:visible;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:18px;
+  background:rgba(255,255,255,.08);
+}
+
+.home-calc-input-card.solar-card{
+  border-color:rgba(74,222,128,.42);
+  background:rgba(32,184,50,.10);
+}
+
+.home-calc-input-card label{
+  display:block;
+  margin-bottom:9px;
+  color:#ffffff;
+  font-size:17px;
+  font-weight:900;
+}
+
+.home-calc-money-input{
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,.35);
+  border-radius:13px;
+  background:#ffffff;
+}
+
+.home-calc-money-input span{
+  padding:15px 16px;
+  color:#06152f;
+  background:#eef2f7;
+  border-right:1px solid #cbd5e1;
+  font-size:24px;
+  font-weight:900;
+}
+
+.home-calc-money-input input{
+  width:100%;
+  min-width:0;
+  padding:15px;
+  border:0;
+  outline:0;
+  color:#06152f;
+  background:#ffffff;
+  font-size:25px;
+  font-weight:900;
+  box-sizing:border-box;
+}
+
+.home-calc-readonly{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  padding:0 17px;
+  border:2px solid rgba(74,222,128,.55);
+  border-radius:13px;
+  background:#ffffff;
+  color:#138a20;
+  font-size:28px;
+  font-weight:900;
+}
+
+.home-calc-helper{
+  margin-top:9px;
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.home-calc-summary{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+  padding:24px 30px 10px;
+  background:#f8fafc;
+}
+
+.home-calc-summary-card{
+  min-height:126px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:18px 14px;
+  border:2px solid #e5e7eb;
+  border-radius:17px;
+  background:#ffffff;
+  text-align:center;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.home-calc-summary-card:hover{
+  transform:translateY(-3px);
+  border-color:#ffc400;
+  box-shadow:0 10px 22px rgba(6,21,47,.12);
+}
+
+.home-calc-summary-card.highlight{
+  border-color:#86efac;
+  background:linear-gradient(180deg,#f0fdf4,#ffffff);
+}
+
+.home-calc-summary-label{
+  margin-bottom:9px;
+  color:#5b6472;
+  font-size:13px;
+  font-weight:900;
+  line-height:1.3;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+
+.home-calc-summary-value{
+  color:#06152f;
+  font-size:27px;
+  line-height:1.05;
+  font-weight:900;
+}
+
+.home-calc-summary-card.highlight .home-calc-summary-value{
+  color:#138a20;
+}
+
+.home-calc-chart-section{
+  padding:26px 30px 30px;
+  background:#f8fafc;
+}
+
+.home-calc-chart-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:16px;
+}
+
+.home-calc-chart-header h3{
+  margin:0;
+  color:#06152f;
+  font-size:27px;
+  font-weight:900;
+}
+
+.home-calc-chart-header p{
+  margin:4px 0 0;
+  color:#64748b;
+  font-size:14px;
+}
+
+.home-calc-legend{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  color:#475569;
+  font-size:13px;
+  font-weight:800;
+}
+
+.home-calc-legend span{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.home-calc-legend i{
+  width:18px;
+  height:4px;
+  display:inline-block;
+  border-radius:999px;
+}
+
+.home-calc-legend .aps-line{
+  background:#dc2626;
+}
+
+.home-calc-legend .solar-line{
+  background:#8b5cf6;
+}
+
+.home-calc-chart-wrap{
+  height:430px;
+  padding:18px;
+  border:1px solid #dbe3ee;
+  border-radius:18px;
+  background:#ffffff;
+}
+
+.home-calc-chart-wrap canvas{
+  width:100% !important;
+  height:100% !important;
+}
+
+.home-calc-breakdown{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  padding:0 30px 26px;
+  background:#f8fafc;
+}
+
+.home-calc-breakdown-card{
+  padding:21px 18px;
+  border-radius:17px;
+  background:#fff8db;
+  border:2px solid #ffc400;
+  text-align:center;
+}
+
+.home-calc-breakdown-card.aps{
+  background:#fff5f5;
+  border-color:#fca5a5;
+}
+
+.home-calc-breakdown-card.solar{
+  background:#f5f3ff;
+  border-color:#c4b5fd;
+}
+
+.home-calc-breakdown-label{
+  margin-bottom:8px;
+  color:#475569;
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.home-calc-breakdown-value{
+  color:#06152f;
+  font-size:29px;
+  font-weight:900;
+}
+
+.home-calc-breakdown-card.aps .home-calc-breakdown-value{
+  color:#dc2626;
+}
+
+.home-calc-breakdown-card.solar .home-calc-breakdown-value{
+  color:#7c3aed;
+}
+
+.home-calc-breakdown-card.savings .home-calc-breakdown-value{
+  color:#138a20;
+}
+
+.home-calc-footer{
+  padding:0 30px 30px;
+  background:#f8fafc;
+  text-align:center;
+}
+
+.home-calc-button{
+  display:inline-block;
+  width:min(100%,520px);
+  padding:17px 25px;
+  border:0;
+  border-radius:12px;
+  background:#ffc400;
+  color:#06152f;
+  font-size:18px;
+  font-weight:900;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(6,21,47,.18);
+  transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.home-calc-button:hover{
+  transform:translateY(-3px);
+  background:#ffd84d;
+  box-shadow:0 14px 28px rgba(6,21,47,.25);
+}
+
+.home-calc-disclaimer{
+  max-width:900px;
+  margin:15px auto 0;
+  color:#6b7280;
+  font-size:12px;
+  line-height:1.5;
+}
+
+@media(max-width:950px){
+  .home-calc-summary{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .home-calc-breakdown{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:760px){
+  .home-savings-calculator{
+    padding:55px 5%;
+  }
+
+  .home-calc-input-area{
+    grid-template-columns:1fr;
+    padding:22px;
+  }
+
+  .home-calc-summary{
+    grid-template-columns:1fr;
+    padding:22px;
+  }
+
+  .home-calc-chart-section{
+    padding:22px;
+  }
+
+  .home-calc-chart-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .home-calc-chart-wrap{
+    height:350px;
+  }
+
+  .home-calc-breakdown{
+    padding:0 22px 22px;
+  }
+
+  .home-calc-footer{
+    padding:0 22px 24px;
+  }
+}
+
+
+/* ===== CUSTOM HOMEPAGE CHART TOOLTIP ===== */
+.home-calc-chart-wrap{
+  position:relative;
+}
+
+.home-chart-tooltip{
+  position:absolute;
+  display:none;
+  width:310px;
+  box-sizing:border-box;
+  padding:14px 15px 13px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  background:#ffffff;
+  color:#06152f;
+  box-shadow:0 8px 20px rgba(15,23,42,.18);
+  pointer-events:none;
+  z-index:20;
+  transform:translate(-50%,-112%);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.home-chart-tooltip-year{
+  margin-bottom:8px;
+  color:#06152f;
+  font-size:17px;
+  font-weight:900;
+}
+
+.home-chart-tooltip-row{
+  display:grid;
+  grid-template-columns:14px minmax(0,1fr) auto;
+  align-items:center;
+  gap:6px;
+  margin:4px 0;
+  color:#4b5563;
+  font-size:14px;
+  line-height:1.2;
+}
+
+.home-chart-tooltip-swatch{
+  width:13px;
+  height:13px;
+  display:block;
+}
+
+.home-chart-tooltip-row.aps .home-chart-tooltip-swatch{
+  background:#dc2626;
+}
+
+.home-chart-tooltip-row.solar .home-chart-tooltip-swatch{
+  background:#8b5cf6;
+}
+
+.home-chart-tooltip-row .label{
+  white-space:nowrap;
+}
+
+.home-chart-tooltip-row .value{
+  text-align:right;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+
+.home-chart-tooltip-divider{
+  height:1px;
+  margin:8px 0 7px;
+  background:#e5e7eb;
+}
+
+.home-chart-tooltip-difference{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:14px;
+  color:#00c853;
+  font-size:17px;
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:.01em;
+}
+
+.home-chart-tooltip-difference .value{
+  text-align:right;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+
+@media(max-width:520px){
+  .home-chart-tooltip{
+    width:280px;
+  }
+
+  .home-chart-tooltip-difference{
+    font-size:15px;
+  }
+}
+
+
+/* ===== START-HERE CALCULATOR CALLOUT ===== */
+.home-calc-input-card:first-child{
+  position:relative;
+}
+
+.home-calc-start-callout{
+  position:absolute;
+  left:34px;
+  top:-120px;
+  z-index:8;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  pointer-events:none;
+  transition:opacity .35s ease, transform .35s ease;
+  animation:homeCalcCalloutFloat 2.2s ease-in-out infinite;
+}
+
+.home-calc-start-callout.home-calc-callout-hidden{
+  opacity:0;
+  transform:translateY(-10px);
+  animation:none;
+}
+
+.home-calc-callout-bubble{
+  position:relative;
+  max-width:255px;
+  padding:13px 16px;
+  border:2px solid #ffc400;
+  border-radius:16px;
+  background:#ffffff;
+  color:#06152f;
+  box-shadow:0 10px 24px rgba(0,0,0,.22);
+}
+
+.home-calc-callout-bubble::after{
+  content:"";
+  position:absolute;
+  left:38px;
+  bottom:-12px;
+  width:20px;
+  height:20px;
+  background:#ffffff;
+  border-right:2px solid #ffc400;
+  border-bottom:2px solid #ffc400;
+  transform:rotate(45deg);
+}
+
+.home-calc-callout-title{
+  margin-bottom:3px;
+  color:#138a20;
+  font-size:18px;
+  font-weight:900;
+}
+
+.home-calc-callout-text{
+  color:#334155;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.35;
+}
+
+.home-calc-callout-arrow{
+  padding-bottom:3px;
+  color:#ffc400;
+  font-size:39px;
+  line-height:1;
+  font-weight:900;
+  text-shadow:0 3px 8px rgba(0,0,0,.24);
+}
+
+.home-calc-money-input.home-calc-input-attention{
+  animation:homeCalcInputPulse 2.2s ease-in-out infinite;
+}
+
+.home-calc-money-input.home-calc-input-attention:focus-within{
+  animation:none;
+}
+
+@keyframes homeCalcCalloutFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-7px); }
+}
+
+@keyframes homeCalcInputPulse{
+  0%,100%{
+    box-shadow:0 0 0 0 rgba(255,196,0,0), 0 6px 15px rgba(0,0,0,.15);
+  }
+  50%{
+    box-shadow:0 0 0 7px rgba(255,196,0,.20), 0 9px 20px rgba(0,0,0,.20);
+  }
+}
+
+@media(max-width:760px){
+  .home-calc-start-callout{
+    position:relative;
+    left:auto;
+    top:auto;
+    margin:0 0 16px;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .home-calc-callout-bubble{
+    max-width:none;
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  .home-calc-callout-bubble::after{
+    left:50%;
+    margin-left:-10px;
+  }
+
+  .home-calc-callout-arrow{
+    display:none;
+  }
+}
+
 </style>
 
 <!-- Google tag (gtag.js) -->
@@ -1525,6 +2434,7 @@ body{
   gtag('config', 'G-1RQMD8FRYL');
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -1592,39 +2502,125 @@ body{
   </div>
 </section>
 
-<section class="benefits">
-  <div class="benefit">
-    <img src="images/shield.png" class="benefit-icon" alt="Dependable Payments">
-    <h3>Dependable Payments</h3>
-    <p>More predictable monthly energy costs.</p>
-  </div>
+<section class="home-savings-calculator" id="quick-savings-calculator">
+  <div class="home-calc-container">
+    <div class="home-calc-heading">
+      <span class="home-calc-kicker">25-Year Solar Savings Calculator</span>
+      <h2>See How Much You Could <span>Save Over Time</span></h2>
+      <p>
+        Enter your current average monthly electric bill. For this illustration,
+        the estimated new solar payment is automatically calculated at 20% less.
+      </p>
+    </div>
 
-  <div class="benefit">
-    <img src="images/piggy-bank.png" class="benefit-icon" alt="Savings">
-    <h3>20–40% Savings</h3>
-    <p>Compared to APS/SRP for qualifying homeowners.</p>
-  </div>
+    <div class="home-calc-panel">
+      <div class="home-calc-input-area">
+        <div class="home-calc-input-card">
+          <div class="home-calc-start-callout" id="homeCalcStartCallout" aria-hidden="true">
+            <div class="home-calc-callout-bubble">
+              <div class="home-calc-callout-title">Start Here!</div>
+              <div class="home-calc-callout-text">
+                Enter your average monthly electric bill to see your estimated savings.
+              </div>
+            </div>
+            <div class="home-calc-callout-arrow">⬇</div>
+          </div>
 
-  <div class="benefit">
-    <img src="images/no-money-down.png" class="benefit-icon" alt="No Money Down">
-    <h3>No Money Down</h3>
-    <p>No traditional solar loan. No property lien.</p>
-  </div>
+          <label for="homeCurrentBill">Current Average Monthly Electric Bill</label>
+          <div class="home-calc-money-input home-calc-input-attention" id="homeCalcMoneyInput">
+            <span>$</span>
+            <input
+              id="homeCurrentBill"
+              type="number"
+              min="0"
+              step="1"
+              inputmode="decimal"
+              value="250"
+              aria-label="Current average monthly electric bill"
+            >
+          </div>
+          <div class="home-calc-helper">
+            Enter the average amount you currently pay APS or SRP each month.
+          </div>
+        </div>
 
-  <div class="benefit">
-    <img src="images/referral.png" class="benefit-icon" alt="Referral Bonus">
-    <h3>$1K Referral Bonus</h3>
-    <p>Earn $1,000 when you refer friends and family.</p>
-  </div>
+        <div class="home-calc-input-card solar-card">
+          <label>Estimated New Solar Payment</label>
+          <div class="home-calc-readonly" id="homeSolarBillDisplay">$200.00/month</div>
+          <div class="home-calc-helper">
+            Automatically calculated at 20% less than the entered utility bill.
+          </div>
+        </div>
+      </div>
 
-  <div class="benefit">
-    <img src="images/chart.png" class="benefit-icon" alt="Avoid Rate Hikes">
-    <h3>Avoid Rate Hikes</h3>
-    <p>Avoid future utility increases.</p>
+      <div class="home-calc-summary">
+        <div class="home-calc-summary-card">
+          <div class="home-calc-summary-label">Current Monthly Bill</div>
+          <div class="home-calc-summary-value" id="homeCurrentBillDisplay">$250.00</div>
+        </div>
+
+        <div class="home-calc-summary-card highlight">
+          <div class="home-calc-summary-label">Estimated Monthly Savings</div>
+          <div class="home-calc-summary-value" id="homeMonthlySavingsDisplay">$50.00</div>
+        </div>
+
+        <div class="home-calc-summary-card highlight">
+          <div class="home-calc-summary-label">Estimated First-Year Savings</div>
+          <div class="home-calc-summary-value" id="homeAnnualSavingsDisplay">$600.00</div>
+        </div>
+
+        <div class="home-calc-summary-card highlight">
+          <div class="home-calc-summary-label">Estimated 25-Year Savings</div>
+          <div class="home-calc-summary-value" id="home25YearSavingsDisplay">$0.00</div>
+        </div>
+      </div>
+
+      <div class="home-calc-chart-section">
+        <div class="home-calc-chart-header">
+          <div>
+            <h3>Projected Monthly Energy Cost</h3>
+            <p>APS/SRP modeled at 5% annual increases; solar modeled at a 1.9% annual escalator.</p>
+          </div>
+
+          <div class="home-calc-legend" aria-hidden="true">
+            <span><i class="aps-line"></i> Utility without solar</span>
+            <span><i class="solar-line"></i> Estimated solar payment</span>
+          </div>
+        </div>
+
+        <div class="home-calc-chart-wrap">
+          <canvas id="homeSavingsChart"></canvas>
+          <div class="home-chart-tooltip" id="homeChartTooltip"></div>
+        </div>
+      </div>
+
+      <div class="home-calc-breakdown">
+        <div class="home-calc-breakdown-card aps">
+          <div class="home-calc-breakdown-label">Estimated 25-Year Utility Cost</div>
+          <div class="home-calc-breakdown-value" id="home25YearApsCost">$0.00</div>
+        </div>
+
+        <div class="home-calc-breakdown-card savings">
+          <div class="home-calc-breakdown-label">Estimated Total Savings</div>
+          <div class="home-calc-breakdown-value" id="home25YearSavingsBreakdown">$0.00</div>
+        </div>
+      </div>
+
+      <div class="home-calc-footer">
+        <button class="home-calc-button" type="button" onclick="openLeadForm()">
+          GET MY CUSTOM ENERGY SAVINGS REVIEW
+        </button>
+
+        <p class="home-calc-disclaimer">
+          This calculator is a simplified illustration. It assumes a starting solar
+          payment equal to 80% of the entered utility bill, a 5% annual utility increase,
+          and a 1.9% annual solar escalator. Actual savings, utility charges, system design,
+          eligibility, and final proposal terms may differ.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
-
-
 
 
 <section class="qualify-section">
@@ -1685,6 +2681,39 @@ body{
 
 </section>
 
+<section class="benefits">
+  <div class="benefit">
+    <img src="images/shield.png" class="benefit-icon" alt="Dependable Payments">
+    <h3>Dependable Payments</h3>
+    <p>More predictable monthly energy costs.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/piggy-bank.png" class="benefit-icon" alt="Savings">
+    <h3>20–40% Savings</h3>
+    <p>Compared to APS/SRP for qualifying homeowners.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/no-money-down.png" class="benefit-icon" alt="No Money Down">
+    <h3>No Money Down</h3>
+    <p>No traditional solar loan. No property lien.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/referral.png" class="benefit-icon" alt="Referral Bonus">
+    <h3>$1K Referral Bonus</h3>
+    <p>Earn $1,000 when you refer friends and family.</p>
+  </div>
+
+  <div class="benefit">
+    <img src="images/chart.png" class="benefit-icon" alt="Avoid Rate Hikes">
+    <h3>Avoid Rate Hikes</h3>
+    <p>Avoid future utility increases.</p>
+  </div>
+</section>
+
+
 <section class="news-articles">
 <h2 class="section-heading">Arizona Energy & Utility News</h2>
 
@@ -1727,7 +2756,6 @@ body{
 </div>
 
 
-
 <div class="news-card">
     <h3>🏠 Why Utility Companies Want To Pay Homeowners To Support The Grid</h3>
 
@@ -1768,7 +2796,6 @@ body{
 
 
 </section>
-
 
 
 <section class="cta">
@@ -1913,5 +2940,254 @@ document.querySelector("form").addEventListener("submit", async function (e) {
   }
 });
 </script>
+
+
+<script>
+(function () {
+  const billInput = document.getElementById("homeCurrentBill");
+  const currentDisplay = document.getElementById("homeCurrentBillDisplay");
+  const solarDisplay = document.getElementById("homeSolarBillDisplay");
+  const monthlyDisplay = document.getElementById("homeMonthlySavingsDisplay");
+  const annualDisplay = document.getElementById("homeAnnualSavingsDisplay");
+  const savings25Display = document.getElementById("home25YearSavingsDisplay");
+  const aps25Display = document.getElementById("home25YearApsCost");
+  const savings25Breakdown = document.getElementById("home25YearSavingsBreakdown");
+  const chartCanvas = document.getElementById("homeSavingsChart");
+
+  if (
+    !billInput || !currentDisplay || !solarDisplay || !monthlyDisplay ||
+    !annualDisplay || !savings25Display || !aps25Display ||
+    !savings25Breakdown || !chartCanvas
+  ) {
+    return;
+  }
+
+  const utilityEscalator = 0.05;
+  const solarEscalator = 0.019;
+  let homeSavingsChart = null;
+
+  function money(value) {
+    return Number(value || 0).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  function calculateProjection(currentBill) {
+    const startingSolarBill = currentBill * 0.80;
+    const years = [];
+    const utilityMonthly = [];
+    const solarMonthly = [];
+
+    let utilityTotal = 0;
+    let solarTotal = 0;
+
+    for (let year = 1; year <= 25; year++) {
+      const utilityForYear = currentBill * Math.pow(1 + utilityEscalator, year - 1);
+      const solarForYear = startingSolarBill * Math.pow(1 + solarEscalator, year - 1);
+
+      years.push("Year " + year);
+      utilityMonthly.push(Number(utilityForYear.toFixed(2)));
+      solarMonthly.push(Number(solarForYear.toFixed(2)));
+
+      utilityTotal += utilityForYear * 12;
+      solarTotal += solarForYear * 12;
+    }
+
+    return {
+      startingSolarBill,
+      monthlySavings: currentBill - startingSolarBill,
+      annualSavings: (currentBill - startingSolarBill) * 12,
+      utilityTotal,
+      solarTotal,
+      totalSavings: utilityTotal - solarTotal,
+      years,
+      utilityMonthly,
+      solarMonthly
+    };
+  }
+
+  function renderChart(projection) {
+    if (typeof Chart === "undefined") {
+      return;
+    }
+
+    if (homeSavingsChart) {
+      homeSavingsChart.destroy();
+    }
+
+    homeSavingsChart = new Chart(chartCanvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: projection.years,
+        datasets: [
+          {
+            label: "Utility without solar",
+            data: projection.utilityMonthly,
+            borderColor: "#dc2626",
+            backgroundColor: "#dc2626",
+            borderWidth: 4,
+            tension: 0.25,
+            pointRadius: 2,
+            pointHoverRadius: 6
+          },
+          {
+            label: "Estimated solar payment",
+            data: projection.solarMonthly,
+            borderColor: "#8b5cf6",
+            backgroundColor: "#8b5cf6",
+            borderWidth: 4,
+            tension: 0.25,
+            pointRadius: 2,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: "index",
+          intersect: false
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: false,
+            external: function (context) {
+              const tooltip = context.tooltip;
+              const tooltipEl = document.getElementById("homeChartTooltip");
+              const chartCanvas = context.chart.canvas;
+
+              if (!tooltipEl || tooltip.opacity === 0) {
+                if (tooltipEl) tooltipEl.style.display = "none";
+                return;
+              }
+
+              const dataPoints = tooltip.dataPoints || [];
+              const apsPoint = dataPoints.find(point => point.datasetIndex === 0);
+              const solarPoint = dataPoints.find(point => point.datasetIndex === 1);
+
+              if (!apsPoint || !solarPoint) {
+                tooltipEl.style.display = "none";
+                return;
+              }
+
+              const yearLabel = apsPoint.label || "";
+              const apsValue = apsPoint.parsed.y || 0;
+              const solarValue = solarPoint.parsed.y || 0;
+              const difference = Math.max(apsValue - solarValue, 0);
+
+              tooltipEl.innerHTML =
+                '<div class="home-chart-tooltip-year">' + yearLabel + '</div>' +
+                '<div class="home-chart-tooltip-row aps">' +
+                  '<span class="home-chart-tooltip-swatch"></span>' +
+                  '<span class="label">Staying with APS</span>' +
+                  '<span class="value">' + money(apsValue) + '</span>' +
+                '</div>' +
+                '<div class="home-chart-tooltip-row solar">' +
+                  '<span class="home-chart-tooltip-swatch"></span>' +
+                  '<span class="label">Going Solar</span>' +
+                  '<span class="value">' + money(solarValue) + '</span>' +
+                '</div>' +
+                '<div class="home-chart-tooltip-divider"></div>' +
+                '<div class="home-chart-tooltip-difference">' +
+                  '<span class="label">MONTHLY SAVINGS</span>' +
+                  '<span class="value">' + money(difference) + '</span>' +
+                '</div>';
+
+              const position = chartCanvas.getBoundingClientRect();
+              const wrap = chartCanvas.parentElement.getBoundingClientRect();
+
+              tooltipEl.style.display = "block";
+              tooltipEl.style.left =
+                (position.left - wrap.left + tooltip.caretX) + "px";
+              tooltipEl.style.top =
+                (position.top - wrap.top + tooltip.caretY) + "px";
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Year"
+            },
+            ticks: {
+              maxTicksLimit: 9
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Estimated monthly cost"
+            },
+            ticks: {
+              callback: function (value) {
+                return "$" + Number(value).toLocaleString("en-US", {
+                  maximumFractionDigits: 0
+                });
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function updateCalculator() {
+    const currentBill = Math.max(parseFloat(billInput.value) || 0, 0);
+    const projection = calculateProjection(currentBill);
+
+    currentDisplay.textContent = money(currentBill);
+    solarDisplay.textContent = money(projection.startingSolarBill) + "/month";
+    monthlyDisplay.textContent = money(projection.monthlySavings);
+    annualDisplay.textContent = money(projection.annualSavings);
+    savings25Display.textContent = money(projection.totalSavings);
+    aps25Display.textContent = money(projection.utilityTotal);
+    savings25Breakdown.textContent = money(projection.totalSavings);
+
+    renderChart(projection);
+  }
+
+  billInput.addEventListener("input", updateCalculator);
+  billInput.addEventListener("change", updateCalculator);
+  updateCalculator();
+})();
+</script>
+
+
+<script>
+(function () {
+  const billInput = document.getElementById("homeCurrentBill");
+  const callout = document.getElementById("homeCalcStartCallout");
+  const moneyInput = document.getElementById("homeCalcMoneyInput");
+
+  if (!billInput || !callout || !moneyInput) return;
+
+  let dismissed = false;
+
+  function dismissStartCallout() {
+    if (dismissed) return;
+    dismissed = true;
+    callout.classList.add("home-calc-callout-hidden");
+    moneyInput.classList.remove("home-calc-input-attention");
+
+    window.setTimeout(function () {
+      callout.style.display = "none";
+    }, 380);
+  }
+
+  billInput.addEventListener("focus", dismissStartCallout, { once: true });
+  billInput.addEventListener("input", dismissStartCallout, { once: true });
+  billInput.addEventListener("pointerdown", dismissStartCallout, { once: true });
+})();
+</script>
+
 </body>
 </html>
