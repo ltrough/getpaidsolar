@@ -889,7 +889,7 @@ body {
     <h2 class="gps-calc-title">See Your 25-Year Solar Savings</h2>
 
     <p class="gps-calc-subtitle">
-      Estimate your solar savings using your current APS bill, solar payment, battery rewards, and GPS incentives.
+      Estimate your solar savings using your current APS bill, solar payment, battery rewards.
     </p>
 
     <div class="gps-input-panel">
@@ -1112,7 +1112,7 @@ body {
 
 
     <p class="gps-disclaimer">
-      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.
+      Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. Utility rates, final system design, participation rules, and final proposal terms may change actual results.
     </p>
 
     <div class="pdf-download-bottom pdf-export-controls">
@@ -1176,7 +1176,7 @@ function calculateSavings() {
   const solarEscalator =
     (parseFloat(document.getElementById("solarEscalator").value) || 0) / 100;
   const batteryAnnualCredit = parseFloat(document.getElementById("batteryCredit").value) || 0;
-  const gpsIncentive = parseFloat(document.getElementById("gpsIncentive").value) || 0;
+  const gpsIncentive = 0;
 
   const fixedCharge = 13.785;
   const energyPortion = Math.max(apsBill - fixedCharge, 0);
@@ -1901,7 +1901,7 @@ async function downloadClientPdf() {
     assumptionBox(margin + colW + gap, y, colW, "Solar annual rate lock", `${inputValue("solarEscalator")}%`);
     y += 62;
     assumptionBox(margin, y, colW, "APS VPP annual reward (5 years)", moneyFromInput("batteryCredit"));
-    assumptionBox(margin + colW + gap, y, colW, "GPS cash incentive", moneyFromInput("gpsIncentive"));
+    
 
     y += 78;
     y = sectionTitle(isDetailed ? "Detailed savings results" : "25-year savings summary", y);
@@ -2022,7 +2022,7 @@ async function downloadClientPdf() {
     );
 
     wrappedText(
-      "Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. GPS incentives, utility rates, final system design, participation rules, and final proposal terms may change actual results.",
+      "Estimates are for illustration only. Battery rewards are estimated using a 5-year program period. Utility rates, final system design, participation rules, and final proposal terms may change actual results.",
       margin, 698, contentWidth, 11, gray, 8.5, "normal"
     );
 
