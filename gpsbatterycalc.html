@@ -1331,12 +1331,13 @@ function calculateSavings() {
   const partialOffsetIsActive =
     annualUsageKwh > 0 && solarOffsetPercent < 100;
 
-  // A valid solar comparison requires an entered solar payment, annual usage,
-  // and a solar offset above zero. When those solar inputs are cleared, the
-  // calculator treats both choices as staying with APS so it cannot display
-  // artificial savings from a $0 solar scenario.
+  // Activate the comparison when there is an equipment payment and annual usage.
+  // A 0% solar offset is allowed for a battery-only proposal. In that case, the
+  // home's grid energy is modeled at the entered off-peak rate, with an added
+  // on-peak premium only when the battery cannot cover the full 4–7 PM usage.
   const solarScenarioActive =
-    solarMonthly > 0 && annualUsageKwh > 0 && solarOffsetPercent > 0;
+    solarMonthly > 0 && annualUsageKwh > 0 &&
+    (solarOffsetPercent > 0 || usableBatteryKwh > 0);
 
   const firstYearRemainingGridEnergyCost =
     firstYearOffPeakEnergyCost + firstYearPeakPremium;
@@ -1383,9 +1384,14 @@ function calculateSavings() {
   }
 
   if (partialOffsetExplanation) {
-    partialOffsetExplanation.textContent = partialOffsetIsActive
-      ? `${solarOffsetPercent.toFixed(1)}% of annual energy is supplied by solar. The remaining ${(100 - solarOffsetPercent).toFixed(1)}% is modeled as grid energy, primarily purchased at the off-peak rate.`
-      : "Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.";
+    if (partialOffsetIsActive && solarOffsetPercent === 0 && usableBatteryKwh > 0) {
+      partialOffsetExplanation.textContent =
+        "Battery-only estimate: 100% of annual energy is supplied by APS. Grid energy is modeled at the entered off-peak rate because the batteries charge off-peak and cover the entered 4–7 PM usage.";
+    } else {
+      partialOffsetExplanation.textContent = partialOffsetIsActive
+        ? `${solarOffsetPercent.toFixed(1)}% of annual energy is supplied by solar. The remaining ${(100 - solarOffsetPercent).toFixed(1)}% is modeled as grid energy, primarily purchased at the off-peak rate.`
+        : "Enter annual usage and a solar offset below 100% to include the remaining APS energy cost.";
+    }
   }
 
   if (batteryCoverageWarning) {
@@ -1587,7 +1593,11 @@ function calculateSavings() {
   if (initialCurrentAps) initialCurrentAps.textContent = money(summaryApsMonthly);
   if (initialAps25) initialAps25.textContent = money(summaryApsTotal);
   if (initialSolarMonthly) initialSolarMonthly.textContent = money(newAvgMonthlyBill);
-  if (initialSavings25) initialSavings25.textContent = money(summaryNetSavings);
+  if (initialSavings25) {
+    initialSavings25.textContent = money(summaryNetSavings);
+    initialSavings25.classList.toggle("green", summaryNetSavings >= 0);
+    initialSavings25.classList.toggle("orange", summaryNetSavings < 0);
+  }
 
   const percentLower = apsBill > 0
     ? ((apsBill - newAvgMonthlyBill) / apsBill) * 100
@@ -1601,7 +1611,7 @@ function calculateSavings() {
     : apsBill;
 
   const summaryMonthlySavings = solarScenarioActive
-    ? Math.max(summaryComparisonBill - newAvgMonthlyBill, 0)
+    ? summaryComparisonBill - newAvgMonthlyBill
     : 0;
 
   const summaryPercentLower = solarScenarioActive && summaryComparisonBill > 0
@@ -1610,6 +1620,7 @@ function calculateSavings() {
 
   if (initialMonthlySavings) {
     initialMonthlySavings.textContent = money(summaryMonthlySavings);
+    initialMonthlySavings.style.color = summaryMonthlySavings >= 0 ? "#166534" : "#dc2626";
   }
 
   if (initialPercentLower) {
@@ -1667,7 +1678,7 @@ function calculateSavings() {
   }
 
   const selectedMonthlySavings = solarScenarioActive
-    ? Math.max(selectedApsMonthly - selectedSolarMonthlyAfterRewards, 0)
+    ? selectedApsMonthly - selectedSolarMonthlyAfterRewards
     : 0;
 
   const selectedPercentLower =
@@ -1691,8 +1702,9 @@ function calculateSavings() {
   document.getElementById("apsNextYear").textContent =
     money(selectedApsMonthly);
 
-  document.getElementById("nextYearDifference").textContent =
-    money(selectedMonthlySavings);
+  const nextYearDifferenceElement = document.getElementById("nextYearDifference");
+  nextYearDifferenceElement.textContent = money(selectedMonthlySavings);
+  nextYearDifferenceElement.style.color = selectedMonthlySavings >= 0 ? "#166534" : "#dc2626";
   document.getElementById("apsTotal").textContent = money(selectedApsTotal);
   document.getElementById("apsCostCardLabel").textContent =
     `APS ${selectedSavingsYears}-Year Cost After 14% Increase`;
@@ -1709,7 +1721,10 @@ function calculateSavings() {
       `than APS in year ${selectedSavingsYears}`;
   }
 
-  document.getElementById("totalSavings").textContent = money(selectedNetSavings);
+  const totalSavingsElement = document.getElementById("totalSavings");
+  totalSavingsElement.textContent = money(selectedNetSavings);
+  totalSavingsElement.classList.toggle("green", selectedNetSavings >= 0);
+  totalSavingsElement.classList.toggle("orange", selectedNetSavings < 0);
 
   const detailedViewIsOpen =
     document.getElementById("detailedResultsView").classList.contains("gps-show");
