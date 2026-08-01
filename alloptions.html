@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS Four-Option Energy Comparison</title>
+<style>
+:root{
+  --navy:#061b3a;--orange:#ff5a1f;--red:#dc2626;--green:#16a34a;--blue:#2563eb;--purple:#8b5cf6;
+  --gold:#d97706;--gray:#4b5563;--light:#f8fafc;--line:#d1d5db;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--navy);color:#fff}
+section{padding:55px 18px}
+.container{max-width:1250px;margin:auto;background:#fff;color:var(--navy);border-radius:24px;padding:34px}
+h1{text-align:center;font-size:38px;margin:0 0 8px;font-weight:900}
+.subtitle{text-align:center;color:var(--gray);font-size:17px;line-height:1.45;margin:0 0 28px}
+.panel{background:var(--light);border:2px solid #e5e7eb;border-radius:20px;padding:24px;margin-bottom:24px}
+.panel-title{font-size:22px;font-weight:900;margin:0 0 18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px}
+.field label{display:block;font-size:14px;font-weight:900;margin-bottom:7px}
+.field input,.field select{width:100%;padding:13px;border:2px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-size:16px;font-weight:700}
+.money{display:flex;border:2px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+.money span{padding:13px 14px;background:#eef2f7;font-weight:900;font-size:18px;border-right:1px solid var(--line)}
+.money input{border:0;border-radius:0;outline:0}
+.help{font-size:11px;color:#6b7280;margin-top:6px;line-height:1.35}
+.option-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:10px}
+.option-box{border-radius:16px;padding:18px;background:#fff;border:2px solid #dbe3ee}
+.option-box h3{margin:0 0 14px;font-size:18px;font-weight:900;text-align:center}
+.option-box.battery{border-color:#c4b5fd}.option-box.eight{border-color:#93c5fd}.option-box.full{border-color:#86efac}
+.results{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.summary-card{border-radius:19px;padding:16px;border:2px solid #e5e7eb;background:#fff}
+.summary-card.aps{background:#fff5f3;border-color:#ffb4a0}
+.summary-card.battery{background:#f5f3ff;border-color:#c4b5fd}
+.summary-card.eight{background:#eff6ff;border-color:#93c5fd}
+.summary-card.full{background:#f0fdf4;border-color:#86efac}
+.summary-card h2{text-align:center;margin:0 0 12px;font-size:19px;font-weight:900;min-height:46px;display:flex;align-items:center;justify-content:center}
+.summary-card.aps h2{color:var(--red)}.summary-card.battery h2{color:var(--purple)}.summary-card.eight h2{color:var(--blue)}.summary-card.full h2{color:var(--green)}
+.metric{background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:13px 9px;text-align:center;margin-top:9px}
+.metric-label{font-size:11px;color:#4b5563;font-weight:900;line-height:1.25;margin-bottom:6px}
+.metric-value{font-size:23px;font-weight:900;line-height:1.1}
+.positive{color:var(--green)!important}.negative{color:var(--red)!important}.neutral{color:var(--navy)!important}
+.small-note{font-size:11px;color:#6b7280;text-align:center;margin-top:9px;line-height:1.35}
+.actions{text-align:center;margin:24px 0 4px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+button{border:0;border-radius:13px;padding:14px 22px;background:var(--navy);color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(6,27,58,.16)}
+button:hover{background:#0b2a56}.green-button{background:var(--green)}.green-button:hover{background:#15803d}
+.scenario-note{text-align:center;color:#4b5563;font-size:12px;font-weight:700;margin-top:8px}
+.detail-panel{margin-top:24px;background:#f8fafc;border:2px solid #dbe3ee;border-radius:18px;padding:20px}.detail-header{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap}.detail-header h2{margin:0;font-size:23px}.detail-year-field{width:220px}.detail-results{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}.detail-card{background:#fff;border:2px solid #e5e7eb;border-radius:15px;padding:14px;text-align:center}.detail-card h3{font-size:14px;min-height:36px;margin:0 0 10px}.detail-value{font-size:21px;font-weight:900}.detail-sub{font-size:11px;color:#6b7280;margin-top:5px}.detail-savings{margin-top:11px;padding-top:11px;border-top:1px solid #e5e7eb}
+.best{margin-top:22px;background:#eff6ff;border:3px solid var(--blue);border-radius:18px;padding:21px;text-align:center}
+.best-label{font-size:14px;color:#1d4ed8;font-weight:900;text-transform:uppercase}.best-winner{font-size:29px;font-weight:900;margin:7px 0}.best-diff{font-size:18px;font-weight:900;color:#1d4ed8}
+.chart-wrap{height:500px;margin-top:25px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:20px}
+.notice{margin-top:22px;background:#fff5f5;border:2px solid var(--red);border-radius:14px;padding:17px;color:#991b1b;font-size:13px;line-height:1.5}.notice strong{display:block;color:var(--red);font-size:17px;margin-bottom:5px}
+@media(max-width:1050px){.results,.detail-results{grid-template-columns:1fr 1fr}.option-inputs{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.grid,.results,.detail-results{grid-template-columns:1fr}.container{padding:20px}h1{font-size:30px}.chart-wrap{height:430px}}
+</style>
+</head>
+<body>
+<section>
+<div class="container">
+  <h1>Compare Four Energy Options</h1>
+  <p class="subtitle">Compare staying with APS, adding batteries only, adding batteries with 8 solar panels, and installing a full solar system with batteries.</p>
+
+  <div class="panel">
+    <h2 class="panel-title">Shared Customer & APS Assumptions</h2>
+    <div class="grid">
+      <div class="field"><label>Average APS Monthly Bill</label><div class="money"><span>$</span><input id="apsBill" type="number" value="344.64" min="0" step="0.01"></div></div>
+      <div class="field"><label>APS Annual Increase %</label><input id="apsIncrease" type="number" value="5" min="0" max="25" step="0.01"></div>
+      <div class="field"><label>Annual Home Energy Usage (kWh)</label><input id="annualUsage" type="number" value="22754" min="0" step="1"></div>
+      <div class="field"><label>Solar Annual Rate Lock %</label><select id="solarEsc"><option value="0">0%</option><option value="0.9">0.9%</option><option value="1.9" selected>1.9%</option><option value="2.99">2.99%</option></select></div>
+      <div class="field"><label>Usable Battery Energy (kWh)</label><input id="batteryKwh" type="number" value="27" min="0" step="0.1"></div>
+      <div class="field"><label>Highest 4–7 PM Energy Use (kWh/day)</label><input id="peakUsage" type="number" value="25" min="0" step="0.1"></div>
+      <div class="field"><label>Off-Peak Grid Energy Rate ($/kWh)</label><div class="money"><span>$</span><input id="offPeakRate" type="number" value="0.06" min="0" step="0.001"></div></div>
+      <div class="field"><label>APS On-Peak Rate (4–7 PM) ($/kWh)</label><div class="money"><span>$</span><input id="peakRate" type="number" value="0.30" min="0" step="0.001"></div></div>
+      <div class="field"><label>APS VPP Annual Reward (5 Years)</label><div class="money"><span>$</span><input id="vpp" type="number" value="800" min="0" step="0.01"></div></div>
+      <div class="field"><label>Detailed View Year</label><select id="years"><option value="1" selected>Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option><option value="6">Year 6</option><option value="7">Year 7</option><option value="8">Year 8</option><option value="9">Year 9</option><option value="10">Year 10</option><option value="11">Year 11</option><option value="12">Year 12</option><option value="13">Year 13</option><option value="14">Year 14</option><option value="15">Year 15</option><option value="16">Year 16</option><option value="17">Year 17</option><option value="18">Year 18</option><option value="19">Year 19</option><option value="20">Year 20</option><option value="21">Year 21</option><option value="22">Year 22</option><option value="23">Year 23</option><option value="24">Year 24</option><option value="25">Year 25</option></select><div class="help">Select a year to view that year’s monthly cost and cumulative savings through that year.</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 class="panel-title">Editable Option-Specific Inputs</h2>
+    <div class="option-inputs">
+      <div class="option-box battery">
+        <h3>2. Batteries Only</h3>
+        <div class="field"><label>Battery Monthly Payment</label><div class="money"><span>$</span><input id="batteryPayment" type="number" value="237.28" min="0" step="0.01"></div></div>
+        <div class="help">Solar offset is automatically 0%. APS supplies all annual energy, modeled primarily at the off-peak rate when the batteries cover 4–7 PM.</div>
+      </div>
+      <div class="option-box eight">
+        <h3>3. Batteries + 8 Panels</h3>
+        <div class="field"><label>Monthly Payment</label><div class="money"><span>$</span><input id="eightPayment" type="number" value="280" min="0" step="0.01"></div></div>
+        <div class="field" style="margin-top:12px"><label>Estimated Solar Energy Offset %</label><input id="eightOffset" type="number" value="18" min="0" max="100" step="0.1"></div>
+      </div>
+      <div class="option-box full">
+        <h3>4. Full Solar + Batteries</h3>
+        <div class="field"><label>Monthly Payment</label><div class="money"><span>$</span><input id="fullPayment" type="number" value="344" min="0" step="0.01"></div></div>
+        <div class="field" style="margin-top:12px"><label>Estimated Solar Energy Offset %</label><input id="fullOffset" type="number" value="100" min="0" max="100" step="0.1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="summary-card aps"><h2>1. Staying with APS</h2><div class="metric"><div class="metric-label" id="apsMonthlyLabel">Current Monthly Cost</div><div class="metric-value" id="apsStart">$0.00</div></div><div class="metric"><div class="metric-label">25-Year Cost After 14% First-Year Increase</div><div class="metric-value" id="apsTotal">$0.00</div></div></div>
+    <div class="summary-card battery"><h2>2. Only Adding Batteries</h2><div class="metric"><div class="metric-label" id="batteryMonthlyLabel">Current Monthly Cost After VPP</div><div class="metric-value" id="batteryStart">$0.00</div></div><div class="metric"><div class="metric-label">25-Year Savings After 14% First-Year APS Increase</div><div class="metric-value" id="batterySavings">$0.00</div></div><div class="small-note" id="batteryApsNote"></div></div>
+    <div class="summary-card eight"><h2>3. Batteries + 8 Panels</h2><div class="metric"><div class="metric-label" id="eightMonthlyLabel">Current Monthly Cost After VPP</div><div class="metric-value" id="eightStart">$0.00</div></div><div class="metric"><div class="metric-label">25-Year Savings After 14% First-Year APS Increase</div><div class="metric-value" id="eightSavings">$0.00</div></div><div class="small-note" id="eightApsNote"></div></div>
+    <div class="summary-card full"><h2>4. Full Solar + Batteries</h2><div class="metric"><div class="metric-label" id="fullMonthlyLabel">Current Monthly Cost After VPP</div><div class="metric-value" id="fullStart">$0.00</div></div><div class="metric"><div class="metric-label">25-Year Savings After 14% First-Year APS Increase</div><div class="metric-value" id="fullSavings">$0.00</div></div><div class="small-note" id="fullApsNote"></div></div>
+  </div>
+
+  <div class="detail-panel">
+    <div class="detail-header">
+      <div><h2>Detailed Year View</h2><div class="help">Monthly figures follow the selected year. Savings are cumulative from year 1 through the selected year and always include the 14% first-year APS increase.</div></div>
+      <div class="field detail-year-field"><label for="detailYears">Select Year</label><select id="detailYears"><option value="1" selected>Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option><option value="6">Year 6</option><option value="7">Year 7</option><option value="8">Year 8</option><option value="9">Year 9</option><option value="10">Year 10</option><option value="11">Year 11</option><option value="12">Year 12</option><option value="13">Year 13</option><option value="14">Year 14</option><option value="15">Year 15</option><option value="16">Year 16</option><option value="17">Year 17</option><option value="18">Year 18</option><option value="19">Year 19</option><option value="20">Year 20</option><option value="21">Year 21</option><option value="22">Year 22</option><option value="23">Year 23</option><option value="24">Year 24</option><option value="25">Year 25</option></select></div>
+    </div>
+    <div class="detail-results">
+      <div class="detail-card"><h3>Staying with APS</h3><div class="detail-value" id="detailApsMonthly">$0.00/mo</div><div class="detail-sub" id="detailApsLabel">Monthly cost in Year 1</div><div class="detail-savings"><div class="metric-label" id="detailApsTotalLabel">Cost through Year 1</div><div class="detail-value" id="detailApsTotal">$0.00</div></div></div>
+      <div class="detail-card"><h3>Only Adding Batteries</h3><div class="detail-value" id="detailBatteryMonthly">$0.00/mo</div><div class="detail-sub">Monthly cost after applicable VPP</div><div class="detail-savings"><div class="metric-label" id="detailBatterySavingsLabel">Savings through Year 1</div><div class="detail-value" id="detailBatterySavings">$0.00</div></div></div>
+      <div class="detail-card"><h3>Batteries + 8 Panels</h3><div class="detail-value" id="detailEightMonthly">$0.00/mo</div><div class="detail-sub">Monthly cost after applicable VPP</div><div class="detail-savings"><div class="metric-label" id="detailEightSavingsLabel">Savings through Year 1</div><div class="detail-value" id="detailEightSavings">$0.00</div></div></div>
+      <div class="detail-card"><h3>Full Solar + Batteries</h3><div class="detail-value" id="detailFullMonthly">$0.00/mo</div><div class="detail-sub">Monthly cost after applicable VPP</div><div class="detail-savings"><div class="metric-label" id="detailFullSavingsLabel">Savings through Year 1</div><div class="detail-value" id="detailFullSavings">$0.00</div></div></div>
+    </div>
+  </div>
+
+  <div class="actions"><button id="toggle14">See Numbers After a 14% APS Increase</button><button class="green-button" onclick="window.print()">Print / Save as PDF</button></div>
+  <div class="scenario-note" id="scenarioNote">Current-rate view. APS increases by the entered annual percentage beginning in year 2.</div>
+
+  <div class="best"><div class="best-label" id="bestLabel">Best Projected 25-Year Financial Result</div><div class="best-winner" id="bestWinner">—</div><div class="best-diff" id="bestDiff">—</div></div>
+  <div class="chart-wrap"><canvas id="chart"></canvas></div>
+
+  <div class="notice"><strong>IMPORTANT ESTIMATE NOTICE</strong>This model assumes battery-equipped options charge from APS during off-peak periods and use battery energy to cover the entered 4–7 PM load. Remaining annual grid energy is modeled at the entered off-peak rate, with an on-peak premium added only when usable battery capacity is below the entered 4–7 PM usage. Actual APS bills may include additional taxes, demand charges, riders, seasonal rates, battery losses, reserve settings, and other charges not represented here.</div>
+</div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+"use strict";
+let chart=null, show14=false;
+const n=id=>parseFloat(document.getElementById(id).value)||0;
+const pct=id=>n(id)/100;
+const money=v=>Number(v).toLocaleString("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2});
+const fixedCharge=13.785;
+function apsMonthly(base,rate,year,use14){
+  const energy=Math.max(base-fixedCharge,0);
+  const firstFactor=use14?1.14:1;
+  return fixedCharge+energy*firstFactor*Math.pow(1+rate,year-1);
+}
+function scenarioBaseGridMonthly(offset){
+  const annual=n("annualUsage"),off=n("offPeakRate"),peak=n("peakRate");
+  const battery=n("batteryKwh"),peakNeed=n("peakUsage");
+  const remaining=annual*(1-Math.min(Math.max(offset,0),100)/100);
+  const uncovered=Math.max(peakNeed-battery,0),peakDays=260;
+  const annualEnergyCost=remaining*off+uncovered*peakDays*Math.max(peak-off,0);
+  return remaining>0?fixedCharge+annualEnergyCost/12:fixedCharge;
+}
+function scenarioMonthly(payment,offset,year,use14){
+  const reward=year<=5?n("vpp")/12:0;
+  const baseGrid=scenarioBaseGridMonthly(offset),energy=Math.max(baseGrid-fixedCharge,0);
+  const grid=fixedCharge+energy*(use14?1.14:1)*Math.pow(1+pct("apsIncrease"),year-1);
+  const equipment=payment*Math.pow(1+pct("solarEsc"),year-1);
+  return Math.max(equipment+grid-reward,0);
+}
+function totalAps(years,use14){let t=0;for(let y=1;y<=years;y++)t+=apsMonthly(n("apsBill"),pct("apsIncrease"),y,use14)*12;return t}
+function totalScenario(payment,offset,years,use14){let t=0;for(let y=1;y<=years;y++)t+=scenarioMonthly(payment,offset,y,use14)*12;return t}
+function colorize(el,val){el.classList.remove("positive","negative","neutral");el.classList.add(val>0?"positive":val<0?"negative":"neutral")}
+function calc(){
+  const detailYear=parseInt(document.getElementById("detailYears").value,10)||1;
+  document.getElementById("years").value=String(detailYear);
+  const bPay=n("batteryPayment"),ePay=n("eightPayment"),fPay=n("fullPayment");
+  const eOff=n("eightOffset"),fOff=n("fullOffset");
+
+  // Summary savings are always 25 years and always include the 14% first-year APS increase.
+  const aps25=totalAps(25,true);
+  const b25=totalScenario(bPay,0,25,true),e25=totalScenario(ePay,eOff,25,true),f25=totalScenario(fPay,fOff,25,true);
+  const bSave25=aps25-b25,eSave25=aps25-e25,fSave25=aps25-f25;
+
+  // The 14% button changes monthly figures only.
+  const monthlyUse14=show14;
+  document.getElementById("apsStart").textContent=money(apsMonthly(n("apsBill"),pct("apsIncrease"),1,monthlyUse14));
+  document.getElementById("apsTotal").textContent=money(aps25);
+  document.getElementById("apsMonthlyLabel").textContent=show14?"Monthly Cost After 14% Increase":"Current Monthly Cost";
+  const map=[["battery",bPay,0,bSave25],["eight",ePay,eOff,eSave25],["full",fPay,fOff,fSave25]];
+  map.forEach(([key,pay,off,save])=>{
+    const start=scenarioMonthly(pay,off,1,monthlyUse14);
+    const el=document.getElementById(key+"Start");el.textContent=money(start);colorize(el,apsMonthly(n("apsBill"),pct("apsIncrease"),1,monthlyUse14)-start);
+    const sEl=document.getElementById(key+"Savings");sEl.textContent=money(save);colorize(sEl,save);
+    document.getElementById(key+"MonthlyLabel").textContent=show14?"Monthly Cost After 14% APS Increase & VPP":"Current Monthly Cost After VPP";
+    const baseGrid=scenarioBaseGridMonthly(off),energy=Math.max(baseGrid-fixedCharge,0);
+    const grid=fixedCharge+energy*(monthlyUse14?1.14:1);
+    document.getElementById(key+"ApsNote").textContent=`Estimated APS portion before VPP: ${money(grid)}/mo`;
+  });
+
+  const options=[{name:"Only Adding Batteries",save:bSave25},{name:"Batteries + 8 Panels",save:eSave25},{name:"Full Solar + Batteries",save:fSave25}].sort((a,b)=>b.save-a.save);
+  document.getElementById("bestLabel").textContent="Best Projected 25-Year Financial Result After 14% First-Year APS Increase";
+  document.getElementById("bestWinner").textContent=options[0].name;
+  document.getElementById("bestDiff").textContent=options[0].save>=0?`${money(options[0].save)} projected savings versus APS`:`Projected to cost ${money(Math.abs(options[0].save))} more than APS`;
+  document.getElementById("scenarioNote").textContent=show14?"Monthly figures now show the 14% first-year APS increase. The 25-year savings figures above do not change because they already include that increase.":"Monthly figures show current rates. The 25-year savings figures already include a 14% first-year APS increase.";
+
+  // Detailed year: monthly values follow selected year and button state; cumulative savings always include 14%.
+  const apsDetailMonthly=apsMonthly(n("apsBill"),pct("apsIncrease"),detailYear,monthlyUse14);
+  const bDetailMonthly=scenarioMonthly(bPay,0,detailYear,monthlyUse14),eDetailMonthly=scenarioMonthly(ePay,eOff,detailYear,monthlyUse14),fDetailMonthly=scenarioMonthly(fPay,fOff,detailYear,monthlyUse14);
+  const apsDetailTotal=totalAps(detailYear,true);
+  const bDetailSave=apsDetailTotal-totalScenario(bPay,0,detailYear,true),eDetailSave=apsDetailTotal-totalScenario(ePay,eOff,detailYear,true),fDetailSave=apsDetailTotal-totalScenario(fPay,fOff,detailYear,true);
+  document.getElementById("detailApsMonthly").textContent=money(apsDetailMonthly)+"/mo";
+  document.getElementById("detailBatteryMonthly").textContent=money(bDetailMonthly)+"/mo";
+  document.getElementById("detailEightMonthly").textContent=money(eDetailMonthly)+"/mo";
+  document.getElementById("detailFullMonthly").textContent=money(fDetailMonthly)+"/mo";
+  document.getElementById("detailApsLabel").textContent=`Monthly cost in Year ${detailYear}${show14?" with 14% first-year increase":" at current-rate path"}`;
+  document.getElementById("detailApsTotalLabel").textContent=`APS cost through Year ${detailYear}`;
+  document.getElementById("detailApsTotal").textContent=money(apsDetailTotal);
+  [["Battery",bDetailSave],["Eight",eDetailSave],["Full",fDetailSave]].forEach(([key,val])=>{
+    const el=document.getElementById("detail"+key+"Savings");el.textContent=money(val);colorize(el,val);
+    document.getElementById("detail"+key+"SavingsLabel").textContent=`Savings through Year ${detailYear}`;
+  });
+  ["detailBatteryMonthly","detailEightMonthly","detailFullMonthly"].forEach((id,i)=>{
+    const vals=[bDetailMonthly,eDetailMonthly,fDetailMonthly];colorize(document.getElementById(id),apsDetailMonthly-vals[i]);
+  });
+
+  const labels=[],aps=[],bat=[],eight=[],full=[];
+  for(let y=1;y<=25;y++){
+    labels.push(y);aps.push(+apsMonthly(n("apsBill"),pct("apsIncrease"),y,true).toFixed(2));
+    bat.push(+scenarioMonthly(bPay,0,y,true).toFixed(2));eight.push(+scenarioMonthly(ePay,eOff,y,true).toFixed(2));full.push(+scenarioMonthly(fPay,fOff,y,true).toFixed(2));
+  }
+  draw(labels,aps,bat,eight,full);
+}
+function draw(labels,aps,bat,eight,full){
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById("chart"),{type:"line",data:{labels,datasets:[
+    {label:"Staying with APS",data:aps,borderColor:"#dc2626",backgroundColor:"#dc2626",borderWidth:4,tension:.22,pointRadius:3},
+    {label:"Batteries Only",data:bat,borderColor:"#8b5cf6",backgroundColor:"#8b5cf6",borderWidth:4,tension:.22,pointRadius:3},
+    {label:"Batteries + 8 Panels",data:eight,borderColor:"#2563eb",backgroundColor:"#2563eb",borderWidth:4,tension:.22,pointRadius:3},
+    {label:"Full Solar + Batteries",data:full,borderColor:"#16a34a",backgroundColor:"#16a34a",borderWidth:4,tension:.22,pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom",labels:{font:{size:14,weight:"bold"}}},tooltip:{callbacks:{title:i=>"Year "+i[0].label,label:i=>i.dataset.label+"  "+money(i.parsed.y)}}},scales:{y:{title:{display:true,text:"Projected Monthly Energy Cost — 14% First-Year APS Increase",font:{size:15,weight:"bold"}},ticks:{callback:v=>"$"+Number(v).toLocaleString()}},x:{title:{display:true,text:"Year",font:{size:15,weight:"bold"}}}}}})
+}
+document.querySelectorAll("input,select").forEach(el=>{el.addEventListener("input",calc);el.addEventListener("change",calc);el.addEventListener("blur",function(){if(this.closest(".money"))this.value=(parseFloat(this.value)||0).toFixed(2)})});
+document.getElementById("years").addEventListener("change",function(){document.getElementById("detailYears").value=this.value;calc()});
+document.getElementById("toggle14").addEventListener("click",function(){show14=!show14;this.textContent=show14?"Back to Current APS Rates":"See Numbers After a 14% APS Increase";calc()});
+window.addEventListener("load",calc);
+</script>
+</body>
+</html>
