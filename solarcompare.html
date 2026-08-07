@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GPS Partial Solar vs. Full Solar + Battery</title>
+<title>GPS APS vs. Solar vs. Solar + Batteries</title>
 <style>
 :root{
   --navy:#061b3a; --orange:#ff5a1f; --green:#16a34a; --purple:#8b5cf6;
@@ -15,7 +15,17 @@ section{padding:55px 18px}
 .container{max-width:1160px;margin:auto;background:#fff;color:var(--navy);border-radius:24px;padding:34px}
 h1{text-align:center;font-size:38px;margin:0 0 8px;font-weight:900}
 .subtitle{text-align:center;color:var(--gray);font-size:17px;line-height:1.4;margin:0 0 28px}
-.panel{background:var(--light);border:2px solid #e5e7eb;border-radius:20px;padding:24px}
+.panel{background:transparent;border:0;border-radius:0;padding:0}
+.entry-options{display:grid;gap:20px}
+.entry-tile{border-radius:20px;padding:24px}
+.entry-tile .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px}
+.entry-tile h2{grid-column:1/-1;text-align:center;margin:0 0 4px;font-size:22px;font-weight:900}
+.entry-a{background:#fff5f5;border:2px solid #fca5a5}
+.entry-a h2{color:#dc2626}
+.entry-b{background:#fff7ed;border:2px solid #fdba74}
+.entry-b h2{color:#ea580c}
+.entry-c{background:#f0fdf4;border:2px solid #86efac}
+.entry-c h2{color:#16a34a}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px}
 .field label{display:block;font-size:14px;font-weight:900;margin-bottom:7px}
 .field input,.field select{width:100%;padding:13px;border:2px solid #d1d5db;border-radius:11px;background:#fff;color:var(--navy);font-size:16px;font-weight:700}
@@ -98,7 +108,7 @@ h1{text-align:center;font-size:38px;margin:0 0 8px;font-weight:900}
 button{border:0;border-radius:11px;padding:14px 23px;background:var(--green);color:#fff;font-size:16px;font-weight:900;cursor:pointer}
 button:hover{background:#15803d}
 @media(max-width:850px){
-  .grid,.results,.cards,.be-grid,.aps-baseline-cards{grid-template-columns:1fr}
+  .grid,.entry-tile .grid,.results,.cards,.be-grid,.aps-baseline-cards{grid-template-columns:1fr}
   .divider{grid-column:auto}
   .container{padding:22px}
   h1{font-size:30px}
@@ -108,82 +118,96 @@ button:hover{background:#15803d}
 <body>
 <section>
 <div class="container">
-  <h1>Partial Solar vs. Full Solar + Battery</h1>
-  <p class="subtitle">Compare a partial-offset solar system with a remaining APS bill against a full solar-and-battery system designed to minimize the APS bill.</p>
+  <h1>APS vs. Solar vs. Solar + Batteries</h1>
+  <p class="subtitle">Compare staying with APS, installing solar panels, or installing solar panels with batteries.</p>
 
   <div class="panel">
-    <div class="grid">
-      <div class="field">
-        <label>Analysis Period</label>
-        <select id="years">
-          <option value="5">5 Years</option><option value="10">10 Years</option>
-          <option value="15">15 Years</option><option value="20">20 Years</option>
-          <option value="25" selected>25 Years</option>
-        </select>
+    <div class="entry-options">
+      <div class="entry-tile entry-a">
+        <div class="grid">
+          <h2>Option A — Stay with APS</h2>
+
+          <div class="field">
+            <label>Analysis Period</label>
+            <select id="years">
+              <option value="5">5 Years</option><option value="10">10 Years</option>
+              <option value="15">15 Years</option><option value="20">20 Years</option>
+              <option value="25" selected>25 Years</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Current APS Monthly Bill Before Solar</label>
+            <div class="money"><span>$</span><input id="currentAps" type="number" value="358.00" min="0" step="0.01"></div>
+          </div>
+
+          <div class="field">
+            <label>APS Annual Increase %</label>
+            <input id="apsIncrease" type="number" value="5" min="0" max="25" step="0.01">
+            <div class="help">Applied annually to APS charges.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="field">
-        <label>Current APS Monthly Bill Before Solar</label>
-        <div class="money"><span>$</span><input id="currentAps" type="number" value="358.00" min="0" step="0.01"></div>
+      <div class="entry-tile entry-b">
+        <div class="grid">
+          <h2>Option B — Solar Panels</h2>
+
+          <div class="field">
+            <label>Solar Monthly Payment</label>
+            <div class="money"><span>$</span><input id="partialSolar" type="number" value="207.00" min="0" step="0.01"></div>
+          </div>
+
+          <div class="field">
+            <label>Solar Escalator %</label>
+            <select id="partialEsc">
+              <option value="0" selected>0%</option><option value="0.9">0.9%</option>
+              <option value="1.9">1.9%</option><option value="2.99">2.99%</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Remaining APS Monthly Bill</label>
+            <div class="money"><span>$</span><input id="partialAps" type="number" value="127.00" min="0" step="0.01"></div>
+          </div>
+        </div>
       </div>
 
-      <div class="field">
-        <label>APS Annual Increase %</label>
-        <input id="apsIncrease" type="number" value="5" min="0" max="25" step="0.01">
-        <div class="help">Applied annually to APS charges.</div>
-      </div>
+      <div class="entry-tile entry-c">
+        <div class="grid">
+          <h2>Option C — Solar Panels + Batteries</h2>
 
-      <div class="divider"><h2>Option A — Partial Solar System</h2></div>
+          <div class="field">
+            <label>Solar + Battery Monthly Payment</label>
+            <div class="money"><span>$</span><input id="fullSolar" type="number" value="358.00" min="0" step="0.01"></div>
+          </div>
 
-      <div class="field">
-        <label>Partial Solar Monthly Payment</label>
-        <div class="money"><span>$</span><input id="partialSolar" type="number" value="207.00" min="0" step="0.01"></div>
-      </div>
+          <div class="field">
+            <label>Solar + Battery Escalator %</label>
+            <select id="fullEsc">
+              <option value="0">0%</option><option value="0.9">0.9%</option>
+              <option value="1.9" selected>1.9%</option><option value="2.99">2.99%</option>
+            </select>
+          </div>
 
-      <div class="field">
-        <label>Partial Solar Escalator %</label>
-        <select id="partialEsc">
-          <option value="0" selected>0%</option><option value="0.9">0.9%</option>
-          <option value="1.9">1.9%</option><option value="2.99">2.99%</option>
-        </select>
-      </div>
+          <div class="field">
+            <label>Remaining APS Monthly Bill</label>
+            <div class="money"><span>$</span><input id="fullAps" type="number" value="0.00" min="0" step="0.01"></div>
+            <div class="help">Enter any expected connection charge or residual APS cost.</div>
+          </div>
 
-      <div class="field">
-        <label>Remaining APS Monthly Bill</label>
-        <div class="money"><span>$</span><input id="partialAps" type="number" value="127.00" min="0" step="0.01"></div>
-      </div>
-
-      <div class="divider"><h2>Option B — Full Solar + Battery</h2></div>
-
-      <div class="field">
-        <label>Full-System Monthly Payment</label>
-        <div class="money"><span>$</span><input id="fullSolar" type="number" value="358.00" min="0" step="0.01"></div>
-      </div>
-
-      <div class="field">
-        <label>Full-System Escalator %</label>
-        <select id="fullEsc">
-          <option value="0">0%</option><option value="0.9">0.9%</option>
-          <option value="1.9" selected>1.9%</option><option value="2.99">2.99%</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Remaining APS Monthly Bill</label>
-        <div class="money"><span>$</span><input id="fullAps" type="number" value="0.00" min="0" step="0.01"></div>
-        <div class="help">Enter any expected connection charge or residual APS cost.</div>
-      </div>
-
-      <div class="field">
-        <label>APS VPP Annual Reward (5 Years)</label>
-        <div class="money"><span>$</span><input id="vpp" type="number" value="800.00" min="0" step="0.01"></div>
-        <div class="help">Deducted from Option B for the first five years only.</div>
+          <div class="field">
+            <label>APS VPP Annual Reward (5 Years)</label>
+            <div class="money"><span>$</span><input id="vpp" type="number" value="800.00" min="0" step="0.01"></div>
+            <div class="help">Deducted from Option C for the first five years only.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="aps-baseline">
-    <h2>Continue with APS</h2>
+    <h2>Option A — Stay with APS</h2>
     <div class="aps-baseline-cards">
       <div class="card">
         <h3>Current APS Monthly Bill</h3>
@@ -198,7 +222,7 @@ button:hover{background:#15803d}
 
   <div class="results">
     <div class="option option-a">
-      <h2>Option A — Partial Solar</h2>
+      <h2>Option B — Solar Panels</h2>
       <div class="cards">
         <div class="card">
           <h3>Starting Combined Monthly Cost</h3>
@@ -212,7 +236,7 @@ button:hover{background:#15803d}
     </div>
 
     <div class="option option-b">
-      <h2>Option B — Full Solar + Battery</h2>
+      <h2>Option C — Solar Panels + Batteries</h2>
       <div class="cards">
         <div class="card">
           <h3>Monthly Cost After Rewards</h3>
@@ -351,7 +375,7 @@ function renderChart(labels, apsOnlyData, partialData, fullData){
       labels,
       datasets:[
         {
-          label:"Continue with APS",
+          label:"Option A — Stay with APS",
           data:apsOnlyData,
           borderColor:"#dc2626",
           backgroundColor:"#dc2626",
@@ -361,7 +385,7 @@ function renderChart(labels, apsOnlyData, partialData, fullData){
           pointHoverRadius:7
         },
         {
-          label:"Option A — Partial Solar + APS",
+          label:"Option B — Solar Panels + APS",
           data:partialData,
           borderColor:"#ff5a1f",
           backgroundColor:"#ff5a1f",
@@ -371,7 +395,7 @@ function renderChart(labels, apsOnlyData, partialData, fullData){
           pointHoverRadius:7
         },
         {
-          label:"Option B — Full Solar + Battery",
+          label:"Option C — Solar Panels + Batteries",
           data:fullData,
           borderColor:"#16a34a",
           backgroundColor:"#16a34a",
@@ -455,6 +479,13 @@ function calculate(){
     ? currentAps * 1.14
     : currentAps;
 
+  // The SAVE amount is the homeowner's actual monthly savings versus staying with APS.
+  // This means it increases when the 14% APS scenario is enabled, while the solar +
+  // battery payment itself remains unchanged (unless a residual APS bill is entered).
+  const fullMonthlySavings = hasFullProposal
+    ? Math.max(displayedApsMonthly - fullAfterRewards, 0)
+    : 0;
+
   document.getElementById("apsBaselineMonthly").textContent = money(displayedApsMonthly);
   document.getElementById("apsBaselineTotal").textContent = money(stayingApsTotal);
   document.querySelector(".aps-baseline .card h3").textContent =
@@ -468,7 +499,7 @@ function calculate(){
 
   document.getElementById("partialStart").textContent = money(partialStart);
   document.getElementById("fullAfterRewards").textContent = money(fullAfterRewards);
-  document.getElementById("vppMonthly").textContent = money(monthlyVpp);
+  document.getElementById("vppMonthly").textContent = money(fullMonthlySavings);
   document.getElementById("partialSavings").textContent = money(partialSavings);
   document.getElementById("fullSavings").textContent = money(fullSavings);
 
@@ -501,11 +532,11 @@ function calculate(){
     document.getElementById("difference").textContent =
       `Continuing with APS is projected to cost ${money(stayingApsTotal)} over ${years} years`;
   }else if(hasPartialProposal && !hasFullProposal){
-    document.getElementById("winner").textContent = "Option A — Partial Solar";
+    document.getElementById("winner").textContent = "Option B — Solar Panels";
     document.getElementById("difference").textContent =
       money(partialSavings)+" projected savings over "+years+" years";
   }else if(!hasPartialProposal && hasFullProposal){
-    document.getElementById("winner").textContent = "Option B — Full Solar + Battery";
+    document.getElementById("winner").textContent = "Option C — Solar Panels + Batteries";
     document.getElementById("difference").textContent =
       money(fullSavings)+" projected savings over "+years+" years";
   }else if(Math.abs(partialSavings - fullSavings) < 0.01){
@@ -513,11 +544,11 @@ function calculate(){
     document.getElementById("difference").textContent =
       "$0.00 difference in projected savings";
   }else if(partialSavings > fullSavings){
-    document.getElementById("winner").textContent = "Option A — Partial Solar";
+    document.getElementById("winner").textContent = "Option B — Solar Panels";
     document.getElementById("difference").textContent =
       money(diff)+" more savings over "+years+" years";
   }else{
-    document.getElementById("winner").textContent = "Option B — Full Solar + Battery";
+    document.getElementById("winner").textContent = "Option C — Solar Panels + Batteries";
     document.getElementById("difference").textContent =
       money(diff)+" more savings over "+years+" years";
   }
@@ -540,11 +571,11 @@ function calculate(){
     const fullAtBe = totalCost(fullSolar,fullEsc,fullAps,be,years,vpp,5);
     document.getElementById("breakEvenRate").textContent = (be*100).toFixed(2)+"%";
     const belowWinner = optionDifferenceAtRate(Math.max(be - 0.0001, 0)) < 0
-      ? "Option A — Partial Solar"
-      : "Option B — Full Solar + Battery";
-    const aboveWinner = belowWinner === "Option A — Partial Solar"
-      ? "Option B — Full Solar + Battery"
-      : "Option A — Partial Solar";
+      ? "Option B — Solar Panels"
+      : "Option C — Solar Panels + Batteries";
+    const aboveWinner = belowWinner === "Option B — Solar Panels"
+      ? "Option C — Solar Panels + Batteries"
+      : "Option B — Solar Panels";
     document.getElementById("breakEvenText").textContent =
       showingFourteenPercentScenario
         ? `After the 14% first-year APS increase, below approximately ${(be*100).toFixed(2)}% ongoing annual APS increases, ${belowWinner} is projected to cost less. Above that rate, ${aboveWinner} is projected to cost less over ${years} years.`
@@ -616,10 +647,10 @@ document.getElementById("downloadPdf").addEventListener("click",function(){
         ? "14% in year 1; "+document.getElementById("apsIncrease").value+"% thereafter"
         : document.getElementById("apsIncrease").value+"%"
     ],
-    ["Option A solar payment",money(getNum("partialSolar"))],
-    ["Option A remaining APS bill",money(getNum("partialAps"))],
-    ["Option B full-system payment",money(getNum("fullSolar"))],
-    ["Option B VPP annual reward",money(getNum("vpp"))+" for 5 years"]
+    ["Option B solar payment",money(getNum("partialSolar"))],
+    ["Option B remaining APS bill",money(getNum("partialAps"))],
+    ["Option C system payment",money(getNum("fullSolar"))],
+    ["Option C VPP annual reward",money(getNum("vpp"))+" for 5 years"]
   ];
 
   let y=94;
@@ -634,7 +665,7 @@ document.getElementById("downloadPdf").addEventListener("click",function(){
   pdf.setFillColor(255,245,245);pdf.setDrawColor(252,165,165);
   pdf.roundedRect(margin,y,contentWidth,62,10,10,"FD");
   pdf.setFont("helvetica","bold");pdf.setFontSize(13);pdf.setTextColor(220,38,38);
-  pdf.text("Continue with APS",pageWidth/2,y+20,{align:"center"});
+  pdf.text("Option A — Stay with APS",pageWidth/2,y+20,{align:"center"});
   pdf.setFontSize(10);pdf.setTextColor(55,65,81);
   pdf.text(
     showingFourteenPercentScenario
@@ -651,8 +682,8 @@ document.getElementById("downloadPdf").addEventListener("click",function(){
   pdf.setFillColor(240,253,244);pdf.setDrawColor(134,239,172);pdf.roundedRect(margin+262,y,250,112,10,10,"FD");
 
   pdf.setFont("helvetica","bold");pdf.setFontSize(15);pdf.setTextColor(234,88,12);
-  pdf.text("Option A — Partial Solar",margin+125,y+24,{align:"center"});
-  pdf.setTextColor(22,163,74);pdf.text("Option B — Full Solar + Battery",margin+387,y+24,{align:"center"});
+  pdf.text("Option B — Solar Panels",margin+125,y+24,{align:"center"});
+  pdf.setTextColor(22,163,74);pdf.text("Option C — Solar Panels + Batteries",margin+387,y+24,{align:"center"});
 
   pdf.setFontSize(10);pdf.setTextColor(55,65,81);
   pdf.text(`${years}-Year Savings`,margin+125,y+50,{align:"center"});
