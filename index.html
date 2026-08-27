@@ -775,7 +775,7 @@ body{
   border-radius:24px;
   overflow:hidden;
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(4,1fr);
 }
 
 .benefit{
@@ -783,6 +783,9 @@ body{
   padding:30px 20px;
   color:#06152f;
   border-right:1px solid #ddd;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 .benefit:last-child{ border-right:none; }
@@ -800,11 +803,18 @@ body{
   font-weight:900;
   text-transform:uppercase;
   line-height:1.1;
+  min-height:53px;
+  margin:0 0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .benefit p{
   color:#333;
   font-size:18px;
+  line-height:1.35;
+  margin:0;
 }
 
 .cta{
@@ -2467,7 +2477,6 @@ body{
       <div class="hero-badge">No Traditional Solar Loan</div>
       <div class="hero-badge">No Property Lien</div>
       <div class="hero-badge">Dependable Payments</div>
-      <div class="hero-badge">$1,000 Referral Bonus</div>
     </div>
 
     <button class="cta-button" onclick="openLeadForm()">
@@ -2700,11 +2709,6 @@ body{
     <p>No traditional solar loan. No property lien.</p>
   </div>
 
-  <div class="benefit">
-    <img src="images/referral.png" class="benefit-icon" alt="Referral Bonus">
-    <h3>$1K Referral Bonus</h3>
-    <p>Earn $1,000 when you refer friends and family.</p>
-  </div>
 
   <div class="benefit">
     <img src="images/chart.png" class="benefit-icon" alt="Avoid Rate Hikes">
